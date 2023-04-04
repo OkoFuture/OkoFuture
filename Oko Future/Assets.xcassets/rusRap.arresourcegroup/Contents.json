@@ -1,0 +1,17 @@
+{
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  },
+  "resources" : [
+    {
+      "filename" : "2.arreferenceimage"
+    },
+    {
+      "filename" : "arm.arreferenceimage"
+    },
+    {
+      "filename" : "okoRef.arreferenceimage"
+    }
+  ]
+}
