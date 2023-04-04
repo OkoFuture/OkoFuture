@@ -44,7 +44,7 @@ final class WelcomeViewController: UIViewController {
         anchor.addChild(entity)
         
         var cancellable: AnyCancellable? = nil
-        
+         
 //          cancellable = ModelEntity.loadModelAsync(named: generalVC.arrayNameScene[1])
 //            .sink(receiveCompletion: { error in
 //              print("Unexpected error: \(error)")
