@@ -28,9 +28,12 @@ class ArViewController: UIViewController {
         }
         
         let configuration = ARImageTrackingConfiguration()
+//        let configuration = ARWorldTrackingConfiguration()
         configuration.isAutoFocusEnabled = true
         configuration.trackingImages = referenceImages
         configuration.maximumNumberOfTrackedImages = 1
+//        configuration.userFaceTrackingEnabled = true
+//        configuration.detectionImages = referenceImages
         
         arView.session.delegate = self
         arView.frame = view.frame

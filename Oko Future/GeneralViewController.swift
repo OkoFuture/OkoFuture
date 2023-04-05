@@ -20,9 +20,10 @@ final class GeneralViewController: UIViewController {
     
     public var chooseModel = 0
     
-    public let arrayNameScene = ["Girlo.usdz", "avatar.usdz"]
-    
-    private var videoPlayerEmoji = AVPlayer()
+    public let arrayNameScene = ["Girlo.usdz", "avatar4rigged_BAKED.usdz"]
+    private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__[264-368]"]
+    private var arrayPlayerItem: [AVPlayerItem] = []
+    private var videoPlayerEmoji: AVQueuePlayer? = nil
     
     private var mode: AvatarMode = .general
     
@@ -122,6 +123,8 @@ final class GeneralViewController: UIViewController {
         self.navigationItem.setHidesBackButton(true, animated:false)
         setupView()
         setupLayout()
+        
+        dowloadVideos()
     }
     
     override func didReceiveMemoryWarning() {
@@ -276,18 +279,38 @@ final class GeneralViewController: UIViewController {
         self.stopDemo()
     }
     
+    public func dowloadVideos() {
+        
+        for nameVideo in self.arrayNameVideos {
+            guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
+                print("Failed get path", nameVideo)
+                return
+            }
+            
+            let videoURL = URL(fileURLWithPath: path)
+            let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
+            
+            guard let alphaMovieURL = url else {
+                print("Failed get url", nameVideo)
+                return
+            }
+            
+            let videoAsset = AVURLAsset(url: alphaMovieURL)
+            let assetKeys = ["playable"]
+            
+            self.arrayPlayerItem.append(AVPlayerItem(asset: videoAsset, automaticallyLoadedAssetKeys: assetKeys))
+        }
+    }
+    
     private func startDemo() {
         
-        guard let path = Bundle.main.path(forResource: "excited", ofType: "mov") else {
-            print("Failed to overlay alpha movie on the background")
-            return
+        if self.videoPlayerEmoji != nil {
+            self.videoPlayerEmoji = nil
         }
         
-        let videoURL = URL(fileURLWithPath: path)
-        let alphaMovieURL = try! URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
-        let playerItem = AVPlayerItem(url: alphaMovieURL)
-        self.videoPlayerEmoji = AVPlayer(playerItem: playerItem)
-        let videoMaterial = VideoMaterial(avPlayer: self.videoPlayerEmoji)
+        videoPlayerEmoji = AVQueuePlayer(items: arrayPlayerItem)
+        
+        let videoMaterial = VideoMaterial(avPlayer: self.videoPlayerEmoji!)
         
         let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, depth: 0.3, cornerRadius: 0), materials: [videoMaterial])
         
@@ -297,24 +320,32 @@ final class GeneralViewController: UIViewController {
         self.sceneView.scene.anchors[0].addChild(videoPlane)
         
         self.demoEmoji.toggle()
-        /// 1.AVQueuePlayer 2.освещение
+        
+        let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: 0.3, z: 0))
         
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
             
-            let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: 0.3, z: 0))
+            guard let videoPlayerEmoji = self.videoPlayerEmoji else {
+                return
+            }
+            
             videoPlane.move(to: transform, relativeTo: videoPlane, duration: 0.1)
-            
-            self.videoPlayerEmoji.play()
-            
-            self.nodeGirl?.playAnimation((self.nodeGirl?.availableAnimations[0])!)
+        
+            videoPlayerEmoji.play()
         })
     }
     
     private func stopDemo() {
         if self.demoEmoji {
-            self.sceneView.scene.anchors[0].children[2].removeFromParent()
             self.nodeGirl?.stopAllAnimations()
-            self.videoPlayerEmoji.pause()
+            
+            self.sceneView.scene.anchors[0].children[2].removeFromParent()
+            self.videoPlayerEmoji?.pause()
+//            self.videoPlayerEmoji?.removeAllItems()
+            self.videoPlayerEmoji = nil
+            
+            self.arrayPlayerItem.removeAll()
+            self.dowloadVideos()
             
             self.demoEmoji.toggle()
         }
