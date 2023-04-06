@@ -45,15 +45,15 @@ final class WelcomeViewController: UIViewController {
         
         var cancellable: AnyCancellable? = nil
          
-//          cancellable = ModelEntity.loadModelAsync(named: generalVC.arrayNameScene[1])
-//            .sink(receiveCompletion: { error in
-//              print("Unexpected error: \(error)")
-//              cancellable?.cancel()
-//            }, receiveValue: { entity in
-//
+          cancellable = ModelEntity.loadModelAsync(named: generalVC.arrayNameScene[1])
+            .sink(receiveCompletion: { error in
+              print("Unexpected error: \(error)")
+              cancellable?.cancel()
+            }, receiveValue: { entity in
+
 //                entity.setScale(SIMD3(x: 0.1, y: 0.1, z: 0.1), relativeTo: entity)
-//
-//                generalVC.nodeAvatar = entity
+
+                generalVC.nodeAvatar = entity
                 
                 cancellable = ModelEntity.loadModelAsync(named: generalVC.arrayNameScene[0])
                   .sink(receiveCompletion: { error in
@@ -69,7 +69,7 @@ final class WelcomeViewController: UIViewController {
 
                       cancellable?.cancel()
                   })
-//            })
+            })
         
     }
     
