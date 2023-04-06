@@ -8,6 +8,7 @@
 import UIKit
 import SceneKit
 import RealityKit
+import ARKit
 import Combine
 import AVFoundation
 
@@ -20,7 +21,7 @@ final class GeneralViewController: UIViewController {
     
     public var chooseModel = 0
     
-    public let arrayNameScene = ["Girlo.usdz", "avatar4rigged_BAKED.usdz"]
+    public let arrayNameScene = ["Girlo.usdz", "avatar5_noCloth_CNVRTR.usdz"]
     private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__[264-368]"]
     private var arrayPlayerItem: [AVPlayerItem] = []
     private var videoPlayerEmoji: AVQueuePlayer? = nil
@@ -215,10 +216,10 @@ final class GeneralViewController: UIViewController {
             self.chooseModel = 1
             
             if self.nodeAvatar != nil {
-//                self.sceneView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
-//                self.sceneView.scene.anchors[0].addChild(self.nodeAvatar!)
+                self.sceneView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
+                self.sceneView.scene.anchors[0].addChild(self.nodeAvatar!)
             } else {
-//                self.uploadChooseSceneInBackground()
+                self.uploadChooseSceneInBackground()
             }
         }
     }
@@ -259,9 +260,14 @@ final class GeneralViewController: UIViewController {
     }
     
     @objc private func tapArView() {
-        let vc = ArViewController()
-        self.navigationController?.pushViewController(vc,
-         animated: true)
+        
+        if ARFaceTrackingConfiguration.isSupported {
+            let vc = ArViewController()
+            self.navigationController?.pushViewController(vc,
+             animated: true)
+        } else {
+            print ("log ARFaceTrackingConfiguration.isSupported == false")
+        }
     }
     
     @objc private func tapZoomIn() {
