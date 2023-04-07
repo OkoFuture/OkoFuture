@@ -22,7 +22,9 @@ final class GeneralViewController: UIViewController {
     public var chooseModel = 0
     
     public let arrayNameScene = ["Girlo.usdz", "avatar5_noCloth_CNVRTR.usdz"]
-    private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__[264-368]"]
+//    public let arrayNameScene = ["blender.usdz", "maya_binary.usdz"]
+    private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__228-1"]
+//    private let arrayNameVideos = ["shocked__228-1"]
     private var arrayPlayerItem: [AVPlayerItem] = []
     private var videoPlayerEmoji: AVQueuePlayer? = nil
     
@@ -309,6 +311,12 @@ final class GeneralViewController: UIViewController {
     }
     
     private func startDemo() {
+        
+//        print ("log anim 1", nodeGirl?.availableAnimations)
+//        print ("log anim 2", nodeAvatar?.availableAnimations)
+//
+//        nodeGirl?.playAnimation((nodeGirl?.availableAnimations[2])!)
+//        nodeAvatar?.playAnimation((nodeAvatar?.availableAnimations[2])!)
         
         if self.videoPlayerEmoji != nil {
             self.videoPlayerEmoji = nil
