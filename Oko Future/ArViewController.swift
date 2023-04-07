@@ -15,8 +15,10 @@ class ArViewController: UIViewController {
     private var videoPlayer = AVQueuePlayer()
     private var isVideoCreate = false
     
-    private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__[264-368]"]
-    private var arrayPlayerItem: [AVPlayerItem] = []
+    private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__228-1"]
+    private var playerItemPokerFace: [AVPlayerItem] = []
+    private var playerItemExcited: [AVPlayerItem] = []
+    private var playerItemShoced: [AVPlayerItem] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +32,7 @@ class ArViewController: UIViewController {
             fatalError("Missing expected asset catalog resources.")
         }
         
+        dowloadVideos()
 //        let configuration = ARImageTrackingConfiguration()
         let configuration = ARWorldTrackingConfiguration()
 //        let configuration = ARFaceTrackingConfiguration()
@@ -53,7 +56,6 @@ extension ArViewController: ARSessionDelegate {
         
         if let imageAnchor = anchors.first as? ARImageAnchor {
             
-//            videoPlayer = AVPlayer(playerItem: playerItem)
             let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
             
             let width = Float(imageAnchor.referenceImage.physicalSize.width * 1.03)
@@ -84,12 +86,12 @@ extension ArViewController: ARSessionDelegate {
 //                }
                 
                 if let imageAnchor = anchors.first as? ARImageAnchor {
-                    
-                    for anchor in arView.scene.anchors {
-                        if anchor.children.first is ModelEntity{
-                            anchor.transform.matrix = imageAnchor.transform
-                        }
-                    }
+                    /// найти нужный imageAnchor по id и подправить transform
+//                    for anchor in arView.scene.anchors {
+//                        if anchor.children.first is ModelEntity{
+//                            anchor.transform.matrix = imageAnchor.transform
+//                        }
+//                    }
                     
                     if imageAnchor.isTracked {
 //                        videoPlayer.play()
@@ -120,8 +122,9 @@ extension ArViewController: ARSessionDelegate {
                 
                 if ((smileLeft?.decimalValue ?? 0.0) + (smileRight?.decimalValue ?? 0.0)) > 0.9 {
 //                    newFacePoseResult = "😀"
-                    videoPlayer = AVQueuePlayer(items: [arrayPlayerItem[2], arrayPlayerItem[3]])
+                    videoPlayer = AVQueuePlayer(items: [playerItemExcited[0], playerItemExcited[1]])
                     videoPlayer.play()
+                    playerItemExcited.removeAll()
                 }
              
                 if innerUp?.decimalValue ?? 0.0 > 0.8 {
@@ -142,27 +145,50 @@ extension ArViewController: ARSessionDelegate {
                 
     }
     
-    public func dowloadVideos() {
+    private func dowloadVideos() {
         
-        for nameVideo in self.arrayNameVideos {
-            guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
-                print("Failed get path", nameVideo)
-                return
+        if playerItemPokerFace.isEmpty {
+            for i in 0...1 {
+                guard let playerItem = dowloadPlayerItem(index: i) else {return}
+                playerItemPokerFace.append(playerItem)
             }
-            
-            let videoURL = URL(fileURLWithPath: path)
-            let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
-            
-            guard let alphaMovieURL = url else {
-                print("Failed get url", nameVideo)
-                return
-            }
-            
-            let videoAsset = AVURLAsset(url: alphaMovieURL)
-            let assetKeys = ["playable"]
-            
-            self.arrayPlayerItem.append(AVPlayerItem(asset: videoAsset, automaticallyLoadedAssetKeys: assetKeys))
         }
+
+        if playerItemExcited.isEmpty {
+            for i in 2...3 {
+                guard let playerItem = dowloadPlayerItem(index: i-2) else {return}
+                playerItemExcited.append(playerItem)
+            }
+        }
+
+        if playerItemShoced.isEmpty {
+            for i in 4...5 {
+                guard let playerItem = dowloadPlayerItem(index: i-4) else {return}
+                playerItemShoced.append(playerItem)
+            }
+        }
+    }
+    
+    private func dowloadPlayerItem(index: Int) -> AVPlayerItem? {
+        let nameVideo = arrayNameVideos[index]
+        
+        guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
+            print("Failed get path", nameVideo)
+            return nil
+        }
+        
+        let videoURL = URL(fileURLWithPath: path)
+        let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
+        
+        guard let alphaMovieURL = url else {
+            print("Failed get url", nameVideo)
+            return nil
+        }
+        
+        let videoAsset = AVURLAsset(url: alphaMovieURL)
+        let assetKeys = ["playable"]
+        
+        return AVPlayerItem(asset: videoAsset, automaticallyLoadedAssetKeys: assetKeys)
     }
 
 }
