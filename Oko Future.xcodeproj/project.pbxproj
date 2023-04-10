@@ -23,6 +23,7 @@
 		92C8306829D6C5A800C660D1 /* shoced_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306229D6C5A700C660D1 /* shoced_transition.mov */; };
 		92C8306929D6C5A800C660D1 /* poker_face.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306329D6C5A700C660D1 /* poker_face.mov */; };
 		92C8306A29D6C5A800C660D1 /* poker_face_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306429D6C5A800C660D1 /* poker_face_transition.mov */; };
+		92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */; };
 		92D6DF8F29E01547009E5909 /* shocked__228-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92D6DF8E29E01547009E5909 /* shocked__228-1.mov */; };
 		92FE684F29DEC829005EE3D3 /* avatar5_noCloth_CNVRTR.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92FE684D29DEC829005EE3D3 /* avatar5_noCloth_CNVRTR.usdz */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,7 @@
 		92C8306229D6C5A700C660D1 /* shoced_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = shoced_transition.mov; sourceTree = "<group>"; };
 		92C8306329D6C5A700C660D1 /* poker_face.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face.mov; sourceTree = "<group>"; };
 		92C8306429D6C5A800C660D1 /* poker_face_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face_transition.mov; sourceTree = "<group>"; };
+		92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewContoller.swift; sourceTree = "<group>"; };
 		92D6DF8E29E01547009E5909 /* shocked__228-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "shocked__228-1.mov"; sourceTree = "<group>"; };
 		92FE684D29DEC829005EE3D3 /* avatar5_noCloth_CNVRTR.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avatar5_noCloth_CNVRTR.usdz; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -96,6 +98,7 @@
 				920BF12C29CC3D33001D40DA /* GeneralViewController.swift */,
 				9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */,
 				920BF14029CC623D001D40DA /* ArViewController.swift */,
+				92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */,
 				920BF13129CC3D34001D40DA /* Assets.xcassets */,
 				920BF13329CC3D34001D40DA /* LaunchScreen.storyboard */,
 				920BF13629CC3D34001D40DA /* Info.plist */,
@@ -186,6 +189,7 @@
 			files = (
 				920BF12D29CC3D33001D40DA /* GeneralViewController.swift in Sources */,
 				9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */,
+				92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */,
 				920BF12929CC3D33001D40DA /* AppDelegate.swift in Sources */,
 				920BF12B29CC3D33001D40DA /* SceneDelegate.swift in Sources */,
 				920BF14129CC623D001D40DA /* ArViewController.swift in Sources */,

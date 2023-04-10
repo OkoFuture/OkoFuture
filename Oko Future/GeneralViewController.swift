@@ -264,7 +264,8 @@ final class GeneralViewController: UIViewController {
     @objc private func tapArView() {
         
         if ARFaceTrackingConfiguration.isSupported {
-            let vc = ArViewController()
+//            let vc = ArViewController()
+            let vc = FaceTrackViewContoller()
             self.navigationController?.pushViewController(vc,
              animated: true)
         } else {
