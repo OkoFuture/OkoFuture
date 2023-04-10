@@ -105,6 +105,10 @@ extension ArViewController: ARSessionDelegate {
                 }
     }
     
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        /// реализация поиска изображений
+    }
+    
     func changeEmoji(anchor: ARFaceAnchor) {
                 let smileLeft = anchor.blendShapes[.mouthSmileLeft]
                 let smileRight = anchor.blendShapes[.mouthSmileRight]
