@@ -33,15 +33,15 @@ final class WelcomeViewController: UIViewController {
             
         let generalVC = GeneralViewController()
         
-        let anchor = AnchorEntity(world: [0,-1,0])
+        let anchor = AnchorEntity(world: generalVC.startPoint)
         generalVC.sceneView.scene.addAnchor(anchor)
         
-        let box: MeshResource = .generateBox(size: SIMD3(x: 1, y: 0.1, z: 1))
-        let material = SimpleMaterial(color: .systemRed, isMetallic: false)
-        
-        let entity = ModelEntity(mesh: box, materials: [material])
+        let entity = try! ModelEntity.loadModel(named: "OKO location_v2", in: nil)
+        entity.setScale(SIMD3(x: 0.1, y: 0.1, z: 0.1), relativeTo: entity)
         
         anchor.addChild(entity)
+        
+        let scaleAvatar: Float = 1.65
         
         var cancellable: AnyCancellable? = nil
          
@@ -51,8 +51,9 @@ final class WelcomeViewController: UIViewController {
               cancellable?.cancel()
             }, receiveValue: { entity in
 
-//                entity.setScale(SIMD3(x: 0.1, y: 0.1, z: 0.1), relativeTo: entity)
-
+                entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
+                entity.transform.translation = SIMD3(x: 0, y: 0, z: 0.3)
+                
                 generalVC.nodeAvatar = entity
                 
                 cancellable = ModelEntity.loadModelAsync(named: generalVC.arrayNameScene[0])
@@ -61,6 +62,9 @@ final class WelcomeViewController: UIViewController {
                     cancellable?.cancel()
                   }, receiveValue: { entity in
 
+                      entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
+                      entity.transform.translation = SIMD3(x: 0, y: 0, z: 0.3)
+                      
                       generalVC.nodeGirl = entity
                       
                       anchor.addChild(entity)

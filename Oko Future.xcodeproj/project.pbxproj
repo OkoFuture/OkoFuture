@@ -18,14 +18,16 @@
 		920BF14329CC804A001D40DA /* hd1833.mov in Resources */ = {isa = PBXBuildFile; fileRef = 920BF14229CC804A001D40DA /* hd1833.mov */; };
 		922CEB3B29D4771E002326F8 /* puppets_with_alpha_hevc.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */; };
 		9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */; };
+		92966ACC29ED7F11007284FC /* amy_test _flex+face_1704.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92966ACB29ED7F11007284FC /* amy_test _flex+face_1704.usdz */; };
 		92C8306529D6C5A800C660D1 /* excited.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8305F29D6C5A700C660D1 /* excited.mov */; };
 		92C8306729D6C5A800C660D1 /* excited_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306129D6C5A700C660D1 /* excited_transition.mov */; };
 		92C8306829D6C5A800C660D1 /* shoced_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306229D6C5A700C660D1 /* shoced_transition.mov */; };
 		92C8306929D6C5A800C660D1 /* poker_face.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306329D6C5A700C660D1 /* poker_face.mov */; };
 		92C8306A29D6C5A800C660D1 /* poker_face_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306429D6C5A800C660D1 /* poker_face_transition.mov */; };
+		92C8F19D29E7DF29001BD86B /* OKO location_v3.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92C8F19B29E7DF29001BD86B /* OKO location_v3.usdz */; };
+		92C8F19E29E7DF29001BD86B /* OKO location_v2.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92C8F19C29E7DF29001BD86B /* OKO location_v2.usdz */; };
 		92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */; };
 		92D6DF8F29E01547009E5909 /* shocked__228-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92D6DF8E29E01547009E5909 /* shocked__228-1.mov */; };
-		92FE684F29DEC829005EE3D3 /* avatar5_noCloth_CNVRTR.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92FE684D29DEC829005EE3D3 /* avatar5_noCloth_CNVRTR.usdz */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,14 +44,16 @@
 		920BF14229CC804A001D40DA /* hd1833.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = hd1833.mov; sourceTree = "<group>"; };
 		922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = puppets_with_alpha_hevc.mov; sourceTree = "<group>"; };
 		9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		92966ACB29ED7F11007284FC /* amy_test _flex+face_1704.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "amy_test _flex+face_1704.usdz"; sourceTree = "<group>"; };
 		92C8305F29D6C5A700C660D1 /* excited.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = excited.mov; sourceTree = "<group>"; };
 		92C8306129D6C5A700C660D1 /* excited_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = excited_transition.mov; sourceTree = "<group>"; };
 		92C8306229D6C5A700C660D1 /* shoced_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = shoced_transition.mov; sourceTree = "<group>"; };
 		92C8306329D6C5A700C660D1 /* poker_face.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face.mov; sourceTree = "<group>"; };
 		92C8306429D6C5A800C660D1 /* poker_face_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face_transition.mov; sourceTree = "<group>"; };
+		92C8F19B29E7DF29001BD86B /* OKO location_v3.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "OKO location_v3.usdz"; sourceTree = "<group>"; };
+		92C8F19C29E7DF29001BD86B /* OKO location_v2.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "OKO location_v2.usdz"; sourceTree = "<group>"; };
 		92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewContoller.swift; sourceTree = "<group>"; };
 		92D6DF8E29E01547009E5909 /* shocked__228-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "shocked__228-1.mov"; sourceTree = "<group>"; };
-		92FE684D29DEC829005EE3D3 /* avatar5_noCloth_CNVRTR.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avatar5_noCloth_CNVRTR.usdz; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -66,8 +70,10 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				92966ACB29ED7F11007284FC /* amy_test _flex+face_1704.usdz */,
+				92C8F19C29E7DF29001BD86B /* OKO location_v2.usdz */,
+				92C8F19B29E7DF29001BD86B /* OKO location_v3.usdz */,
 				92D6DF8E29E01547009E5909 /* shocked__228-1.mov */,
-				92FE684D29DEC829005EE3D3 /* avatar5_noCloth_CNVRTR.usdz */,
 				92C8306129D6C5A700C660D1 /* excited_transition.mov */,
 				92C8305F29D6C5A700C660D1 /* excited.mov */,
 				92C8306429D6C5A800C660D1 /* poker_face_transition.mov */,
@@ -164,8 +170,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				92966ACC29ED7F11007284FC /* amy_test _flex+face_1704.usdz in Resources */,
+				92C8F19D29E7DF29001BD86B /* OKO location_v3.usdz in Resources */,
+				92C8F19E29E7DF29001BD86B /* OKO location_v2.usdz in Resources */,
 				92D6DF8F29E01547009E5909 /* shocked__228-1.mov in Resources */,
-				92FE684F29DEC829005EE3D3 /* avatar5_noCloth_CNVRTR.usdz in Resources */,
 				92C8306529D6C5A800C660D1 /* excited.mov in Resources */,
 				92C8306729D6C5A800C660D1 /* excited_transition.mov in Resources */,
 				92C8306829D6C5A800C660D1 /* shoced_transition.mov in Resources */,
