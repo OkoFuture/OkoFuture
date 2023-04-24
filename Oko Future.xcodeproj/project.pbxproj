@@ -28,6 +28,13 @@
 		92C8F19E29E7DF29001BD86B /* OKO location_v2.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92C8F19C29E7DF29001BD86B /* OKO location_v2.usdz */; };
 		92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */; };
 		92D6DF8F29E01547009E5909 /* shocked__228-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92D6DF8E29E01547009E5909 /* shocked__228-1.mov */; };
+		D158732429F3E8A400C18364 /* dressed_girl_2104.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D158732329F3E8A400C18364 /* dressed_girl_2104.usdz */; };
+		D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15A35B129F697EC00E3F6E1 /* Helper.swift */; };
+		D15A35BA29F69BF300E3F6E1 /* ChakraPetch-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */; };
+		D15A35BB29F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15A35B929F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf */; };
+		D188FBAF29F550910003F3EC /* OKO-location_v3.usd in Resources */ = {isa = PBXBuildFile; fileRef = D188FBAE29F550910003F3EC /* OKO-location_v3.usd */; };
+		D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB029F553340003F3EC /* OkoDefaultButton.swift */; };
+		D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -54,6 +61,13 @@
 		92C8F19C29E7DF29001BD86B /* OKO location_v2.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "OKO location_v2.usdz"; sourceTree = "<group>"; };
 		92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewContoller.swift; sourceTree = "<group>"; };
 		92D6DF8E29E01547009E5909 /* shocked__228-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "shocked__228-1.mov"; sourceTree = "<group>"; };
+		D158732329F3E8A400C18364 /* dressed_girl_2104.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dressed_girl_2104.usdz; sourceTree = "<group>"; };
+		D15A35B129F697EC00E3F6E1 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
+		D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ChakraPetch-Medium.ttf"; sourceTree = "<group>"; };
+		D15A35B929F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ChakraPetch-SemiBold.ttf"; sourceTree = "<group>"; };
+		D188FBAE29F550910003F3EC /* OKO-location_v3.usd */ = {isa = PBXFileReference; lastKnownFileType = file; path = "OKO-location_v3.usd"; sourceTree = "<group>"; };
+		D188FBB029F553340003F3EC /* OkoDefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoDefaultButton.swift; sourceTree = "<group>"; };
+		D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigSwitch.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +84,8 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				D188FBAE29F550910003F3EC /* OKO-location_v3.usd */,
+				D158732329F3E8A400C18364 /* dressed_girl_2104.usdz */,
 				92966ACB29ED7F11007284FC /* amy_test _flex+face_1704.usdz */,
 				92C8F19C29E7DF29001BD86B /* OKO location_v2.usdz */,
 				92C8F19B29E7DF29001BD86B /* OKO location_v3.usdz */,
@@ -105,11 +121,24 @@
 				9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */,
 				920BF14029CC623D001D40DA /* ArViewController.swift */,
 				92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */,
+				D15A35B329F698FD00E3F6E1 /* Font */,
+				D188FBB029F553340003F3EC /* OkoDefaultButton.swift */,
+				D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */,
+				D15A35B129F697EC00E3F6E1 /* Helper.swift */,
 				920BF13129CC3D34001D40DA /* Assets.xcassets */,
 				920BF13329CC3D34001D40DA /* LaunchScreen.storyboard */,
 				920BF13629CC3D34001D40DA /* Info.plist */,
 			);
 			path = "Oko Future";
+			sourceTree = "<group>";
+		};
+		D15A35B329F698FD00E3F6E1 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */,
+				D15A35B929F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -170,6 +199,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D188FBAF29F550910003F3EC /* OKO-location_v3.usd in Resources */,
+				D158732429F3E8A400C18364 /* dressed_girl_2104.usdz in Resources */,
 				92966ACC29ED7F11007284FC /* amy_test _flex+face_1704.usdz in Resources */,
 				92C8F19D29E7DF29001BD86B /* OKO location_v3.usdz in Resources */,
 				92C8F19E29E7DF29001BD86B /* OKO location_v2.usdz in Resources */,
@@ -181,7 +212,9 @@
 				92C8306A29D6C5A800C660D1 /* poker_face_transition.mov in Resources */,
 				922CEB3B29D4771E002326F8 /* puppets_with_alpha_hevc.mov in Resources */,
 				920BF14329CC804A001D40DA /* hd1833.mov in Resources */,
+				D15A35BB29F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf in Resources */,
 				920BF13E29CC43CC001D40DA /* Girlo.usdz in Resources */,
+				D15A35BA29F69BF300E3F6E1 /* ChakraPetch-Medium.ttf in Resources */,
 				920BF13F29CC43CC001D40DA /* wraith.usdz in Resources */,
 				920BF13529CC3D34001D40DA /* LaunchScreen.storyboard in Resources */,
 				920BF13229CC3D34001D40DA /* Assets.xcassets in Resources */,
@@ -197,7 +230,10 @@
 			files = (
 				920BF12D29CC3D33001D40DA /* GeneralViewController.swift in Sources */,
 				9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */,
+				D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */,
 				92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */,
+				D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */,
+				D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */,
 				920BF12929CC3D33001D40DA /* AppDelegate.swift in Sources */,
 				920BF12B29CC3D33001D40DA /* SceneDelegate.swift in Sources */,
 				920BF14129CC623D001D40DA /* ArViewController.swift in Sources */,

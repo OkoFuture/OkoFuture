@@ -29,7 +29,7 @@ final class GeneralViewController: UIViewController {
     public let startPoint: SIMD3<Float> = [0, -1.3, -1]
     public let finishPoint: SIMD3<Float> = [0, -2.3, 0.5]
 //    public let arrayNameScene = ["Girlo.usdz", "avatar5_noCloth_CNVRTR.usdz"]
-    public let arrayNameScene = ["amy_test _flex+face_1704.usdz", "amy_test _flex+face_1704.usdz"]
+    public let arrayNameScene = ["dressed_girl_2104.usdz", "amy_test _flex+face_1704.usdz"]
     private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__228-1"]
     private var arrayPlayerItem: [AVPlayerItem] = []
     private var videoPlayerEmoji: AVQueuePlayer? = nil
@@ -85,26 +85,9 @@ final class GeneralViewController: UIViewController {
     public var nodeGirl: Entity? = nil
     public var nodeAvatar: Entity? = nil
     
-    private let zoomInButton: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("+", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .black
-        btn.clipsToBounds = true
-        btn.layer.borderWidth = 2
-        btn.layer.borderColor = UIColor.white.cgColor
-        return btn
-    }()
-
-    private let zoomOutButton: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("-", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .black
-        btn.clipsToBounds = true
-        btn.layer.borderWidth = 2
-        btn.layer.borderColor = UIColor.white.cgColor
-        return btn
+    private let arSwitch: OkoBigSwitch = {
+        let sw = OkoBigSwitch()
+        return sw
     }()
     
     private let wardrobeButton: UIButton = {
@@ -199,8 +182,7 @@ final class GeneralViewController: UIViewController {
         view.addSubview(backWardrobeButton)
         view.addSubview(arViewButton)
         
-        view.addSubview(zoomInButton)
-        view.addSubview(zoomOutButton)
+        view.addSubview(arSwitch)
         
 //        let dragRotateGesture = UIPanGestureRecognizer(target: self, action: #selector(rotateDragY))
 //        sceneView.addGestureRecognizer(dragRotateGesture)
@@ -213,8 +195,8 @@ final class GeneralViewController: UIViewController {
         
         arViewButton.addTarget(self, action: #selector(tapArView), for: .touchUpInside)
         
-        zoomInButton.addTarget(self, action: #selector(tapZoomIn), for: .touchUpInside)
-        zoomOutButton.addTarget(self, action: #selector(tapZoomOut), for: .touchUpInside)
+        arSwitch.setOnActive(active: tapZoomOut)
+        arSwitch.setOffActive(active: tapZoomIn)
     }
     
     private func setupLayout() {
@@ -240,11 +222,7 @@ final class GeneralViewController: UIViewController {
         arViewButton.frame = CGRect(x: weightSystemButton*3, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
         arViewButton.layer.cornerRadius = arViewButton.bounds.size.width / 2.0
         
-        zoomInButton.frame = CGRect(x: view.frame.width - weightZoomButton - 10, y: view.frame.height/3, width: weightZoomButton, height: weightZoomButton)
-        zoomInButton.layer.cornerRadius = zoomInButton.bounds.size.width / 2.0
-        
-        zoomOutButton.frame = CGRect(x: view.frame.width - weightZoomButton - 10, y: view.frame.height/3 + weightZoomButton + 10, width: weightZoomButton, height: weightZoomButton)
-        zoomOutButton.layer.cornerRadius = zoomOutButton.bounds.size.width / 2.0
+        arSwitch.frame = CGRect(x: view.frame.width/2 - 105, y: 245, width: 210, height: 48)
         
     }
     
@@ -466,7 +444,7 @@ final class GeneralViewController: UIViewController {
                     self.durationZoomCamera = 0
                 }
                 
-                print ("timer flex", self.durationZoomCamera)
+//                print ("timer flex", self.durationZoomCamera)
             }
         }
     }
@@ -555,7 +533,7 @@ final class GeneralViewController: UIViewController {
                     self.durationZoomCamera = 0
                 }
                 
-                print ("timer Emoji", self.durationZoomCamera)
+//                print ("timer Emoji", self.durationZoomCamera)
             }
             
             self.animateMode = .emoji
