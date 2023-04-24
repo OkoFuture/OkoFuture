@@ -36,8 +36,9 @@ final class WelcomeViewController: UIViewController {
         let anchor = AnchorEntity(world: generalVC.startPoint)
         generalVC.sceneView.scene.addAnchor(anchor)
         
-        let entity = try! ModelEntity.loadModel(named: "OKO location_v2", in: nil)
-        entity.setScale(SIMD3(x: 0.1, y: 0.1, z: 0.1), relativeTo: entity)
+//        let entity = try! ModelEntity.loadModel(named: "OKO location_v2", in: nil)
+        let entity = try! ModelEntity.loadModel(named: "OKO-location_v3", in: nil)
+//        entity.setScale(SIMD3(x: 0.1, y: 0.1, z: 0.1), relativeTo: entity)
         
         anchor.addChild(entity)
         
