@@ -26,10 +26,9 @@ final class GeneralViewController: UIViewController {
     
     public var chooseModel = 0
     
-    public let startPoint: SIMD3<Float> = [0, -1.3, -1]
+    public let startPoint: SIMD3<Float> = [0, -2, -1]
     public let finishPoint: SIMD3<Float> = [0, -2.3, 0.5]
-//    public let arrayNameScene = ["Girlo.usdz", "avatar5_noCloth_CNVRTR.usdz"]
-    public let arrayNameScene = ["dressed_girl_2104.usdz", "amy_test _flex+face_1704.usdz"]
+    public let arrayNameScene = ["dressed_avatar_2504.usdz", "dressed_girl_2104.usdz"]
     private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__228-1"]
     private var arrayPlayerItem: [AVPlayerItem] = []
     private var videoPlayerEmoji: AVQueuePlayer? = nil
@@ -39,6 +38,10 @@ final class GeneralViewController: UIViewController {
     private var animationController: AnimationPlaybackController? = nil
     private var animToggle: Bool = true
     private var animateMode: AnimationMode = .waiting
+    
+    private let sideNavButton: CGFloat = 48
+    private let sideSysButton: CGFloat = 64
+    private let sideSysBigButton: CGFloat = 72
     
     private let serialQueue = DispatchQueue(label: "animate")
     
@@ -90,65 +93,27 @@ final class GeneralViewController: UIViewController {
         return sw
     }()
     
-    private let wardrobeButton: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("skin", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .black
-        btn.clipsToBounds = true
-        btn.layer.borderWidth = 2
-        btn.layer.borderColor = UIColor.white.cgColor
+    private let firstModelWardrobeButton: OkoDefaultButton = {
+       let btn = OkoDefaultButton()
+        btn.setImage(UIImage(named: "istockphoto-1"), for: .normal)
         return btn
     }()
     
-    private let arViewButton: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("AR", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .black
-        btn.clipsToBounds = true
-        btn.layer.borderWidth = 2
-        btn.layer.borderColor = UIColor.white.cgColor
+    private let secondModelWardrobeButton: OkoDefaultButton = {
+       let btn = OkoDefaultButton()
+        btn.setImage(UIImage(named: "istockphoto-2"), for: .normal)
         return btn
     }()
     
-    private let backWardrobeButton: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("back", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .black
-        btn.clipsToBounds = true
-        btn.layer.borderWidth = 2
-        btn.layer.borderColor = UIColor.white.cgColor
-        return btn
-    }()
-    
-    private let firstModelWardrobeButton: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("first", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .black
-        btn.clipsToBounds = true
-        btn.layer.borderWidth = 2
-        btn.layer.borderColor = UIColor.white.cgColor
-        return btn
-    }()
-    
-    private let secondModelWardrobeButton: UIButton = {
-        let btn = UIButton()
-        btn.setTitle("second", for: .normal)
-        btn.setTitleColor(.white, for: .normal)
-        btn.backgroundColor = .black
-        btn.clipsToBounds = true
-        btn.layer.borderWidth = 2
-        btn.layer.borderColor = UIColor.white.cgColor
+    private let arViewButton: OkoDefaultButton = {
+       let btn = OkoDefaultButton()
+        btn.setImage(UIImage(named: "view_in_ar"), for: .normal)
         return btn
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.navigationItem.setHidesBackButton(true, animated:false)
         setupView()
         dowloadVideos()
         createAnimRes()
@@ -159,6 +124,12 @@ final class GeneralViewController: UIViewController {
         startTimerFlex()
         startAnimationFlex()
         setupLayout()
+        
+        navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     override func didReceiveMemoryWarning() {
@@ -178,8 +149,6 @@ final class GeneralViewController: UIViewController {
         view.addSubview(firstModelWardrobeButton)
         view.addSubview(secondModelWardrobeButton)
         
-        view.addSubview(wardrobeButton)
-        view.addSubview(backWardrobeButton)
         view.addSubview(arViewButton)
         
         view.addSubview(arSwitch)
@@ -190,9 +159,6 @@ final class GeneralViewController: UIViewController {
         firstModelWardrobeButton.addTarget(self, action: #selector(tapFirst), for: .touchUpInside)
         secondModelWardrobeButton.addTarget(self, action: #selector(tapSecond), for: .touchUpInside)
         
-        wardrobeButton.addTarget(self, action: #selector(tapWardrobe), for: .touchUpInside)
-        backWardrobeButton.addTarget(self, action: #selector(tapBackWardrobe), for: .touchUpInside)
-        
         arViewButton.addTarget(self, action: #selector(tapArView), for: .touchUpInside)
         
         arSwitch.setOnActive(active: tapZoomOut)
@@ -202,27 +168,24 @@ final class GeneralViewController: UIViewController {
     private func setupLayout() {
         sceneView.frame = view.frame
         
-        changeMode()
+        arViewButton.frame = CGRect(x: view.frame.width - sideNavButton - 21,
+                                    y: 61,
+                                    width: sideNavButton,
+                                    height: sideNavButton)
+        arSwitch.frame = CGRect(x: sideNavButton + 21 + 10,
+                                y: 61,
+                                width: view.frame.width - (sideNavButton + 21 + 10) * 2,
+                                height: sideNavButton)
         
-        let weightSystemButton: CGFloat = view.frame.width / 5
-        let weightZoomButton: CGFloat = weightSystemButton / 1.8
+        firstModelWardrobeButton.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
+                                                y: view.frame.height - 46 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
+                                                width: sideSysBigButton,
+                                                height: sideSysBigButton)
         
-        firstModelWardrobeButton.frame = CGRect(x: weightSystemButton/2, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
-        firstModelWardrobeButton.layer.cornerRadius = firstModelWardrobeButton.bounds.size.width / 2.0
-        
-        secondModelWardrobeButton.frame = CGRect(x: weightSystemButton*2, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
-        secondModelWardrobeButton.layer.cornerRadius = secondModelWardrobeButton.bounds.size.width / 2.0
-        
-        backWardrobeButton.frame = CGRect(x: weightSystemButton*4 - weightSystemButton/2, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
-        backWardrobeButton.layer.cornerRadius = backWardrobeButton.bounds.size.width / 2.0
-        
-        wardrobeButton.frame = CGRect(x: weightSystemButton, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
-        wardrobeButton.layer.cornerRadius = wardrobeButton.bounds.size.width / 2.0
-        
-        arViewButton.frame = CGRect(x: weightSystemButton*3, y: view.frame.height - weightSystemButton - 20, width: weightSystemButton, height: weightSystemButton)
-        arViewButton.layer.cornerRadius = arViewButton.bounds.size.width / 2.0
-        
-        arSwitch.frame = CGRect(x: view.frame.width/2 - 105, y: 245, width: 210, height: 48)
+        secondModelWardrobeButton.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
+                                                  y: view.frame.height - 46 - sideSysButton,
+                                                  width: sideSysButton,
+                                                  height: sideSysButton)
         
     }
     
@@ -275,6 +238,20 @@ final class GeneralViewController: UIViewController {
             
             self.startTimerFlex()
             self.startAnimationFlex()
+            
+            UIView.animate(withDuration: 0.4, animations: {
+                
+                self.firstModelWardrobeButton.frame = CGRect(x: self.view.center.x - self.sideSysBigButton / 2,
+                                                        y: self.firstModelWardrobeButton.frame.origin.y - ((self.sideSysBigButton - self.sideSysButton) / 2),
+                                                        width: self.sideSysBigButton,
+                                                        height: self.sideSysBigButton)
+                
+                self.secondModelWardrobeButton.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
+                                                               y: self.view.frame.height - 46 - self.sideSysButton,
+                                                               width: self.sideSysButton,
+                                                               height: self.sideSysButton)
+            })
+            
         }
     }
 
@@ -296,6 +273,19 @@ final class GeneralViewController: UIViewController {
             
             self.startTimerFlex()
             self.startAnimationFlex()
+            
+            UIView.animate(withDuration: 0.4, animations: {
+                
+                self.firstModelWardrobeButton.frame = CGRect(x: self.view.center.x - 16 - self.sideSysButton - (self.sideSysBigButton / 2),
+                                                        y: self.view.frame.height - 46 - self.sideSysButton,
+                                                        width: self.sideSysButton,
+                                                        height: self.sideSysButton)
+                
+                self.secondModelWardrobeButton.frame = CGRect(x: self.view.center.x - self.sideSysBigButton / 2,
+                                                              y: self.secondModelWardrobeButton.frame.origin.y - ((self.sideSysBigButton - self.sideSysButton) / 2),
+                                                              width: self.sideSysBigButton,
+                                                              height: self.sideSysBigButton)
+            })
         }
     }
     
@@ -324,16 +314,6 @@ final class GeneralViewController: UIViewController {
           })
     }
     
-    @objc private func tapWardrobe() {
-        mode = .wardrobe
-        changeMode()
-    }
-    
-    @objc private func tapBackWardrobe() {
-        mode = .general
-        changeMode()
-    }
-    
     @objc private func tapArView() {
         
         if ARFaceTrackingConfiguration.isSupported {
@@ -356,7 +336,6 @@ final class GeneralViewController: UIViewController {
     @objc private func tapZoomOut() {
         
         let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: startPoint)
-//        self.sceneView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: 1)
         self.sceneView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: TimeInterval(self.durationZoomCamera))
         self.durationZoomCamera = 0
         
@@ -403,7 +382,6 @@ final class GeneralViewController: UIViewController {
         
         let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, depth: 0.3, cornerRadius: 0), materials: [videoMaterial])
         
-//        videoPlane.transform.translation = SIMD3(x: 0, y: 0.9, z: -0.2)
         videoPlane.transform.translation = SIMD3(x: 0, y: 2.15, z: -0.2)
         videoPlane.transform.rotation = simd_quatf(angle: 1.5708, axis: SIMD3(x: 1, y: 0, z: 0))
         
@@ -571,25 +549,6 @@ final class GeneralViewController: UIViewController {
 //        sceneView.scene?.rootNode.childNodes[1].runAction(SCNAction.rotateBy(x: 0, y: 0, z: velocity.x/1000, duration: 0))
         
 //        gesture.setTranslation(.zero, in: view)
-    }
-    
-    private func changeMode() {
-        switch mode {
-        case .general:
-            firstModelWardrobeButton.isHidden = true
-            secondModelWardrobeButton.isHidden = true
-            backWardrobeButton.isHidden = true
-            
-            wardrobeButton.isHidden = false
-            arViewButton.isHidden = false
-        case .wardrobe:
-            firstModelWardrobeButton.isHidden = false
-            secondModelWardrobeButton.isHidden = false
-            backWardrobeButton.isHidden = false
-            
-            wardrobeButton.isHidden = true
-            arViewButton.isHidden = true
-        }
     }
     
 }
