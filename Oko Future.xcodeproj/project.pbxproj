@@ -28,6 +28,8 @@
 		92C8F19E29E7DF29001BD86B /* OKO location_v2.usdz in Resources */ = {isa = PBXBuildFile; fileRef = 92C8F19C29E7DF29001BD86B /* OKO location_v2.usdz */; };
 		92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */; };
 		92D6DF8F29E01547009E5909 /* shocked__228-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92D6DF8E29E01547009E5909 /* shocked__228-1.mov */; };
+		D10B06F429F7AE90002B9868 /* dressed_avatar_2504.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D10B06F329F7AE90002B9868 /* dressed_avatar_2504.usdz */; };
+		D10B06F629F7C80A002B9868 /* dressed_avatar_2504_V2.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D10B06F529F7C80A002B9868 /* dressed_avatar_2504_V2.usdz */; };
 		D158732429F3E8A400C18364 /* dressed_girl_2104.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D158732329F3E8A400C18364 /* dressed_girl_2104.usdz */; };
 		D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15A35B129F697EC00E3F6E1 /* Helper.swift */; };
 		D15A35BA29F69BF300E3F6E1 /* ChakraPetch-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */; };
@@ -61,6 +63,8 @@
 		92C8F19C29E7DF29001BD86B /* OKO location_v2.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "OKO location_v2.usdz"; sourceTree = "<group>"; };
 		92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewContoller.swift; sourceTree = "<group>"; };
 		92D6DF8E29E01547009E5909 /* shocked__228-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "shocked__228-1.mov"; sourceTree = "<group>"; };
+		D10B06F329F7AE90002B9868 /* dressed_avatar_2504.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dressed_avatar_2504.usdz; sourceTree = "<group>"; };
+		D10B06F529F7C80A002B9868 /* dressed_avatar_2504_V2.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dressed_avatar_2504_V2.usdz; sourceTree = "<group>"; };
 		D158732329F3E8A400C18364 /* dressed_girl_2104.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dressed_girl_2104.usdz; sourceTree = "<group>"; };
 		D15A35B129F697EC00E3F6E1 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ChakraPetch-Medium.ttf"; sourceTree = "<group>"; };
@@ -84,6 +88,8 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				D10B06F529F7C80A002B9868 /* dressed_avatar_2504_V2.usdz */,
+				D10B06F329F7AE90002B9868 /* dressed_avatar_2504.usdz */,
 				D188FBAE29F550910003F3EC /* OKO-location_v3.usd */,
 				D158732329F3E8A400C18364 /* dressed_girl_2104.usdz */,
 				92966ACB29ED7F11007284FC /* amy_test _flex+face_1704.usdz */,
@@ -199,6 +205,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D10B06F629F7C80A002B9868 /* dressed_avatar_2504_V2.usdz in Resources */,
+				D10B06F429F7AE90002B9868 /* dressed_avatar_2504.usdz in Resources */,
 				D188FBAF29F550910003F3EC /* OKO-location_v3.usd in Resources */,
 				D158732429F3E8A400C18364 /* dressed_girl_2104.usdz in Resources */,
 				92966ACC29ED7F11007284FC /* amy_test _flex+face_1704.usdz in Resources */,
@@ -383,8 +391,8 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow camera access for ar";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -411,8 +419,8 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow camera access for ar";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
-				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

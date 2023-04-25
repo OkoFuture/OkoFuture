@@ -36,13 +36,23 @@ final class WelcomeViewController: UIViewController {
         let anchor = AnchorEntity(world: generalVC.startPoint)
         generalVC.sceneView.scene.addAnchor(anchor)
         
-//        let entity = try! ModelEntity.loadModel(named: "OKO location_v2", in: nil)
         let entity = try! ModelEntity.loadModel(named: "OKO-location_v3", in: nil)
+        entity.setScale(SIMD3(x: 2, y: 2, z: 2), relativeTo: entity)
+        
+//        let entity = try! ModelEntity.loadModel(named: "OKO location_v2", in: nil)
 //        entity.setScale(SIMD3(x: 0.1, y: 0.1, z: 0.1), relativeTo: entity)
         
         anchor.addChild(entity)
         
-        let scaleAvatar: Float = 1.65
+        let cameraEntity = PerspectiveCamera()
+        cameraEntity.camera.fieldOfViewInDegrees = 39
+        let cameraAnchor = AnchorEntity(world: .zero)
+        cameraAnchor.addChild(cameraEntity)
+        cameraAnchor.transform.translation = SIMD3(x: 0, y: 0, z: 4)
+               
+        generalVC.sceneView.scene.addAnchor(cameraAnchor)
+        
+        let scaleAvatar: Float = 1.5
         
         var cancellable: AnyCancellable? = nil
          
@@ -53,7 +63,7 @@ final class WelcomeViewController: UIViewController {
             }, receiveValue: { entity in
 
                 entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
-                entity.transform.translation = SIMD3(x: 0, y: 0, z: 0.3)
+                entity.transform.translation = SIMD3(x: 0, y: 0.7, z: 0.3)
                 
                 generalVC.nodeAvatar = entity
                 
@@ -64,7 +74,7 @@ final class WelcomeViewController: UIViewController {
                   }, receiveValue: { entity in
 
                       entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
-                      entity.transform.translation = SIMD3(x: 0, y: 0, z: 0.3)
+                      entity.transform.translation = SIMD3(x: 0, y: 0.7, z: 0.3)
                       
                       generalVC.nodeGirl = entity
                       
