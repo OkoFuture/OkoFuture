@@ -359,11 +359,9 @@ final class GeneralViewController: UIViewController {
         
         if ARFaceTrackingConfiguration.isSupported {
             
-            DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
-                let vc = CleanFaceTrackViewController(arView: self.arView)
-                self.navigationController?.pushViewController(vc,
+            let vc = CleanFaceTrackViewController(arView: self.arView)
+            self.navigationController?.pushViewController(vc,
                  animated: true)
-            })
         } else {
             print ("log ARFaceTrackingConfiguration.isSupported == false")
         }
