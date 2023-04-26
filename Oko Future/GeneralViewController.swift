@@ -24,6 +24,13 @@ enum AnimationMode {
 
 final class GeneralViewController: UIViewController {
     
+    public var arView: ARView
+    
+    private var cameraEntity = PerspectiveCamera()
+    private var sceneEntity: ModelEntity
+    private var nodeGirl: Entity?
+    private var nodeAvatar: Entity?
+    
     public var chooseModel = 0
     
     public let startPoint: SIMD3<Float> = [0, -2, -1]
@@ -77,17 +84,6 @@ final class GeneralViewController: UIViewController {
     
     private var demoEmoji = false
     
-    public var sceneView: ARView = {
-        let scn = ARView()
-        scn.cameraMode = .nonAR
-        scn.backgroundColor = .clear
-//        scn.debugOptions = .showStatistics
-        return scn
-    }()
-    
-    public var nodeGirl: Entity? = nil
-    public var nodeAvatar: Entity? = nil
-    
     private let arSwitch: OkoBigSwitch = {
         let sw = OkoBigSwitch()
         return sw
@@ -111,6 +107,18 @@ final class GeneralViewController: UIViewController {
         return btn
     }()
     
+    init(arView: ARView, sceneEntity: ModelEntity, nodeGirl: Entity, nodeAvatar: Entity) {
+        self.arView = arView
+        self.sceneEntity = sceneEntity
+        self.nodeGirl = nodeGirl
+        self.nodeAvatar = nodeAvatar
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -121,15 +129,20 @@ final class GeneralViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        
         startTimerFlex()
         startAnimationFlex()
         setupLayout()
         
-        navigationController?.setNavigationBarHidden(true, animated: animated)
+        setupScene()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
-        navigationController?.setNavigationBarHidden(false, animated: animated)
+        
+        stopSession()
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
     }
     
     override func didReceiveMemoryWarning() {
@@ -142,10 +155,34 @@ final class GeneralViewController: UIViewController {
         }
     }
     
+    private func setupScene() {
+        
+        guard let nodeAvatar = self.nodeAvatar, let nodeGirl = self.nodeGirl else {return}
+        
+        let anchor = AnchorEntity(world: self.startPoint)
+        arView.scene.addAnchor(anchor)
+        
+        anchor.addChild(sceneEntity)
+        cameraEntity.camera.fieldOfViewInDegrees = 39
+        let cameraAnchor = AnchorEntity(world: .zero)
+        cameraAnchor.addChild(cameraEntity)
+        cameraAnchor.transform.translation = SIMD3(x: 0, y: 0, z: 4)
+               
+        arView.scene.addAnchor(cameraAnchor)
+        
+        nodeAvatar.transform.translation = SIMD3(x: 0, y: 0.7, z: 0.3)
+        
+        nodeGirl.transform.translation = SIMD3(x: 0, y: 0.7, z: 0.3)
+        
+        anchor.addChild(nodeGirl)
+    }
+    
+    func stopSession() {
+        arView.session.pause()
+    }
+    
     private func setupView() {
         
-        view.backgroundColor = UIColor.systemRed
-        view.addSubview(sceneView)
         view.addSubview(firstModelWardrobeButton)
         view.addSubview(secondModelWardrobeButton)
         
@@ -166,7 +203,8 @@ final class GeneralViewController: UIViewController {
     }
     
     private func setupLayout() {
-        sceneView.frame = view.frame
+        view.insertSubview(arView, at: 0)
+        arView.frame = view.frame
         
         arViewButton.frame = CGRect(x: view.frame.width - sideNavButton - 21,
                                     y: 61,
@@ -230,8 +268,8 @@ final class GeneralViewController: UIViewController {
             self.chooseModel = 0
             
             if self.nodeGirl != nil {
-                self.sceneView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
-                self.sceneView.scene.anchors[0].addChild(self.nodeGirl!)
+                arView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
+                arView.scene.anchors[0].addChild(self.nodeGirl!)
             } else {
                 self.uploadChooseSceneInBackground()
             }
@@ -265,8 +303,8 @@ final class GeneralViewController: UIViewController {
             self.chooseModel = 1
             
             if self.nodeAvatar != nil {
-                self.sceneView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
-                self.sceneView.scene.anchors[0].addChild(self.nodeAvatar!)
+                arView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
+                arView.scene.anchors[0].addChild(self.nodeAvatar!)
             } else {
                 self.uploadChooseSceneInBackground()
             }
@@ -292,12 +330,15 @@ final class GeneralViewController: UIViewController {
     func uploadChooseSceneInBackground() {
         
         var cancellable: AnyCancellable? = nil
+        let scaleAvatar: Float = 1.5
         
         cancellable = ModelEntity.loadModelAsync(named: self.arrayNameScene[self.chooseModel])
           .sink(receiveCompletion: { error in
             print("Unexpected error: \(error)")
             cancellable?.cancel()
           }, receiveValue: { entity in
+              
+              entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
 
               print ("uploadChooseSceneInBackground")
               
@@ -307,8 +348,8 @@ final class GeneralViewController: UIViewController {
                   self.nodeAvatar = entity
               }
               
-              self.sceneView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
-              self.sceneView.scene.anchors[0].addChild(entity)
+              self.arView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
+              self.arView.scene.anchors[0].addChild(entity)
 
               cancellable?.cancel()
           })
@@ -317,10 +358,12 @@ final class GeneralViewController: UIViewController {
     @objc private func tapArView() {
         
         if ARFaceTrackingConfiguration.isSupported {
-//            let vc = ArViewController()
-            let vc = FaceTrackViewContoller()
-            self.navigationController?.pushViewController(vc,
-             animated: true)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now(), execute: {
+                let vc = CleanFaceTrackViewController(arView: self.arView)
+                self.navigationController?.pushViewController(vc,
+                 animated: true)
+            })
         } else {
             print ("log ARFaceTrackingConfiguration.isSupported == false")
         }
@@ -336,7 +379,7 @@ final class GeneralViewController: UIViewController {
     @objc private func tapZoomOut() {
         
         let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: startPoint)
-        self.sceneView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: TimeInterval(self.durationZoomCamera))
+        arView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: TimeInterval(self.durationZoomCamera))
         self.durationZoomCamera = 0
         
         self.stopDemo()
@@ -370,7 +413,7 @@ final class GeneralViewController: UIViewController {
     private func startDemo() {
         
         let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: finishPoint)
-        self.sceneView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: TimeInterval(self.durationZoomCamera))
+        arView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: TimeInterval(self.durationZoomCamera))
         
         if self.videoPlayerEmoji != nil {
             self.videoPlayerEmoji = nil
@@ -385,7 +428,7 @@ final class GeneralViewController: UIViewController {
         videoPlane.transform.translation = SIMD3(x: 0, y: 2.15, z: -0.2)
         videoPlane.transform.rotation = simd_quatf(angle: 1.5708, axis: SIMD3(x: 1, y: 0, z: 0))
         
-        self.sceneView.scene.anchors[0].addChild(videoPlane)
+        arView.scene.anchors[0].addChild(videoPlane)
         
         let transformVideoPlane = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: 1, z: 0))
             
@@ -429,7 +472,7 @@ final class GeneralViewController: UIViewController {
     
     private func subAnim() {
         
-        subAnimComplete = self.sceneView.scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: nil, { _ in
+        subAnimComplete = arView.scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: nil, { _ in
             
             self.serialQueue.sync {
             
@@ -528,10 +571,9 @@ final class GeneralViewController: UIViewController {
     }
     
     private func stopDemo() {
+        self.stopAnimationEmoji()
         
-            self.stopAnimationEmoji()
-        
-            self.sceneView.scene.anchors[0].children[2].removeFromParent()
+        arView.scene.anchors[0].children[2].removeFromParent()
             self.videoPlayerEmoji?.pause()
 //            self.videoPlayerEmoji?.removeAllItems()
             self.videoPlayerEmoji = nil
