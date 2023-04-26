@@ -27,59 +27,54 @@ final class WelcomeViewController: UIViewController {
         welcomeImage.frame = view.frame
         
         uploadScene()
+        
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func uploadScene() {
-            
-        let generalVC = GeneralViewController()
         
-        let anchor = AnchorEntity(world: generalVC.startPoint)
-        generalVC.sceneView.scene.addAnchor(anchor)
+        let arView = ARView(frame: .zero, cameraMode: .nonAR, automaticallyConfigureSession: false)
         
-        let entity = try! ModelEntity.loadModel(named: "OKO-location_v3", in: nil)
-        entity.setScale(SIMD3(x: 2, y: 2, z: 2), relativeTo: entity)
+        let sceneEntity = try! ModelEntity.loadModel(named: "OKO-location_v3", in: nil)
+        sceneEntity.setScale(SIMD3(x: 2, y: 2, z: 2), relativeTo: sceneEntity)
         
 //        let entity = try! ModelEntity.loadModel(named: "OKO location_v2", in: nil)
 //        entity.setScale(SIMD3(x: 0.1, y: 0.1, z: 0.1), relativeTo: entity)
         
-        anchor.addChild(entity)
-        
         let cameraEntity = PerspectiveCamera()
         cameraEntity.camera.fieldOfViewInDegrees = 39
-        let cameraAnchor = AnchorEntity(world: .zero)
-        cameraAnchor.addChild(cameraEntity)
-        cameraAnchor.transform.translation = SIMD3(x: 0, y: 0, z: 4)
-               
-        generalVC.sceneView.scene.addAnchor(cameraAnchor)
+        
+        var nodeGirl: Entity?
+        var nodeAvatar: Entity?
         
         let scaleAvatar: Float = 1.5
         
+        let arrayNameScene = ["dressed_avatar_2504.usdz", "dressed_girl_2104.usdz"]
+        
         var cancellable: AnyCancellable? = nil
          
-          cancellable = ModelEntity.loadModelAsync(named: generalVC.arrayNameScene[1])
+          cancellable = ModelEntity.loadModelAsync(named: arrayNameScene[1])
             .sink(receiveCompletion: { error in
               print("Unexpected error: \(error)")
               cancellable?.cancel()
             }, receiveValue: { entity in
 
                 entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
-                entity.transform.translation = SIMD3(x: 0, y: 0.7, z: 0.3)
                 
-                generalVC.nodeAvatar = entity
+                nodeAvatar = entity
                 
-                cancellable = ModelEntity.loadModelAsync(named: generalVC.arrayNameScene[0])
+                cancellable = ModelEntity.loadModelAsync(named: arrayNameScene[0])
                   .sink(receiveCompletion: { error in
                     print("Unexpected error: \(error)")
                     cancellable?.cancel()
                   }, receiveValue: { entity in
 
                       entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
-                      entity.transform.translation = SIMD3(x: 0, y: 0.7, z: 0.3)
                       
-                      generalVC.nodeGirl = entity
-                      
-                      anchor.addChild(entity)
+                      nodeGirl = entity
 
+                      let generalVC = GeneralViewController(arView: arView, sceneEntity: sceneEntity, nodeGirl: nodeGirl!, nodeAvatar: nodeAvatar!)
+                      
                       self.navigationController?.pushViewController(generalVC, animated: true)
 
                       cancellable?.cancel()
