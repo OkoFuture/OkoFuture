@@ -9,7 +9,7 @@ import UIKit
 import RealityKit
 import ARKit
 
-fileprivate enum Emoji {
+public enum Emoji {
     case pokerFace, excited, shoced
 }
 
