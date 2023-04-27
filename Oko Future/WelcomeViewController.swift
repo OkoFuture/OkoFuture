@@ -35,7 +35,7 @@ final class WelcomeViewController: UIViewController {
         
         let arView = ARView(frame: .zero, cameraMode: .nonAR, automaticallyConfigureSession: false)
         
-        let sceneEntity = try! ModelEntity.loadModel(named: "OKO-location_v3", in: nil)
+        let sceneEntity = try! ModelEntity.loadModel(named: "OKO-location_v3.1", in: nil)
         sceneEntity.setScale(SIMD3(x: 2, y: 2, z: 2), relativeTo: sceneEntity)
         
 //        let entity = try! ModelEntity.loadModel(named: "OKO location_v2", in: nil)
