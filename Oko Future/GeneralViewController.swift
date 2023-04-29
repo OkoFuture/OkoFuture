@@ -35,7 +35,7 @@ final class GeneralViewController: UIViewController {
     
     public let startPoint: SIMD3<Float> = [0, -2, -1]
     public let finishPoint: SIMD3<Float> = [0, -2.3, 0.5]
-    public let arrayNameScene = ["dressed_avatar_2504.usdz", "dressed_girl_2104.usdz"]
+    public let arrayNameScene = Helper().arrayNameAvatarUSDZ()
     private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__228-1"]
     private var arrayPlayerItem: [AVPlayerItem] = []
     private var videoPlayerEmoji: AVQueuePlayer? = nil
@@ -229,33 +229,38 @@ final class GeneralViewController: UIViewController {
     
     private func createAnimRes() {
         
-        guard let anim1 = self.nodeGirl?.availableAnimations[0] else {return}
+        if let availableAnimationsGirl = self.nodeGirl?.availableAnimations, self.nodeGirl?.availableAnimations.count != 0 {
+            let animGirl = availableAnimationsGirl[0]
+            
+            let flex1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex1), end: .init(timingFinishFlex1), duration: nil)))
+            let flex2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
+            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
+            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
+            let emoji3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
+            
+            dictAnimationRes1["flex1"] = flex1
+            dictAnimationRes1["flex2"] = flex2
+            dictAnimationRes1["emoji1"] = emoji1
+            dictAnimationRes1["emoji2"] = emoji2
+            dictAnimationRes1["emoji3"] = emoji3
+        }
         
-        let flex1: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartFlex1), end: .init(timingFinishFlex1), duration: nil)))
-        let flex2: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
-        let emoji1: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
-        let emoji2: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
-        let emoji3: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
+        if let availableAnimationsAvatar = self.nodeAvatar?.availableAnimations, self.nodeAvatar?.availableAnimations.count != 0 {
+            let animAvatar = availableAnimationsAvatar[0]
+            
+            let flex1av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartFlex1), end: .init(timingFinishFlex1), duration: nil)))
+            let flex2av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
+            let emoji1av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
+            let emoji2av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
+            let emoji3av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
+            
+            dictAnimationRes2["flex1"] = flex1av
+            dictAnimationRes2["flex2"] = flex2av
+            dictAnimationRes2["emoji1"] = emoji1av
+            dictAnimationRes2["emoji2"] = emoji2av
+            dictAnimationRes2["emoji3"] = emoji3av
+        }
         
-        dictAnimationRes1["flex1"] = flex1
-        dictAnimationRes1["flex2"] = flex2
-        dictAnimationRes1["emoji1"] = emoji1
-        dictAnimationRes1["emoji2"] = emoji2
-        dictAnimationRes1["emoji3"] = emoji3
-        
-        guard let anim1 = self.nodeAvatar?.availableAnimations[0] else {return}
-        
-        let flex1av: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartFlex1), end: .init(timingFinishFlex1), duration: nil)))
-        let flex2av: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
-        let emoji1av: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
-        let emoji2av: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
-        let emoji3av: AnimationResource = try! .generate(with: (anim1.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
-        
-        dictAnimationRes2["flex1"] = flex1av
-        dictAnimationRes2["flex2"] = flex2av
-        dictAnimationRes2["emoji1"] = emoji1av
-        dictAnimationRes2["emoji2"] = emoji2av
-        dictAnimationRes2["emoji3"] = emoji3av
     }
     
     @objc private func tapFirst() {
@@ -444,9 +449,13 @@ final class GeneralViewController: UIViewController {
         
         switch self.chooseModel {
         case 0:
-            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["flex1"]!)
+            if let animRes = self.dictAnimationRes1["flex1"] {
+                self.animationController = self.nodeGirl?.playAnimation(animRes)
+            }
         case 1:
-            self.animationController = self.nodeAvatar?.playAnimation(self.dictAnimationRes2["flex1"]!)
+            if let animRes = self.dictAnimationRes2["flex1"] {
+                self.animationController = self.nodeAvatar?.playAnimation(animRes)
+            }
         default: break
         }
         }

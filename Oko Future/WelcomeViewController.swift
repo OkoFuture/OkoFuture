@@ -49,7 +49,7 @@ final class WelcomeViewController: UIViewController {
         
         let scaleAvatar: Float = 1.5
         
-        let arrayNameScene = ["dressed_avatar_2504.usdz", "dressed_girl_2104.usdz"]
+        let arrayNameScene = Helper().arrayNameAvatarUSDZ()
         
         var cancellable: AnyCancellable? = nil
          
