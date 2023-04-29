@@ -31,6 +31,7 @@
 		D10B06F429F7AE90002B9868 /* dressed_avatar_2504.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D10B06F329F7AE90002B9868 /* dressed_avatar_2504.usdz */; };
 		D10B06F829F7FDB6002B9868 /* CleanFaceTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10B06F729F7FDB6002B9868 /* CleanFaceTrackViewController.swift */; };
 		D10B422229F94B0800526BEF /* dressed_avatar_2504_V2.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D10B422129F94B0800526BEF /* dressed_avatar_2504_V2.usdz */; };
+		D1355C2429FD0DB6005ABD5A /* H_FBX_M_USDx100.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1355C2329FD0DB6005ABD5A /* H_FBX_M_USDx100.usdz */; };
 		D158732429F3E8A400C18364 /* dressed_girl_2104.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D158732329F3E8A400C18364 /* dressed_girl_2104.usdz */; };
 		D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15A35B129F697EC00E3F6E1 /* Helper.swift */; };
 		D15A35BA29F69BF300E3F6E1 /* ChakraPetch-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */; };
@@ -68,6 +69,7 @@
 		D10B06F329F7AE90002B9868 /* dressed_avatar_2504.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dressed_avatar_2504.usdz; sourceTree = "<group>"; };
 		D10B06F729F7FDB6002B9868 /* CleanFaceTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanFaceTrackViewController.swift; sourceTree = "<group>"; };
 		D10B422129F94B0800526BEF /* dressed_avatar_2504_V2.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dressed_avatar_2504_V2.usdz; sourceTree = "<group>"; };
+		D1355C2329FD0DB6005ABD5A /* H_FBX_M_USDx100.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = H_FBX_M_USDx100.usdz; sourceTree = "<group>"; };
 		D158732329F3E8A400C18364 /* dressed_girl_2104.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = dressed_girl_2104.usdz; sourceTree = "<group>"; };
 		D15A35B129F697EC00E3F6E1 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ChakraPetch-Medium.ttf"; sourceTree = "<group>"; };
@@ -92,6 +94,7 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				D1355C2329FD0DB6005ABD5A /* H_FBX_M_USDx100.usdz */,
 				D1A4C42D29FA6AA50087707C /* OKO-location_v3.1.usdz */,
 				D10B422129F94B0800526BEF /* dressed_avatar_2504_V2.usdz */,
 				D10B06F329F7AE90002B9868 /* dressed_avatar_2504.usdz */,
@@ -211,6 +214,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1355C2429FD0DB6005ABD5A /* H_FBX_M_USDx100.usdz in Resources */,
 				D1A4C42E29FA6AA50087707C /* OKO-location_v3.1.usdz in Resources */,
 				D10B422229F94B0800526BEF /* dressed_avatar_2504_V2.usdz in Resources */,
 				D10B06F429F7AE90002B9868 /* dressed_avatar_2504.usdz in Resources */,

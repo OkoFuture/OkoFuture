@@ -1,3 +1,4 @@
 dressed_avatar_2504_V2.usdz filter=lfs diff=lfs merge=lfs -text
+H_FBX_M_USDx100.usdz filter=lfs diff=lfs merge=lfs -text
 Oko/Future/CNNEmotions.mlmodel filter=lfs diff=lfs merge=lfs -text
 *.mlmodel filter=lfs diff=lfs merge=lfs -text
