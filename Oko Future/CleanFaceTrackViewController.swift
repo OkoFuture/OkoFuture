@@ -22,7 +22,7 @@ final class CleanFaceTrackViewController: UIViewController {
     
     private var arView: ARView
     
-    private var videoPlayer = AVQueuePlayer()
+//    private var videoPlayer = AVQueuePlayer()
     
     private let arrayNameVideos = ["poker_face_transition", "poker_face", "excited_transition", "excited", "shoced_transition", "shocked__228-1"]
     private var playerItemPokerFace: [AVPlayerItem] = []
@@ -101,27 +101,28 @@ extension CleanFaceTrackViewController: ARSessionDelegate {
 
     private func createOneAnchor (faceAnchor: ARFaceAnchor) {
         
-        let anchorEntity = AnchorEntity()
-        anchorEntity.transform.matrix = faceAnchor.transform
+        let anchor = AnchorEntity()
+        var currentMatrix = faceAnchor.transform
+        currentMatrix.columns.3.y = currentMatrix.columns.3.y - 0.25
         
-        let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
-        let width: Float = 100
-        let height: Float = 100
-        let videoPlane = ModelEntity(mesh: .generatePlane(width: width, depth: height, cornerRadius: 0), materials: [videoMaterial])
+        anchor.transform.matrix = currentMatrix
         
-        anchorEntity.addChild(videoPlane)
-        videoPlane.transform.translation += SIMD3(x: 0, y: 0.3, z: 0)
-        
-        arView.scene.addAnchor(anchorEntity)
-//            let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: 0.3, z: 0))
-//            videoPlane.move(to: transform, relativeTo: anchorEntity, duration: 0)
+        arView.scene.addAnchor(anchor)
     }
     
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
                 
+        if self.arView.scene.anchors.count < 2 {
+            return
+        }
+        
         if let faceAnchor = anchors.first as? ARFaceAnchor {
             changeEmoji(anchor: faceAnchor)
-            arView.scene.anchors[0].transform.matrix = faceAnchor.transform
+            
+            var currentMatrix = faceAnchor.transform
+            currentMatrix.columns.3.y = currentMatrix.columns.3.y - 0.25
+            
+            arView.scene.anchors[1].transform.matrix = currentMatrix
         }
     }
     
@@ -138,13 +139,10 @@ extension CleanFaceTrackViewController: ARSessionDelegate {
         let excited: Bool = ((smileLeft?.decimalValue ?? 0.0) + (smileRight?.decimalValue ?? 0.0)) > 0.9
         
         if shoced {
-            print ("awdfawfa shoced")
             self.emoji = .shoced
         } else if excited {
-            print ("awdfawfa excited")
             self.emoji = .excited
         } else {
-            print ("awdfawfa pokerFace")
             self.emoji = .pokerFace
         }
     }
@@ -160,14 +158,14 @@ extension CleanFaceTrackViewController: ARSessionDelegate {
 
         if playerItemExcited.isEmpty {
             for i in 2...3 {
-                guard let playerItem = dowloadPlayerItem(index: i-2) else {return}
+                guard let playerItem = dowloadPlayerItem(index: i) else {return}
                 playerItemExcited.append(playerItem)
             }
         }
 
         if playerItemShoced.isEmpty {
             for i in 4...5 {
-                guard let playerItem = dowloadPlayerItem(index: i-4) else {return}
+                guard let playerItem = dowloadPlayerItem(index: i) else {return}
                 playerItemShoced.append(playerItem)
             }
         }
@@ -196,6 +194,13 @@ extension CleanFaceTrackViewController: ARSessionDelegate {
     }
     
     private func changeVideo(emoji: Emoji) {
+        
+        if self.arView.scene.anchors.count < 2 {
+            return
+        }
+        
+        var videoPlayer = AVQueuePlayer()
+        
         switch emoji {
         case .pokerFace:
             videoPlayer = AVQueuePlayer(items: [playerItemPokerFace[0], playerItemPokerFace[1]])
@@ -208,7 +213,29 @@ extension CleanFaceTrackViewController: ARSessionDelegate {
             playerItemShoced.removeAll()
         }
         
-        videoPlayer.play()
+        arView.scene.anchors[1].children.removeAll()
+        
+        let videoPlane = returnPlane(videoPlayer: videoPlayer)
         dowloadVideos()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.13, execute: {
+            videoPlayer.play()
+            self.arView.scene.anchors[1].addChild(videoPlane)
+        })
     }
+    
+    private func returnPlane(videoPlayer: AVQueuePlayer) -> ModelEntity {
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
+        
+        let width: Float = 0.3
+        let height: Float = 0.3
+        
+        let videoPlane = ModelEntity(mesh: .generatePlane(width: width, depth: height, cornerRadius: 0), materials: [videoMaterial])
+        videoPlane.transform.rotation = simd_quatf(angle: 1.5708, axis: SIMD3(x: 1, y: 0, z: 0))
+        videoPlane.transform.translation.z = videoPlane.transform.translation.z + 0.1
+        
+        return videoPlane
+    }
+
 }
