@@ -35,11 +35,8 @@ final class WelcomeViewController: UIViewController {
         
         let arView = ARView(frame: .zero, cameraMode: .nonAR, automaticallyConfigureSession: false)
         
-        let sceneEntity = try! ModelEntity.loadModel(named: "OKO-location_v3.1", in: nil)
+        let sceneEntity = try! ModelEntity.loadModel(named: "loc_new_textures 08.05", in: nil)
         sceneEntity.setScale(SIMD3(x: 2, y: 2, z: 2), relativeTo: sceneEntity)
-        
-//        let entity = try! ModelEntity.loadModel(named: "OKO location_v2", in: nil)
-//        entity.setScale(SIMD3(x: 0.1, y: 0.1, z: 0.1), relativeTo: entity)
         
         let cameraEntity = PerspectiveCamera()
         cameraEntity.camera.fieldOfViewInDegrees = 39
@@ -47,7 +44,7 @@ final class WelcomeViewController: UIViewController {
         var nodeGirl: Entity?
         var nodeAvatar: Entity?
         
-        let scaleAvatar: Float = 1.5
+        let scaleAvatar: Float = 0.75
         
         let arrayNameScene = Helper().arrayNameAvatarUSDZ()
         
