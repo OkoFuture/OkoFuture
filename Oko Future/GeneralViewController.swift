@@ -196,6 +196,32 @@ final class GeneralViewController: UIViewController {
         nodeGirl.transform.translation = SIMD3(x: 0, y: 0.7, z: 0.3)
         
         anchor.addChild(nodeGirl)
+        
+        let Light = Lighting()
+        let anchorLight = AnchorEntity(world: self.startPoint)
+        arView.scene.addAnchor(anchorLight)
+        let pointLight = Lighting().light
+        let strongLight = Light.strongLight()
+        
+        let light1 = AnchorEntity(world: [0,1,0])
+        light1.components.set(pointLight)
+        anchorLight.addChild(light1)
+        
+        let light2 = AnchorEntity(world: [0,-0.5,0])
+        light2.components.set(strongLight)
+        anchorLight.addChild(light2)
+        
+        let lightFon1 = AnchorEntity(world: [1,1,-2])
+        lightFon1.components.set(pointLight)
+        anchorLight.addChild(lightFon1)
+        
+        let lightFon2 = AnchorEntity(world: [-1,2,-2])
+        lightFon2.components.set(pointLight)
+        anchorLight.addChild(lightFon2)
+        
+        let lightFon3 = AnchorEntity(world: [-1,1,-2])
+        lightFon3.components.set(strongLight)
+        anchorLight.addChild(lightFon3)
     }
     
     func stopSession() {
@@ -420,6 +446,15 @@ final class GeneralViewController: UIViewController {
         
         let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: startPoint)
         arView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: TimeInterval(self.durationZoomCamera))
+        
+        for var light in arView.scene.anchors[2].children {
+            let trans: SIMD3<Float> = [startPoint.x - finishPoint.x, startPoint.y - finishPoint.y, startPoint.z - finishPoint.z]
+            
+            let transLight = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: trans)
+            
+            light.move(to: transLight, relativeTo: light, duration: TimeInterval(self.durationZoomCamera))
+        }
+        
         self.durationZoomCamera = 0
         
         self.stopDemo()
@@ -502,6 +537,14 @@ final class GeneralViewController: UIViewController {
         
         let transform = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: finishPoint)
         arView.scene.anchors[0].move(to: transform, relativeTo: nil, duration: TimeInterval(self.durationZoomCamera))
+        
+        for var light in arView.scene.anchors[2].children {
+            let trans: SIMD3<Float> = [finishPoint.x - startPoint.x, finishPoint.y - startPoint.y, finishPoint.z - startPoint.z]
+            
+            let transLight = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: trans)
+            
+            light.move(to: transLight, relativeTo: light, duration: TimeInterval(self.durationZoomCamera))
+        }
         
         if self.videoPlayerEmoji != nil {
             self.videoPlayerEmoji = nil
