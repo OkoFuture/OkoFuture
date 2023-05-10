@@ -32,6 +32,8 @@
 		D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB029F553340003F3EC /* OkoDefaultButton.swift */; };
 		D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */; };
 		D1DF2F6B2A09505200E17DA9 /* avtr_anim_0805.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */; };
+		D1FF5B762A0BAA120027B89C /* OkoClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FF5B752A0BAA120027B89C /* OkoClassifierService.swift */; };
+		D1FF5B782A0BAA340027B89C /* OkoClassifier2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = D1FF5B772A0BAA340027B89C /* OkoClassifier2.mlmodel */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -62,6 +64,8 @@
 		D188FBB029F553340003F3EC /* OkoDefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoDefaultButton.swift; sourceTree = "<group>"; };
 		D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigSwitch.swift; sourceTree = "<group>"; };
 		D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avtr_anim_0805.usdz; sourceTree = "<group>"; };
+		D1FF5B752A0BAA120027B89C /* OkoClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoClassifierService.swift; sourceTree = "<group>"; };
+		D1FF5B772A0BAA340027B89C /* OkoClassifier2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = OkoClassifier2.mlmodel; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,7 +115,9 @@
 				9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */,
 				920BF14029CC623D001D40DA /* ArViewController.swift */,
 				92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */,
+				D1FF5B772A0BAA340027B89C /* OkoClassifier2.mlmodel */,
 				D10B06F729F7FDB6002B9868 /* CleanFaceTrackViewController.swift */,
+				D1FF5B752A0BAA120027B89C /* OkoClassifierService.swift */,
 				D15A35B329F698FD00E3F6E1 /* Font */,
 				D188FBB029F553340003F3EC /* OkoDefaultButton.swift */,
 				D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */,
@@ -222,8 +228,10 @@
 				92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */,
 				D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */,
 				D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */,
+				D1FF5B762A0BAA120027B89C /* OkoClassifierService.swift in Sources */,
 				920BF12929CC3D33001D40DA /* AppDelegate.swift in Sources */,
 				920BF12B29CC3D33001D40DA /* SceneDelegate.swift in Sources */,
+				D1FF5B782A0BAA340027B89C /* OkoClassifier2.mlmodel in Sources */,
 				920BF14129CC623D001D40DA /* ArViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

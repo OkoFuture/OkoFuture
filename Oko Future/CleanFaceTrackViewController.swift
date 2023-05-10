@@ -20,7 +20,20 @@ final class CleanFaceTrackViewController: UIViewController {
         }
     }
     
+    private var counter = 100 {
+        didSet {
+            if counter == 120 {
+                reqvest()
+                counter = 0
+            }
+        }
+    }
+    
     private var arView: ARView
+    
+    private let classifierService = OkoClassifierService()
+    
+    private var isOKO = false
     
 //    private var videoPlayer = AVQueuePlayer()
     
@@ -51,6 +64,7 @@ final class CleanFaceTrackViewController: UIViewController {
         
         view.addSubview(backButton)
         backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
+        bindToImageClassifierService()
         
         dowloadVideos()
     }
@@ -88,6 +102,45 @@ final class CleanFaceTrackViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    private func bindToImageClassifierService() {
+      classifierService.onDidUpdateState = { [weak self] state in
+        self?.setupWithImageClassifierState(state)
+      }
+    }
+    
+    private func setupWithImageClassifierState(_ state: ImageClassifierServiceState) {
+        
+        var resultLog = ""
+      switch state {
+      case .startRequest:
+          resultLog = "Сlassification in progress"
+      case .requestFailed:
+          resultLog = "Classification is failed"
+      case .receiveResult(let result):
+          resultLog = result.description
+          
+          if result.identifier == "OKO" && result.confidence > 70 {
+              isOKO = true
+//              print ("hjkhjjnk результ", result.identifier , result.confidence, isOKO)
+          } else {
+              isOKO = false
+//              print ("hjkhjjnk результ", result.identifier , result.confidence, isOKO)
+          }
+      }
+//        print (resultLog)
+    }
+
+    private func reqvest() {
+        
+        arView.snapshot(saveToHDR: false, completion: {image in
+            
+            if let img = image {
+                self.classifierService.classifyImage(img)
+            }
+            
+        })
+        
+    }
 }
 
 extension CleanFaceTrackViewController: ARSessionDelegate {
@@ -97,6 +150,10 @@ extension CleanFaceTrackViewController: ARSessionDelegate {
         if let faceAnchor = anchors.first as? ARFaceAnchor {
             createOneAnchor(faceAnchor: faceAnchor)
         }
+    }
+    
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        counter += 1
     }
 
     private func createOneAnchor (faceAnchor: ARFaceAnchor) {
@@ -113,6 +170,10 @@ extension CleanFaceTrackViewController: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
                 
         if self.arView.scene.anchors.count < 2 {
+            return
+        }
+        
+        if !isOKO {
             return
         }
         
@@ -196,6 +257,10 @@ extension CleanFaceTrackViewController: ARSessionDelegate {
     private func changeVideo(emoji: Emoji) {
         
         if self.arView.scene.anchors.count < 2 {
+            return
+        }
+        
+        if !isOKO {
             return
         }
         
