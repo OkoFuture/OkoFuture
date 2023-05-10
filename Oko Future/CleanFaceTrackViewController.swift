@@ -153,7 +153,9 @@ extension CleanFaceTrackViewController: ARSessionDelegate {
     }
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        counter += 1
+        if !isOKO {
+            counter += 1
+        }
     }
 
     private func createOneAnchor (faceAnchor: ARFaceAnchor) {
