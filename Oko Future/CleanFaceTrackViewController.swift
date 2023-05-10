@@ -20,9 +20,9 @@ final class CleanFaceTrackViewController: UIViewController {
         }
     }
     
-    private var counter = 100 {
+    private var counter = 0 {
         didSet {
-            if counter == 120 {
+            if counter == 30 {
                 reqvest()
                 counter = 0
             }
