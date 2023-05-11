@@ -13,6 +13,7 @@ final class CleanFaceTrackViewController: UIViewController {
     
     private var stepImageView: UIImageView = {
         let imgv = UIImageView(image: UIImage(named: "Step 1 (4)"))
+        imgv.contentMode = .scaleAspectFill
         return imgv
     }()
     
