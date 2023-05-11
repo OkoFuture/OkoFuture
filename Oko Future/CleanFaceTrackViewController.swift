@@ -11,6 +11,11 @@ import RealityKit
 
 final class CleanFaceTrackViewController: UIViewController {
     
+    private var stepImageView: UIImageView = {
+        let imgv = UIImageView(image: UIImage(named: "Step 1 (4)"))
+        return imgv
+    }()
+    
     private var emoji: Emoji? = nil {
         didSet {
             if emoji != oldValue, let emoji = emoji {
@@ -33,7 +38,21 @@ final class CleanFaceTrackViewController: UIViewController {
     
     private let classifierService = OkoClassifierService()
     
-    private var isOKO = false
+    private var isOKO = false {
+        didSet {
+            if isOKO == true {
+                stepImageView.image = UIImage(named: "S")
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                    self.stepImageView.image = UIImage(named: "Step 2 (3)")
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                        self.stepImageView.isHidden = true
+                    })
+                })
+            }
+        }
+    }
     
 //    private var videoPlayer = AVQueuePlayer()
     
@@ -62,6 +81,7 @@ final class CleanFaceTrackViewController: UIViewController {
         
         arView.session.delegate = self
         
+        view.addSubview(stepImageView)
         view.addSubview(backButton)
         backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
         bindToImageClassifierService()
@@ -72,6 +92,7 @@ final class CleanFaceTrackViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
         backButton.frame = CGRect(x: 21, y: 61, width: 48, height: 48)
+        stepImageView.frame = view.frame
         
         arView.removeFromSuperview()
         arView.frame = view.frame
