@@ -32,6 +32,9 @@
 		D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB029F553340003F3EC /* OkoDefaultButton.swift */; };
 		D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */; };
 		D1DF2F6B2A09505200E17DA9 /* avtr_anim_0805.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */; };
+		D1FC93422A160F84002A3B05 /* LevelTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */; };
+		D1FC93442A1614DA002A3B05 /* okobot_1710scale_all.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */; };
+		D1FC93462A1615B8002A3B05 /* CNNEmotions.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */; };
 		D1FF5B762A0BAA120027B89C /* OkoClassifierService.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FF5B752A0BAA120027B89C /* OkoClassifierService.swift */; };
 		D1FF5B782A0BAA340027B89C /* OkoClassifier2.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = D1FF5B772A0BAA340027B89C /* OkoClassifier2.mlmodel */; };
 		D1FF5B7A2A0BC2F00027B89C /* Lighting.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FF5B792A0BC2F00027B89C /* Lighting.swift */; };
@@ -65,6 +68,9 @@
 		D188FBB029F553340003F3EC /* OkoDefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoDefaultButton.swift; sourceTree = "<group>"; };
 		D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigSwitch.swift; sourceTree = "<group>"; };
 		D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avtr_anim_0805.usdz; sourceTree = "<group>"; };
+		D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelTwoViewController.swift; sourceTree = "<group>"; };
+		D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = okobot_1710scale_all.usdz; sourceTree = "<group>"; };
+		D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = CNNEmotions.mlmodel; sourceTree = "<group>"; };
 		D1FF5B752A0BAA120027B89C /* OkoClassifierService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoClassifierService.swift; sourceTree = "<group>"; };
 		D1FF5B772A0BAA340027B89C /* OkoClassifier2.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = OkoClassifier2.mlmodel; sourceTree = "<group>"; };
 		D1FF5B792A0BC2F00027B89C /* Lighting.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Lighting.swift; sourceTree = "<group>"; };
@@ -84,6 +90,7 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */,
 				D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */,
 				D16981DF2A08E71B00F82292 /* amy_anim_0505x100_2.usdz */,
 				D16981D92A08CC1D00F82292 /* loc_new_textures 08.05.usdz */,
@@ -118,7 +125,9 @@
 				D1FF5B792A0BC2F00027B89C /* Lighting.swift */,
 				920BF14029CC623D001D40DA /* ArViewController.swift */,
 				92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */,
+				D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */,
 				D1FF5B772A0BAA340027B89C /* OkoClassifier2.mlmodel */,
+				D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */,
 				D10B06F729F7FDB6002B9868 /* CleanFaceTrackViewController.swift */,
 				D1FF5B752A0BAA120027B89C /* OkoClassifierService.swift */,
 				D15A35B329F698FD00E3F6E1 /* Font */,
@@ -199,6 +208,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1FC93442A1614DA002A3B05 /* okobot_1710scale_all.usdz in Resources */,
 				D1DF2F6B2A09505200E17DA9 /* avtr_anim_0805.usdz in Resources */,
 				D16981E02A08E71B00F82292 /* amy_anim_0505x100_2.usdz in Resources */,
 				D16981DB2A08CC1E00F82292 /* loc_new_textures 08.05.usdz in Resources */,
@@ -230,7 +240,9 @@
 				9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */,
 				D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */,
 				92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */,
+				D1FC93462A1615B8002A3B05 /* CNNEmotions.mlmodel in Sources */,
 				D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */,
+				D1FC93422A160F84002A3B05 /* LevelTwoViewController.swift in Sources */,
 				D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */,
 				D1FF5B762A0BAA120027B89C /* OkoClassifierService.swift in Sources */,
 				920BF12929CC3D33001D40DA /* AppDelegate.swift in Sources */,
