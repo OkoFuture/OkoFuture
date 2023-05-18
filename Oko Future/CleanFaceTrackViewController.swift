@@ -84,7 +84,7 @@ final class CleanFaceTrackViewController: UIViewController {
         
         view.addSubview(stepImageView)
         view.addSubview(backButton)
-        backButton.addTarget(self, action: #selector(back), for: .touchUpInside)
+        backButton.addTarget(self, action: #selector(backButtonTap), for: .touchUpInside)
         bindToImageClassifierService()
         
         dowloadVideos()
@@ -119,7 +119,7 @@ final class CleanFaceTrackViewController: UIViewController {
         arView.removeFromSuperview()
     }
     
-    @objc func back() {
+    @objc func backButtonTap() {
         arView.removeFromSuperview()
         navigationController?.popViewController(animated: true)
     }
