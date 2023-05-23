@@ -8,6 +8,7 @@
 import ARKit
 import UIKit
 import RealityKit
+import ReplayKit
 
 final class CleanFaceTrackViewController: UIViewController {
     
