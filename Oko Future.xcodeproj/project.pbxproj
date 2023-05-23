@@ -402,6 +402,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Oko Future/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow camera access for ar";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow photo library access for save photo";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
@@ -432,6 +433,7 @@
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Oko Future/Info.plist";
 				INFOPLIST_KEY_NSCameraUsageDescription = "Allow camera access for ar";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "Allow photo library access for save photo";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
