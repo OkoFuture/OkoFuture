@@ -32,6 +32,8 @@
 		D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB029F553340003F3EC /* OkoDefaultButton.swift */; };
 		D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */; };
 		D1DF2F6B2A09505200E17DA9 /* avtr_anim_0805.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */; };
+		D1F3F6FF2A1B5E89004A2FFD /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */; };
+		D1F3F7012A1B6451004A2FFD /* OkoBigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */; };
 		D1FC93422A160F84002A3B05 /* LevelTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */; };
 		D1FC93442A1614DA002A3B05 /* okobot_1710scale_all.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */; };
 		D1FC93462A1615B8002A3B05 /* CNNEmotions.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */; };
@@ -68,6 +70,8 @@
 		D188FBB029F553340003F3EC /* OkoDefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoDefaultButton.swift; sourceTree = "<group>"; };
 		D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigSwitch.swift; sourceTree = "<group>"; };
 		D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avtr_anim_0805.usdz; sourceTree = "<group>"; };
+		D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
+		D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigButton.swift; sourceTree = "<group>"; };
 		D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelTwoViewController.swift; sourceTree = "<group>"; };
 		D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = okobot_1710scale_all.usdz; sourceTree = "<group>"; };
 		D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = CNNEmotions.mlmodel; sourceTree = "<group>"; };
@@ -122,6 +126,7 @@
 				920BF12A29CC3D33001D40DA /* SceneDelegate.swift */,
 				920BF12C29CC3D33001D40DA /* GeneralViewController.swift */,
 				9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */,
+				D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */,
 				D1FF5B792A0BC2F00027B89C /* Lighting.swift */,
 				920BF14029CC623D001D40DA /* ArViewController.swift */,
 				92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */,
@@ -133,6 +138,7 @@
 				D15A35B329F698FD00E3F6E1 /* Font */,
 				D188FBB029F553340003F3EC /* OkoDefaultButton.swift */,
 				D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */,
+				D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */,
 				D15A35B129F697EC00E3F6E1 /* Helper.swift */,
 				920BF13129CC3D34001D40DA /* Assets.xcassets */,
 				920BF13329CC3D34001D40DA /* LaunchScreen.storyboard */,
@@ -246,9 +252,11 @@
 				D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */,
 				D1FF5B762A0BAA120027B89C /* OkoClassifierService.swift in Sources */,
 				920BF12929CC3D33001D40DA /* AppDelegate.swift in Sources */,
+				D1F3F6FF2A1B5E89004A2FFD /* LogInViewController.swift in Sources */,
 				920BF12B29CC3D33001D40DA /* SceneDelegate.swift in Sources */,
 				D1FF5B782A0BAA340027B89C /* OkoClassifier2.mlmodel in Sources */,
 				920BF14129CC623D001D40DA /* ArViewController.swift in Sources */,
+				D1F3F7012A1B6451004A2FFD /* OkoBigButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
