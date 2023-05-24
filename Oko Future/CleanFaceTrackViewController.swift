@@ -12,9 +12,14 @@ import ReplayKit
 
 final class CleanFaceTrackViewController: UIViewController {
     
-    private let photoVideoButton: OkoDefaultButton = {
-        let btn = OkoDefaultButton()
+    private let photoVideoButton: UIButton = {
+        let btn = UIButton()
         btn.isHidden = true
+        btn.layer.borderWidth = 1
+        btn.layer.borderColor = UIColor.white.cgColor
+        btn.backgroundColor = .black
+//        btn.backgroundColor = .clear
+        btn.setImage(UIImage(named: "okoLogoWhite"), for: .normal)
         return btn
     }()
     
@@ -107,7 +112,8 @@ final class CleanFaceTrackViewController: UIViewController {
         
         backButton.frame = CGRect(x: 21, y: 61, width: 48, height: 48)
         stepImageView.frame = view.frame
-        photoVideoButton.frame = CGRect(x: (view.bounds.width - 64) / 2, y: view.bounds.height - 100, width: 64, height: 64)
+        photoVideoButton.frame = CGRect(x: (view.bounds.width - 80) / 2, y: view.bounds.height - 122, width: 80, height: 80)
+        photoVideoButton.layer.cornerRadius = photoVideoButton.bounds.size.height / 2.0
         
         arView.removeFromSuperview()
         arView.frame = view.frame
