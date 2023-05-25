@@ -27,6 +27,11 @@
 		D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15A35B129F697EC00E3F6E1 /* Helper.swift */; };
 		D15A35BA29F69BF300E3F6E1 /* ChakraPetch-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */; };
 		D15A35BB29F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15A35B929F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf */; };
+		D15E14062A1F70D30090584D /* 2405_screenwords_[000-299]Com-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D15E14042A1F70D20090584D /* 2405_screenwords_[000-299]Com-1.mov */; };
+		D15E14072A1F70D30090584D /* screen_2405.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D15E14052A1F70D30090584D /* screen_2405.usdz */; };
+		D15E14092A1F75A40090584D /* okobot_2305.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D15E14082A1F75A40090584D /* okobot_2305.usdz */; };
+		D15E140B2A1F9F2A0090584D /* okoBotVizor_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D15E140A2A1F9F2A0090584D /* okoBotVizor_[000-299]-1.mov */; };
+		D15E140D2A1F9FE00090584D /* fx element_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D15E140C2A1F9FE00090584D /* fx element_[000-299]-1.mov */; };
 		D16981DB2A08CC1E00F82292 /* loc_new_textures 08.05.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D16981D92A08CC1D00F82292 /* loc_new_textures 08.05.usdz */; };
 		D16981E02A08E71B00F82292 /* amy_anim_0505x100_2.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D16981DF2A08E71B00F82292 /* amy_anim_0505x100_2.usdz */; };
 		D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB029F553340003F3EC /* OkoDefaultButton.swift */; };
@@ -65,6 +70,11 @@
 		D15A35B129F697EC00E3F6E1 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ChakraPetch-Medium.ttf"; sourceTree = "<group>"; };
 		D15A35B929F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ChakraPetch-SemiBold.ttf"; sourceTree = "<group>"; };
+		D15E14042A1F70D20090584D /* 2405_screenwords_[000-299]Com-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "2405_screenwords_[000-299]Com-1.mov"; sourceTree = "<group>"; };
+		D15E14052A1F70D30090584D /* screen_2405.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = screen_2405.usdz; sourceTree = "<group>"; };
+		D15E14082A1F75A40090584D /* okobot_2305.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = okobot_2305.usdz; sourceTree = "<group>"; };
+		D15E140A2A1F9F2A0090584D /* okoBotVizor_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "okoBotVizor_[000-299]-1.mov"; sourceTree = "<group>"; };
+		D15E140C2A1F9FE00090584D /* fx element_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "fx element_[000-299]-1.mov"; sourceTree = "<group>"; };
 		D16981D92A08CC1D00F82292 /* loc_new_textures 08.05.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "loc_new_textures 08.05.usdz"; sourceTree = "<group>"; };
 		D16981DF2A08E71B00F82292 /* amy_anim_0505x100_2.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = amy_anim_0505x100_2.usdz; sourceTree = "<group>"; };
 		D188FBB029F553340003F3EC /* OkoDefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoDefaultButton.swift; sourceTree = "<group>"; };
@@ -94,6 +104,11 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				D15E140C2A1F9FE00090584D /* fx element_[000-299]-1.mov */,
+				D15E140A2A1F9F2A0090584D /* okoBotVizor_[000-299]-1.mov */,
+				D15E14082A1F75A40090584D /* okobot_2305.usdz */,
+				D15E14042A1F70D20090584D /* 2405_screenwords_[000-299]Com-1.mov */,
+				D15E14052A1F70D30090584D /* screen_2405.usdz */,
 				D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */,
 				D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */,
 				D16981DF2A08E71B00F82292 /* amy_anim_0505x100_2.usdz */,
@@ -214,6 +229,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D15E140D2A1F9FE00090584D /* fx element_[000-299]-1.mov in Resources */,
+				D15E140B2A1F9F2A0090584D /* okoBotVizor_[000-299]-1.mov in Resources */,
+				D15E14092A1F75A40090584D /* okobot_2305.usdz in Resources */,
+				D15E14062A1F70D30090584D /* 2405_screenwords_[000-299]Com-1.mov in Resources */,
+				D15E14072A1F70D30090584D /* screen_2405.usdz in Resources */,
 				D1FC93442A1614DA002A3B05 /* okobot_1710scale_all.usdz in Resources */,
 				D1DF2F6B2A09505200E17DA9 /* avtr_anim_0805.usdz in Resources */,
 				D16981E02A08E71B00F82292 /* amy_anim_0505x100_2.usdz in Resources */,

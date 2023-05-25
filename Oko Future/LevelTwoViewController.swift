@@ -8,6 +8,11 @@
 import ARKit
 import UIKit
 import RealityKit
+import ReplayKit
+
+public enum EmojiLVL2 {
+    case surprise, cry, cuteness
+}
 
 final class LevelTwoViewController: UIViewController {
     
@@ -15,6 +20,7 @@ final class LevelTwoViewController: UIViewController {
     
     private var videoPlayerPlane = AVPlayer()
     private var videoPlayerScreen = AVPlayer()
+    private var videoPlayerOkoBot = AVPlayer()
     
     let model: VNCoreMLModel = {
         let config = MLModelConfiguration()
@@ -23,16 +29,51 @@ final class LevelTwoViewController: UIViewController {
         return mlModel
     }()
     
-    private var emoji: Emoji? = nil {
+    private var emoji: EmojiLVL2? = nil {
         didSet {
             if emoji != oldValue, let emoji = emoji {
                 self.emoji = emoji
-//                self.changeVideo(emoji: emoji)
+                self.rewindVideoEmoji(emoji: emoji)
             }
         }
     }
     
-    var headAnchorID: UUID? = nil
+    private let photoVideoButton: UIButton = {
+        let btn = UIButton()
+        btn.isHidden = true
+        btn.layer.borderWidth = 1
+        btn.layer.borderColor = UIColor.white.cgColor
+        btn.backgroundColor = .black
+//        btn.backgroundColor = .clear
+        btn.setImage(UIImage(named: "okoLogoWhite"), for: .normal)
+        return btn
+    }()
+    
+    private var stepImageView: UIImageView = {
+        let imgv = UIImageView(image: UIImage(named: "Step 1 (4)"))
+        imgv.contentMode = .scaleAspectFill
+        return imgv
+    }()
+    
+//    var isOko = false
+    
+    var isOKO = false {
+        didSet {
+            if isOKO == true {
+                stepImageView.image = UIImage(named: "S")
+                photoVideoButton.isHidden = false
+                DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                    self.stepImageView.image = UIImage(named: "Step 2 (3)")
+
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                        self.stepImageView.isHidden = true
+                    })
+                })
+            }
+        }
+    }
+    
+//    var headAnchorID: UUID? = nil
     var imageAnchorID: UUID? = nil
     
     private let backButton: OkoDefaultButton = {
@@ -56,12 +97,22 @@ final class LevelTwoViewController: UIViewController {
         arView.session.delegate = self
         
         view.addSubview(backButton)
+        view.addSubview(photoVideoButton)
+        view.addSubview(stepImageView)
         backButton.addTarget(self, action: #selector(backButtonTap), for: .touchUpInside)
+        photoVideoButton.addTarget(self, action: #selector(snapshotSave), for: .touchUpInside)
+        let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(recordScreen))
+        photoVideoButton.addGestureRecognizer(longPressRecognizer)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
         backButton.frame = CGRect(x: 21, y: 61, width: 48, height: 48)
+        
+        photoVideoButton.frame = CGRect(x: (view.bounds.width - 80) / 2, y: view.bounds.height - 122, width: 80, height: 80)
+        photoVideoButton.layer.cornerRadius = photoVideoButton.bounds.size.height / 2.0
+        
+        stepImageView.frame = view.frame
         
         arView.removeFromSuperview()
         arView.frame = view.frame
@@ -85,9 +136,8 @@ final class LevelTwoViewController: UIViewController {
         arView.scene.anchors.removeAll()
         arView.cameraMode = .ar
         
-        let configuration = ARBodyTrackingConfiguration()
-        configuration.detectionImages = referenceImages
-        configuration.automaticSkeletonScaleEstimationEnabled = true
+        let configuration = ARImageTrackingConfiguration()
+        configuration.trackingImages = referenceImages
         
         arView.session.run(configuration)
     }
@@ -102,9 +152,49 @@ final class LevelTwoViewController: UIViewController {
         navigationController?.popViewController(animated: true)
     }
     
+    @objc private func snapshotSave() {
+        arView.snapshot(saveToHDR: false, completion: {image in
+            UIImageWriteToSavedPhotosAlbum(image!, self, #selector(self.image(_:didFinishSavingWithError:contextInfo:)), nil)
+            
+        })
+    }
+    
+    @objc func image(_ image: UIImage, didFinishSavingWithError error: Error?, contextInfo: UnsafeRawPointer) {
+
+        if let error = error {
+            print("Error Saving ARKit Scene \(error)")
+        } else {
+            print("ARKit Scene Successfully Saved")
+        }
+    }
+
+    
+    @objc private func recordScreen(sender: UILongPressGestureRecognizer) {
+        /// багулька с разрешением на запись экрана
+        switch sender.state {
+            
+        case .began:
+            RPScreenRecorder.shared().startRecording(handler: { error in
+                guard let error = error else { return }
+//                print ("htfghythyf", error.localizedDescription)
+            })
+        
+        case .ended:
+            RPScreenRecorder.shared().stopRecording { preview, err in
+              guard let preview = preview else { print("no preview window"); return }
+              preview.modalPresentationStyle = .overFullScreen
+              preview.previewControllerDelegate = self
+              self.present(preview, animated: true)
+                
+            }
+        default:
+            break
+        }
+    }
+    
     func generateVideoPlane() -> ModelEntity? {
         
-        let nameVideo = "puppets_with_alpha_hevc"
+        let nameVideo = "fx element_[000-299]-1"
         
         guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
             print("Failed get path", nameVideo)
@@ -127,15 +217,42 @@ final class LevelTwoViewController: UIViewController {
         videoPlayerPlane = AVPlayer(playerItem: item)
         
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlane)
-//        videoPlayerPlane.play()
+        videoPlayerPlane.play()
         
-        let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.5, height: 1), materials: [videoMaterial])
+        let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, height: 0.5), materials: [videoMaterial])
         
         return videoPlane
     }
     
-    private func generateVideoMaterialScreen() -> VideoMaterial? {
-        let nameVideo = "hd1833"
+    func rewindVideoEmoji(emoji: EmojiLVL2) {
+        
+        let cutTime: Float = 101 / 25
+        let cryTime: Float = 151 / 25
+        let omgTime: Float = 251 / 25
+        
+        switch emoji {
+            
+        case .surprise:
+            rewindVideoPlayer(time: omgTime)
+        case .cry:
+            rewindVideoPlayer(time: cryTime)
+        case .cuteness:
+            rewindVideoPlayer(time: cutTime)
+        }
+    }
+    
+    func rewindVideoPlayer(time: Float) {
+        
+        let currentTime = CMTimeMake(value: Int64(time), timescale: 1)
+        
+        videoPlayerPlane.seek(to: currentTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+        videoPlayerScreen.seek(to: currentTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+        videoPlayerOkoBot.seek(to: currentTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+    }
+    
+    private func generateOkoBot() -> ModelEntity? {
+        
+        let nameVideo = "okoBotVizor_[000-299]-1"
         
         guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
             print("Failed get path", nameVideo)
@@ -157,33 +274,76 @@ final class LevelTwoViewController: UIViewController {
         videoPlayerScreen = AVPlayer(playerItem: item)
         
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerScreen)
+        videoPlayerScreen.play()
         
-        return videoMaterial
-//        videoPlayerScreen.play()
+        let okoRobot1 = try! ModelEntity.loadModel(named: "okobot_2305")
+        
+        okoRobot1.model?.materials[0] = videoMaterial
+        
+        okoRobot1.transform.translation = [-0.3, 0.3, 0]
+        let startScale: Float = 0.1
+//        let startScale: Float = 0
+        okoRobot1.scale = [startScale, startScale, startScale]
+        
+        okoRobot1.playAnimation(okoRobot1.availableAnimations[0].repeat())
+        
+        let finalScale: Float = 0.1
+//        let finalScale: Float = 0.5
+        
+        let trans1 = Transform(scale: [finalScale,finalScale,finalScale], rotation: okoRobot1.transform.rotation, translation: okoRobot1.transform.translation)
+        
+//        okoRobot1.move(to: trans1, relativeTo: anchor, duration: TimeInterval(2))
+//        okoRobot1.move(to: trans1, relativeTo: nil, duration: TimeInterval(2))
+        return okoRobot1
     }
     
-//    func addPlaneTshirt(imageAnchor: ARImageAnchor) {
-    func addPlaneTshirt(imageAnchor: ARAnchor) {
+    func addPlaneTshirt(imageAnchor: ARImageAnchor) {
         guard let videoPlane = generateVideoPlane() else {return}
-        let frame = try! ModelEntity.loadModel(named: "frame_1505_v1")
-        let screen = try! ModelEntity.loadModel(named: "screen_1505_v1")
+        guard let okoBot = generateOkoBot() else {return}
         
-        let scale: Float = 50
-        frame.setScale(SIMD3(x: scale, y: scale, z: scale), relativeTo: frame)
-        screen.setScale(SIMD3(x: scale, y: scale, z: scale), relativeTo: screen)
+        videoPlane.transform.translation.y = videoPlane.transform.translation.y + 0.1
         
-        frame.transform.translation = [0,-4.5,0]
-        screen.transform.translation = [0,-4.5,0]
+        let screen = try! ModelEntity.loadModel(named: "screen_2405")
         
-       let videoMaterial = generateVideoMaterialScreen()
+        let scale: Float = 7
+        screen.scale = [scale,scale,scale]
         
-        screen.model?.materials[0] = videoMaterial!
+        screen.transform.translation = [0,-0.5,-0.04]
+        
+        let nameVideo = "2405_screenwords_[000-299]Com-1"
+        
+        guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
+            print("Failed get path", nameVideo)
+            return
+        }
+        
+        let videoURL = URL(fileURLWithPath: path)
+        let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
+        
+        guard let alphaMovieURL = url else {
+            print("Failed get url", nameVideo)
+            return
+        }
+        
+        let videoAsset = AVURLAsset(url: alphaMovieURL)
+        
+        let item: AVPlayerItem = .init(asset: videoAsset)
+        
+        videoPlayerScreen = AVPlayer(playerItem: item)
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerScreen)
+        videoPlayerScreen.play()
+        
+        screen.model?.materials[0] = videoMaterial
+        screen.model?.materials[1] = videoMaterial
         
         let anchor = AnchorEntity(anchor: imageAnchor)
         
         anchor.addChild(videoPlane)
-        anchor.addChild(frame)
         anchor.addChild(screen)
+        anchor.addChild(okoBot)
+        
+        anchor.transform.rotation = simd_quatf(angle: -1.5708, axis: [1,0,0])
         
         arView.scene.addAnchor(anchor)
         imageAnchorID = anchor.anchorIdentifier
@@ -220,9 +380,9 @@ final class LevelTwoViewController: UIViewController {
           if confidence > 80 {
               switch firstResult.identifier {
                   
-              case "Neutral": self?.emoji = .pokerFace
-              case "Happy": self?.emoji = .excited
-              case "Surprise": self?.emoji = .shoced
+              case "Surprise": self?.emoji = .surprise
+              case "Happy": self?.emoji = .cuteness
+              case "Sad": self?.emoji = .cry
                   
               default: break
               }
@@ -230,46 +390,31 @@ final class LevelTwoViewController: UIViewController {
       }
     }
     
-    func addRobotScene(bodyAnchor: ARBodyAnchor) {
-        let headTransformFromRoot = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "head_joint"))
-        let head: SIMD3<Float> = simd_make_float3(headTransformFromRoot!.columns.3)
-        let root: SIMD3<Float> = simd_make_float3(bodyAnchor.transform.columns.3)
-
-        let headTransform = head + root
-        
-        let anchor = AnchorEntity(world: headTransform)
-        anchor.orientation = Transform(matrix: headTransformFromRoot!).rotation
-        
-        let okoRobot1 = try! ModelEntity.loadModel(named: "okobot_1710scale_all")
-        okoRobot1.transform.translation = [0.3, 0, 0]
-        
-        let okoRobot2 = try! ModelEntity.loadModel(named: "okobot_1710scale_all")
-        okoRobot2.transform.translation = [-0.3, 0, 0]
-        
-        anchor.addChild(okoRobot1)
-        anchor.addChild(okoRobot2)
-        
-        arView.scene.addAnchor(anchor)
-        headAnchorID = anchor.anchorIdentifier
-    }
-    
-    func updateRobot(bodyAnchor: ARBodyAnchor) {
-        let headTransformFromRoot = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "head_joint"))
-        let head: SIMD3<Float> = simd_make_float3(headTransformFromRoot!.columns.3)
-        let root: SIMD3<Float> = simd_make_float3(bodyAnchor.transform.columns.3)
-        let headTransform = head + root
-        
-        for anchor in arView.scene.anchors {
-            if anchor.anchorIdentifier == headAnchorID {
-                anchor.position = headTransform
-                anchor.orientation = Transform(matrix: headTransformFromRoot!).rotation
-            }
-        }
-        
-    }
-    
 }
 
 extension LevelTwoViewController: ARSessionDelegate {
+    func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
+        
+        for anchor in anchors {
+            if let imageAnchor = anchor as? ARImageAnchor {
+                isOKO = true
+                addPlaneTshirt(imageAnchor: imageAnchor)
+            }
+        }
+    }
     
+    func session(_ session: ARSession, didUpdate frame: ARFrame) {
+    
+        if isOKO {
+            emojiTrack()
+        }
+    }
+}
+
+extension LevelTwoViewController: RPPreviewViewControllerDelegate {
+    func previewControllerDidFinish(_ previewController: RPPreviewViewController) {
+      previewController.dismiss(animated: true) { [weak self] in
+      /// после исчезновения previewController
+      }
+    }
 }

@@ -427,7 +427,8 @@ final class GeneralViewController: UIViewController {
         
         if ARFaceTrackingConfiguration.isSupported {
             
-            let vc = CleanFaceTrackViewController(arView: self.arView)
+//            let vc = CleanFaceTrackViewController(arView: self.arView)
+            let vc = LevelTwoViewController(arView: self.arView)
             self.navigationController?.pushViewController(vc,
                  animated: true)
         } else {
