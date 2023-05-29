@@ -15,7 +15,7 @@
 		920BF14129CC623D001D40DA /* ArViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920BF14029CC623D001D40DA /* ArViewController.swift */; };
 		920BF14329CC804A001D40DA /* hd1833.mov in Resources */ = {isa = PBXBuildFile; fileRef = 920BF14229CC804A001D40DA /* hd1833.mov */; };
 		922CEB3B29D4771E002326F8 /* puppets_with_alpha_hevc.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */; };
-		9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */; };
+		9292EE3029D09A4500526C07 /* UploadSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */; };
 		92C8306529D6C5A800C660D1 /* excited.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8305F29D6C5A700C660D1 /* excited.mov */; };
 		92C8306729D6C5A800C660D1 /* excited_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306129D6C5A700C660D1 /* excited_transition.mov */; };
 		92C8306829D6C5A800C660D1 /* shoced_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306229D6C5A700C660D1 /* shoced_transition.mov */; };
@@ -38,6 +38,9 @@
 		D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */; };
 		D1AC4DA42A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */; };
 		D1AC4DA62A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */; };
+		D1D5B3BB2A24C8AE00E03647 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */; };
+		D1D5B3BD2A24CE9C00E03647 /* PasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D5B3BC2A24CE9C00E03647 /* PasswordViewController.swift */; };
+		D1D5B3BF2A24D31800E03647 /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D5B3BE2A24D31800E03647 /* ProfileSettingViewController.swift */; };
 		D1DF2F6B2A09505200E17DA9 /* avtr_anim_0805.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */; };
 		D1F3F6FF2A1B5E89004A2FFD /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */; };
 		D1F3F7012A1B6451004A2FFD /* OkoBigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */; };
@@ -60,7 +63,7 @@
 		920BF14029CC623D001D40DA /* ArViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArViewController.swift; sourceTree = "<group>"; };
 		920BF14229CC804A001D40DA /* hd1833.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = hd1833.mov; sourceTree = "<group>"; };
 		922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = puppets_with_alpha_hevc.mov; sourceTree = "<group>"; };
-		9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadSceneViewController.swift; sourceTree = "<group>"; };
 		92C8305F29D6C5A700C660D1 /* excited.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = excited.mov; sourceTree = "<group>"; };
 		92C8306129D6C5A700C660D1 /* excited_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = excited_transition.mov; sourceTree = "<group>"; };
 		92C8306229D6C5A700C660D1 /* shoced_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = shoced_transition.mov; sourceTree = "<group>"; };
@@ -83,6 +86,9 @@
 		D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigSwitch.swift; sourceTree = "<group>"; };
 		D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Debug_futage_[000-299]-1.mov"; sourceTree = "<group>"; };
 		D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "flip_vert_[000-299]-1.mov"; sourceTree = "<group>"; };
+		D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
+		D1D5B3BC2A24CE9C00E03647 /* PasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewController.swift; sourceTree = "<group>"; };
+		D1D5B3BE2A24D31800E03647 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
 		D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avtr_anim_0805.usdz; sourceTree = "<group>"; };
 		D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigButton.swift; sourceTree = "<group>"; };
@@ -146,8 +152,11 @@
 				920BF12829CC3D33001D40DA /* AppDelegate.swift */,
 				920BF12A29CC3D33001D40DA /* SceneDelegate.swift */,
 				920BF12C29CC3D33001D40DA /* GeneralViewController.swift */,
-				9292EE2F29D09A4500526C07 /* WelcomeViewController.swift */,
+				9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */,
+				D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */,
 				D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */,
+				D1D5B3BC2A24CE9C00E03647 /* PasswordViewController.swift */,
+				D1D5B3BE2A24D31800E03647 /* ProfileSettingViewController.swift */,
 				D1FF5B792A0BC2F00027B89C /* Lighting.swift */,
 				920BF14029CC623D001D40DA /* ArViewController.swift */,
 				92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */,
@@ -271,12 +280,15 @@
 				D1FF5B7A2A0BC2F00027B89C /* Lighting.swift in Sources */,
 				920BF12D29CC3D33001D40DA /* GeneralViewController.swift in Sources */,
 				D10B06F829F7FDB6002B9868 /* CleanFaceTrackViewController.swift in Sources */,
-				9292EE3029D09A4500526C07 /* WelcomeViewController.swift in Sources */,
+				9292EE3029D09A4500526C07 /* UploadSceneViewController.swift in Sources */,
 				D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */,
 				92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */,
+				D1D5B3BD2A24CE9C00E03647 /* PasswordViewController.swift in Sources */,
+				D1D5B3BF2A24D31800E03647 /* ProfileSettingViewController.swift in Sources */,
 				D1FC93462A1615B8002A3B05 /* CNNEmotions.mlmodel in Sources */,
 				D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */,
 				D1FC93422A160F84002A3B05 /* LevelTwoViewController.swift in Sources */,
+				D1D5B3BB2A24C8AE00E03647 /* WelcomeViewController.swift in Sources */,
 				D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */,
 				D1FF5B762A0BAA120027B89C /* OkoClassifierService.swift in Sources */,
 				920BF12929CC3D33001D40DA /* AppDelegate.swift in Sources */,

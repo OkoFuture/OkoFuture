@@ -16,8 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let navigate = UINavigationController()
-//        let welcomeVC = WelcomeViewController()
-        let welcomeVC = LogInViewController()
+        let welcomeVC = WelcomeViewController()
         navigate.pushViewController(welcomeVC, animated: false)
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene
