@@ -147,12 +147,14 @@ final class GeneralViewController: UIViewController {
     private let firstModelWardrobeButton: OkoDefaultButton = {
        let btn = OkoDefaultButton()
         btn.setImage(UIImage(named: "istockphoto-1"), for: .normal)
+        btn.isEnabled = false
         return btn
     }()
     
     private let secondModelWardrobeButton: OkoDefaultButton = {
        let btn = OkoDefaultButton()
         btn.setImage(UIImage(named: "istockphoto-2"), for: .normal)
+        btn.isEnabled = false
         return btn
     }()
     
@@ -880,6 +882,7 @@ final class GeneralViewController: UIViewController {
     }
     
     private func stopDemoLevel1() {
+        arView.scene.anchors[0].children[2].removeFromParent()
         arView.scene.anchors[0].children[2].removeFromParent()
             self.videoPlayerEmoji?.pause()
 //            self.videoPlayerEmoji?.removeAllItems()
