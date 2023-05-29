@@ -36,6 +36,8 @@
 		D16981E02A08E71B00F82292 /* amy_anim_0505x100_2.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D16981DF2A08E71B00F82292 /* amy_anim_0505x100_2.usdz */; };
 		D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB029F553340003F3EC /* OkoDefaultButton.swift */; };
 		D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */; };
+		D1AC4DA42A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */; };
+		D1AC4DA62A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */; };
 		D1DF2F6B2A09505200E17DA9 /* avtr_anim_0805.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */; };
 		D1F3F6FF2A1B5E89004A2FFD /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */; };
 		D1F3F7012A1B6451004A2FFD /* OkoBigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */; };
@@ -79,6 +81,8 @@
 		D16981DF2A08E71B00F82292 /* amy_anim_0505x100_2.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = amy_anim_0505x100_2.usdz; sourceTree = "<group>"; };
 		D188FBB029F553340003F3EC /* OkoDefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoDefaultButton.swift; sourceTree = "<group>"; };
 		D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigSwitch.swift; sourceTree = "<group>"; };
+		D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Debug_futage_[000-299]-1.mov"; sourceTree = "<group>"; };
+		D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "flip_vert_[000-299]-1.mov"; sourceTree = "<group>"; };
 		D1DF2F6A2A09505200E17DA9 /* avtr_anim_0805.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avtr_anim_0805.usdz; sourceTree = "<group>"; };
 		D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigButton.swift; sourceTree = "<group>"; };
@@ -104,6 +108,8 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */,
+				D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */,
 				D15E140C2A1F9FE00090584D /* fx element_[000-299]-1.mov */,
 				D15E140A2A1F9F2A0090584D /* okoBotVizor_[000-299]-1.mov */,
 				D15E14082A1F75A40090584D /* okobot_2305.usdz */,
@@ -229,6 +235,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1AC4DA62A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov in Resources */,
+				D1AC4DA42A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov in Resources */,
 				D15E140D2A1F9FE00090584D /* fx element_[000-299]-1.mov in Resources */,
 				D15E140B2A1F9F2A0090584D /* okoBotVizor_[000-299]-1.mov in Resources */,
 				D15E14092A1F75A40090584D /* okobot_2305.usdz in Resources */,

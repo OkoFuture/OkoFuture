@@ -18,9 +18,30 @@ final class LevelTwoViewController: UIViewController {
     
     private var arView: ARView
     
-    private var videoPlayerPlane = AVPlayer()
-    private var videoPlayerScreen = AVPlayer()
-    private var videoPlayerOkoBot = AVPlayer()
+    private var videoPlayerPlane = AVPlayer() {
+        didSet {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                print ("kjkljljkljkjnkljnkl videoPlayerPlane", self.videoPlayerPlane.currentItem?.status.rawValue)
+                print ("kjkljljkljkjnkljnkl videoPlayerPlane", self.videoPlayerPlane.currentItem?.canPlayFastForward)
+            })
+        }
+    }
+    private var videoPlayerScreen = AVPlayer() {
+        didSet {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                print ("kjkljljkljkjnkljnkl videoPlayerScreen", self.videoPlayerScreen.currentItem?.status.rawValue)
+                print ("kjkljljkljkjnkljnkl videoPlayerScreen", self.videoPlayerScreen.currentItem?.canPlayFastForward)
+            })
+        }
+    }
+    private var videoPlayerOkoBot = AVPlayer() {
+        didSet {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+                print ("kjkljljkljkjnkljnkl videoPlayerOkoBot", self.videoPlayerOkoBot.currentItem?.status.rawValue)
+                print ("kjkljljkljkjnkljnkl videoPlayerOkoBot", self.videoPlayerOkoBot.currentItem?.canPlayFastForward)
+            })
+        }
+    }
     
     let model: VNCoreMLModel = {
         let config = MLModelConfiguration()
@@ -192,10 +213,7 @@ final class LevelTwoViewController: UIViewController {
         }
     }
     
-    func generateVideoPlane() -> ModelEntity? {
-        
-        let nameVideo = "fx element_[000-299]-1"
-        
+    private func returnAVPlayerItem(nameVideo: String) -> AVPlayerItem? {
         guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
             print("Failed get path", nameVideo)
             return nil
@@ -211,18 +229,19 @@ final class LevelTwoViewController: UIViewController {
         
         let videoAsset = AVURLAsset(url: alphaMovieURL)
         
-        let item: AVPlayerItem = .init(asset: videoAsset)
+        var item: AVPlayerItem = .init(asset: videoAsset)
+//        item.canPlayFastForward = true
+//        item.canPlayFastReverse = true
+//        item.canPlaySlowForward
+//        item.canPlaySlowReverse
+//        item.canStepForward = true
+//        item.canStepBackward = true
+//        print ("kjkljljkljkjnkljnkl", item.status.rawValue)
         
-//        let videoPlayer = AVQueuePlayer(items: [item])
-        videoPlayerPlane = AVPlayer(playerItem: item)
-        
-        let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlane)
-        videoPlayerPlane.play()
-        
-        let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, height: 0.5), materials: [videoMaterial])
-        
-        return videoPlane
+        return item
     }
+    
+    
     
     func rewindVideoEmoji(emoji: EmojiLVL2) {
         
@@ -250,59 +269,39 @@ final class LevelTwoViewController: UIViewController {
         videoPlayerOkoBot.seek(to: currentTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
     }
     
+    func generateVideoPlane() -> ModelEntity? {
+        
+        let nameVideo = "fx element_[000-299]-1"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
+        
+        videoPlayerPlane = AVPlayer(playerItem: item)
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlane)
+        videoPlayerPlane.play()
+        
+        let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, height: 0.5), materials: [videoMaterial])
+        
+        return videoPlane
+    }
+    
     private func generateOkoBot() -> ModelEntity? {
         
         let nameVideo = "okoBotVizor_[000-299]-1"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
         
-        guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
-            print("Failed get path", nameVideo)
-            return nil
-        }
+        videoPlayerOkoBot = AVPlayer(playerItem: item)
         
-        let videoURL = URL(fileURLWithPath: path)
-        let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
-        
-        guard let alphaMovieURL = url else {
-            print("Failed get url", nameVideo)
-            return nil
-        }
-        
-        let videoAsset = AVURLAsset(url: alphaMovieURL)
-        
-        let item: AVPlayerItem = .init(asset: videoAsset)
-        
-        videoPlayerScreen = AVPlayer(playerItem: item)
-        
-        let videoMaterial = VideoMaterial(avPlayer: videoPlayerScreen)
-        videoPlayerScreen.play()
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerOkoBot)
+        videoPlayerOkoBot.play()
         
         let okoRobot1 = try! ModelEntity.loadModel(named: "okobot_2305")
         
         okoRobot1.model?.materials[0] = videoMaterial
         
-        okoRobot1.transform.translation = [-0.3, 0.3, 0]
-        let startScale: Float = 0.1
-//        let startScale: Float = 0
-        okoRobot1.scale = [startScale, startScale, startScale]
-        
-        okoRobot1.playAnimation(okoRobot1.availableAnimations[0].repeat())
-        
-        let finalScale: Float = 0.1
-//        let finalScale: Float = 0.5
-        
-        let trans1 = Transform(scale: [finalScale,finalScale,finalScale], rotation: okoRobot1.transform.rotation, translation: okoRobot1.transform.translation)
-        
-//        okoRobot1.move(to: trans1, relativeTo: anchor, duration: TimeInterval(2))
-//        okoRobot1.move(to: trans1, relativeTo: nil, duration: TimeInterval(2))
         return okoRobot1
     }
     
-    func addPlaneTshirt(imageAnchor: ARImageAnchor) {
-        guard let videoPlane = generateVideoPlane() else {return}
-        guard let okoBot = generateOkoBot() else {return}
-        
-        videoPlane.transform.translation.y = videoPlane.transform.translation.y + 0.1
-        
+    private func generateScreen() -> ModelEntity? {
         let screen = try! ModelEntity.loadModel(named: "screen_2405")
         
         let scale: Float = 7
@@ -310,32 +309,42 @@ final class LevelTwoViewController: UIViewController {
         
         screen.transform.translation = [0,-0.5,-0.04]
         
-        let nameVideo = "2405_screenwords_[000-299]Com-1"
-        
-        guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
-            print("Failed get path", nameVideo)
-            return
-        }
-        
-        let videoURL = URL(fileURLWithPath: path)
-        let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
-        
-        guard let alphaMovieURL = url else {
-            print("Failed get url", nameVideo)
-            return
-        }
-        
-        let videoAsset = AVURLAsset(url: alphaMovieURL)
-        
-        let item: AVPlayerItem = .init(asset: videoAsset)
+        let nameVideo = "flip_vert_[000-299]-1"
+//        let nameVideo = "Debug_futage_[000-299]-1"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
         
         videoPlayerScreen = AVPlayer(playerItem: item)
         
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerScreen)
         videoPlayerScreen.play()
-        
-        screen.model?.materials[0] = videoMaterial
         screen.model?.materials[1] = videoMaterial
+        
+        return screen
+    }
+    
+    func addPlaneTshirt(imageAnchor: ARImageAnchor) {
+        
+        print ("kjkljljkljkjnkljnkl addPlaneTshirt", arView.scene.anchors.count)
+        
+        guard let videoPlane = generateVideoPlane() else {return}
+        guard let okoBot = generateOkoBot() else {return}
+        guard let screen = generateScreen() else {return}
+        
+        videoPlane.transform.translation.y = videoPlane.transform.translation.y + 0.1
+        
+        okoBot.transform.translation = [-0.3, 0.3, 0]
+        let startScale: Float = 0.1
+//        let startScale: Float = 0
+        okoBot.scale = [startScale, startScale, startScale]
+        
+        okoBot.playAnimation(okoBot.availableAnimations[0].repeat())
+        
+        let finalScale: Float = 0.1
+//        let finalScale: Float = 0.5
+        
+        let trans1 = Transform(scale: [finalScale,finalScale,finalScale], rotation: okoBot.transform.rotation, translation: okoBot.transform.translation)
+//        okoRobot1.move(to: trans1, relativeTo: anchor, duration: TimeInterval(2))
+//        okoRobot1.move(to: trans1, relativeTo: nil, duration: TimeInterval(2))
         
         let anchor = AnchorEntity(anchor: imageAnchor)
         
@@ -394,6 +403,10 @@ final class LevelTwoViewController: UIViewController {
 
 extension LevelTwoViewController: ARSessionDelegate {
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
+        
+        if arView.scene.anchors.count > 0 {
+            return
+        }
         
         for anchor in anchors {
             if let imageAnchor = anchor as? ARImageAnchor {
