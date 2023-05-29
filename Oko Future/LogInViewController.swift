@@ -127,7 +127,7 @@ final class LogInViewController: UIViewController {
     }
     
     @objc private func tapSendButton() {
-        let vc = WelcomeViewController()
+        let vc = PasswordViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
 }

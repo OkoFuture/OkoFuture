@@ -2,15 +2,37 @@
 //  WelcomeViewController.swift
 //  Oko Future
 //
-//  Created by Denis on 26.03.2023.
+//  Created by Денис Калинин on 29.05.23.
 //
 
 import UIKit
-import SceneKit
-import Combine
-import RealityKit
 
 final class WelcomeViewController: UIViewController {
+    
+    let logoImageView: UIImageView = {
+        let img = UIImage(named: "okoLogoColor")
+//        let img = UIImage(named: "Welcome")
+        let imgV = UIImageView(image: img)
+        imgV.contentMode = .scaleAspectFill
+        return imgV
+    }()
+    
+//    let welcomeLabel: UILabel = {
+//        let lbl = UILabel()
+//        lbl.text = "Welcome to"
+//        lbl.font = Helper().fontChakra500(size: 16)
+//        lbl.textColor = .black
+//        return lbl
+//    }()
+//
+//    let okoFutureLabel: UILabel = {
+//        let lbl = UILabel()
+//        lbl.text = "OKO FUTURE"
+////        lbl.font = Helper().fontChakra600(size: 32)
+//        lbl.font = lbl.font.withSize(32)
+//        lbl.textColor = .black
+//        return lbl
+//    }()
     
     private let welcomeImage: UIImageView = {
         let img = UIImage(named: "Welcome")
@@ -19,65 +41,51 @@ final class WelcomeViewController: UIViewController {
         return imgV
     }()
     
+    let getStartButton: OkoBigButton = {
+        let btn = OkoBigButton()
+        btn.setTitle("Get started", for: .normal)
+//        btn.font = Helper().fontChakra500(size: 16)!
+        return btn
+    }()
     
     override func viewDidLoad() {
-        super.viewDidLoad()
+        
+        setupView()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        setupLayout()
+    }
+    
+    private func setupView() {
+        view.backgroundColor = .white
         
         view.addSubview(welcomeImage)
-        welcomeImage.frame = view.frame
+        view.addSubview(logoImageView)
+//        view.addSubview(welcomeLabel)
+//        view.addSubview(okoFutureLabel)
+        view.addSubview(getStartButton)
         
-        uploadScene()
-        
+        getStartButton.addTarget(self, action: #selector(tapStartButton), for: .touchUpInside)
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
-    private func uploadScene() {
+    private func setupLayout() {
+        let heightOko: CGFloat = 48
         
-        let arView = ARView(frame: .zero, cameraMode: .nonAR, automaticallyConfigureSession: false)
+        welcomeImage.frame = view.frame
         
-        let sceneEntity = try! ModelEntity.loadModel(named: "loc_new_textures 08.05", in: nil)
-        sceneEntity.setScale(SIMD3(x: 2, y: 2, z: 2), relativeTo: sceneEntity)
+        logoImageView.frame = CGRect(x: (view.bounds.width - 200)/2, y: 80, width: 200, height: 200)
         
-        let cameraEntity = PerspectiveCamera()
-        cameraEntity.camera.fieldOfViewInDegrees = 39
+//        welcomeLabel.frame = CGRect(x: (view.bounds.width - 91)/2, y: logoImageView.frame.origin.y + 200 + 54, width: 91, height: 22)
+//        okoFutureLabel.frame = CGRect(x: (view.bounds.width - 194)/2, y: welcomeLabel.frame.origin.y + 22 + 4, width: 194, height: 42)
         
-        var nodeGirl: Entity?
-        var nodeAvatar: Entity?
-        
-        let scaleAvatar: Float = 0.75
-        
-        let arrayNameScene = Helper().arrayNameAvatarUSDZ()
-        
-        var cancellable: AnyCancellable? = nil
-         
-          cancellable = ModelEntity.loadModelAsync(named: arrayNameScene[1])
-            .sink(receiveCompletion: { error in
-              print("Unexpected error: \(error)")
-              cancellable?.cancel()
-            }, receiveValue: { entity in
-
-                entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
-                
-                nodeAvatar = entity
-                
-                cancellable = ModelEntity.loadModelAsync(named: arrayNameScene[0])
-                  .sink(receiveCompletion: { error in
-                    print("Unexpected error: \(error)")
-                    cancellable?.cancel()
-                  }, receiveValue: { entity in
-
-                      entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
-                      
-                      nodeGirl = entity
-
-                      let generalVC = GeneralViewController(arView: arView, sceneEntity: sceneEntity, nodeGirl: nodeGirl!, nodeAvatar: nodeAvatar!)
-                      
-                      self.navigationController?.pushViewController(generalVC, animated: true)
-
-                      cancellable?.cancel()
-                  })
-            })
-        
+        getStartButton.frame = CGRect(x: 20, y: view.bounds.height - heightOko - 58, width: view.bounds.width - 40, height: heightOko)
+    }
+    
+    @objc private func tapStartButton() {
+        let vc = LogInViewController()
+        navigationController?.pushViewController(vc, animated: true)
     }
     
 }
