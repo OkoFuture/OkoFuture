@@ -230,18 +230,9 @@ final class LevelTwoViewController: UIViewController {
         let videoAsset = AVURLAsset(url: alphaMovieURL)
         
         var item: AVPlayerItem = .init(asset: videoAsset)
-//        item.canPlayFastForward = true
-//        item.canPlayFastReverse = true
-//        item.canPlaySlowForward
-//        item.canPlaySlowReverse
-//        item.canStepForward = true
-//        item.canStepBackward = true
-//        print ("kjkljljkljkjnkljnkl", item.status.rawValue)
         
         return item
     }
-    
-    
     
     func rewindVideoEmoji(emoji: EmojiLVL2) {
         

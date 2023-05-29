@@ -32,6 +32,7 @@ final class GeneralViewController: UIViewController {
     private var nodeAvatar: Entity?
     
     public var chooseModel = 0
+    private var chooseLevel = 1
     
     public let startPoint: SIMD3<Float> = [0, -2, -1]
     public let finishPoint: SIMD3<Float> = [0, -2.3, 0.5]
@@ -105,9 +106,40 @@ final class GeneralViewController: UIViewController {
     
     private var demoEmoji = false
     
+    private var videoPlayerPlane = AVPlayer()
+    private var videoPlayerScreen = AVPlayer()
+    private var videoPlayerOkoBot = AVPlayer()
+    
+    private var emoji: EmojiLVL2? = nil {
+        didSet {
+            if emoji != oldValue, let emoji = emoji {
+                self.emoji = emoji
+//                self.rewindVideoEmoji(emoji: emoji)
+            }
+        }
+    }
+    
     private let arSwitch: OkoBigSwitch = {
         let sw = OkoBigSwitch()
         return sw
+    }()
+    
+    private let level1Button: OkoDefaultButton = {
+       let btn = OkoDefaultButton()
+//        btn.setImage(UIImage(named: "istockphoto-1"), for: .normal)
+        btn.setTitle("1", for: .normal)
+        btn.setTitleColor(.black, for: .normal)
+        btn.backgroundColor = .white
+        return btn
+    }()
+    
+    private let level2Button: OkoDefaultButton = {
+       let btn = OkoDefaultButton()
+//        btn.setImage(UIImage(named: "istockphoto-1"), for: .normal)
+        btn.setTitle("2", for: .normal)
+        btn.setTitleColor(.black, for: .normal)
+        btn.backgroundColor = .white
+        return btn
     }()
     
     private let firstModelWardrobeButton: OkoDefaultButton = {
@@ -230,6 +262,9 @@ final class GeneralViewController: UIViewController {
     
     private func setupView() {
         
+        view.addSubview(level1Button)
+        view.addSubview(level2Button)
+        
         view.addSubview(firstModelWardrobeButton)
         view.addSubview(secondModelWardrobeButton)
         
@@ -239,6 +274,9 @@ final class GeneralViewController: UIViewController {
         
 //        let dragRotateGesture = UIPanGestureRecognizer(target: self, action: #selector(rotateDragY))
 //        sceneView.addGestureRecognizer(dragRotateGesture)
+        
+        level1Button.addTarget(self, action: #selector(tapLevel1), for: .touchUpInside)
+        level2Button.addTarget(self, action: #selector(tapLevel2), for: .touchUpInside)
         
         firstModelWardrobeButton.addTarget(self, action: #selector(tapFirst), for: .touchUpInside)
         secondModelWardrobeButton.addTarget(self, action: #selector(tapSecond), for: .touchUpInside)
@@ -261,6 +299,16 @@ final class GeneralViewController: UIViewController {
                                 y: 61,
                                 width: view.frame.width - (sideNavButton + 21 + 10) * 2,
                                 height: sideNavButton)
+        
+        level1Button.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
+                                                y: view.frame.height - 130 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
+                                                width: sideSysBigButton,
+                                                height: sideSysBigButton)
+        
+        level2Button.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
+                                                  y: view.frame.height - 130 - sideSysButton,
+                                                  width: sideSysButton,
+                                                  height: sideSysButton)
         
         firstModelWardrobeButton.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
                                                 y: view.frame.height - 46 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
@@ -395,6 +443,40 @@ final class GeneralViewController: UIViewController {
         }
     }
     
+    @objc private func tapLevel1() {
+        chooseLevel = 1
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            
+            self.level1Button.frame = CGRect(x: self.view.center.x - self.sideSysBigButton / 2,
+                                                    y: self.level1Button.frame.origin.y - ((self.sideSysBigButton - self.sideSysButton) / 2),
+                                                    width: self.sideSysBigButton,
+                                                    height: self.sideSysBigButton)
+            
+            self.level2Button.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
+                                                           y: self.view.frame.height - 130 - self.sideSysButton,
+                                                           width: self.sideSysButton,
+                                                           height: self.sideSysButton)
+        })
+    }
+    
+    @objc private func tapLevel2() {
+        chooseLevel = 2
+        
+        UIView.animate(withDuration: 0.4, animations: {
+            
+            self.level1Button.frame = CGRect(x: self.view.center.x - 16 - self.sideSysButton - (self.sideSysBigButton / 2),
+                                                    y: self.view.frame.height - 130 - self.sideSysButton,
+                                                    width: self.sideSysButton,
+                                                    height: self.sideSysButton)
+            
+            self.level2Button.frame = CGRect(x: self.view.center.x - self.sideSysBigButton / 2,
+                                                          y: self.level2Button.frame.origin.y - ((self.sideSysBigButton - self.sideSysButton) / 2),
+                                                          width: self.sideSysBigButton,
+                                                          height: self.sideSysBigButton)
+        })
+    }
+    
     func uploadChooseSceneInBackground() {
         
         var cancellable: AnyCancellable? = nil
@@ -428,9 +510,19 @@ final class GeneralViewController: UIViewController {
         if ARFaceTrackingConfiguration.isSupported {
             
 //            let vc = CleanFaceTrackViewController(arView: self.arView)
-            let vc = LevelTwoViewController(arView: self.arView)
-            self.navigationController?.pushViewController(vc,
-                 animated: true)
+//            let vc = LevelTwoViewController(arView: self.arView)
+            switch chooseLevel {
+            case 1: let vc = CleanFaceTrackViewController(arView: self.arView)
+                self.navigationController?.pushViewController(vc,
+                     animated: true)
+            case 2: let vc = LevelTwoViewController(arView: self.arView)
+                self.navigationController?.pushViewController(vc,
+                     animated: true)
+            default: break
+            }
+            
+//            self.navigationController?.pushViewController(vc,
+//                 animated: true)
         } else {
             print ("log ARFaceTrackingConfiguration.isSupported == false")
         }
@@ -463,72 +555,32 @@ final class GeneralViewController: UIViewController {
         self.startTimerFlex()
     }
     
-//    private func dowloadVideos() {
-//
-//        if playerItemPokerFace.isEmpty {
-//            for i in 0...1 {
-//                guard let playerItem = dowloadPlayerItem(index: i) else {return}
-//                playerItemPokerFace.append(playerItem)
-//            }
-//        }
-//
-//        if playerItemExcited.isEmpty {
-//            for i in 2...3 {
-//                guard let playerItem = dowloadPlayerItem(index: i) else {return}
-//                playerItemExcited.append(playerItem)
-//            }
-//        }
-//
-//        if playerItemShoced.isEmpty {
-//            for i in 4...5 {
-//                guard let playerItem = dowloadPlayerItem(index: i) else {return}
-//                playerItemShoced.append(playerItem)
-//            }
-//        }
-//    }
-//
-//    private func dowloadPlayerItem(index: Int) -> AVPlayerItem? {
-//        let nameVideo = arrayNameVideos[index]
-//
-//        guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
-//            print("Failed get path", nameVideo)
-//            return nil
-//        }
-//
-//        let videoURL = URL(fileURLWithPath: path)
-//        let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
-//
-//        guard let alphaMovieURL = url else {
-//            print("Failed get url", nameVideo)
-//            return nil
-//        }
-//
-//        let videoAsset = AVURLAsset(url: alphaMovieURL)
-//        let assetKeys = ["playable"]
-//
-//        return AVPlayerItem(asset: videoAsset, automaticallyLoadedAssetKeys: assetKeys)
-//    }
+    private func returnAVPlayerItem(nameVideo: String) -> AVPlayerItem? {
+        guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
+            print("Failed get path", nameVideo)
+            return nil
+        }
+        
+        let videoURL = URL(fileURLWithPath: path)
+        let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
+        
+        guard let alphaMovieURL = url else {
+            print("Failed get url", nameVideo)
+            return nil
+        }
+        
+        let videoAsset = AVURLAsset(url: alphaMovieURL)
+        
+        var item: AVPlayerItem = .init(asset: videoAsset)
+        
+        return item
+    }
     
     public func dowloadVideos() {
 
         for nameVideo in self.arrayNameVideos {
-            guard let path = Bundle.main.path(forResource: nameVideo, ofType: "mov") else {
-                print("Failed get path", nameVideo)
-                return
-            }
-
-            let videoURL = URL(fileURLWithPath: path)
-            let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
-
-            guard let alphaMovieURL = url else {
-                print("Failed get url", nameVideo)
-                return
-            }
-
-            let videoAsset = AVURLAsset(url: alphaMovieURL)
-            let assetKeys = ["playable"]
-
-            self.arrayPlayerItem.append(AVPlayerItem(asset: videoAsset, automaticallyLoadedAssetKeys: assetKeys))
+            
+            self.arrayPlayerItem.append(returnAVPlayerItem(nameVideo: nameVideo)!)
         }
     }
     
@@ -555,16 +607,23 @@ final class GeneralViewController: UIViewController {
         
         let videoMaterial = VideoMaterial(avPlayer: self.videoPlayerEmoji!)
         
+        let backgroundPlane = ModelEntity(mesh: .generatePlane(width: 0.1, depth: 0.07, cornerRadius: 0), materials: [SimpleMaterial(color: .black, isMetallic: false)])
         let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, depth: 0.3, cornerRadius: 0), materials: [videoMaterial])
         
-        videoPlane.transform.translation = SIMD3(x: 0, y: 2.15, z: -0.2)
+        backgroundPlane.transform.translation = SIMD3(x: 0, y: 2.55, z: -0.25)
+        backgroundPlane.transform.rotation = simd_quatf(angle: 1.5708, axis: SIMD3(x: 1, y: 0, z: 0))
+        
+        videoPlane.transform.translation = SIMD3(x: 0, y: 2.55, z: -0.2)
         videoPlane.transform.rotation = simd_quatf(angle: 1.5708, axis: SIMD3(x: 1, y: 0, z: 0))
         
         arView.scene.anchors[0].addChild(videoPlane)
+        arView.scene.anchors[0].addChild(backgroundPlane)
         
         let transformVideoPlane = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: 1, z: 0))
             
         videoPlane.move(to: transformVideoPlane, relativeTo: videoPlane, duration: TimeInterval(self.durationZoomCamera))
+        backgroundPlane.move(to: transformVideoPlane, relativeTo: backgroundPlane, duration: TimeInterval(self.durationZoomCamera))
+        
         self.durationZoomCamera = 0
         
         self.videoPlayerEmoji?.play()
@@ -676,48 +735,6 @@ final class GeneralViewController: UIViewController {
             }
         })
     }
-    
-//    private func changeVideo(emoji: Emoji) {
-//        
-//        var videoPlayer = AVQueuePlayer()
-//        
-//        switch emoji {
-//        case .pokerFace:
-//            videoPlayer = AVQueuePlayer(items: [playerItemPokerFace[0], playerItemPokerFace[1]])
-//            playerItemPokerFace.removeAll()
-//        case .excited:
-//            videoPlayer = AVQueuePlayer(items: [playerItemExcited[0], playerItemExcited[1]])
-//            playerItemExcited.removeAll()
-//        case .shoced:
-//            videoPlayer = AVQueuePlayer(items: [playerItemShoced[0], playerItemShoced[1]])
-//            playerItemShoced.removeAll()
-//        }
-//        
-////        arView.scene.anchors[1].children.removeAll()
-//        arView.scene.anchors[0].children[2].removeFromParent()
-//        
-//        let videoPlane = returnPlane(videoPlayer: videoPlayer)
-//        dowloadVideos()
-//        
-//        DispatchQueue.main.asyncAfter(deadline: .now() + 0.13, execute: {
-//            videoPlayer.play()
-//            self.arView.scene.anchors[0].addChild(videoPlane)
-//        })
-//    }
-//    
-//    private func returnPlane(videoPlayer: AVQueuePlayer) -> ModelEntity {
-//        
-//        let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
-//        
-//        let width: Float = 0.3
-//        let height: Float = 0.3
-//        
-//        let videoPlane = ModelEntity(mesh: .generatePlane(width: width, depth: height, cornerRadius: 0), materials: [videoMaterial])
-//        videoPlane.transform.rotation = simd_quatf(angle: 1.5708, axis: SIMD3(x: 1, y: 0, z: 0))
-//        videoPlane.transform.translation.z = videoPlane.transform.translation.z + 0.1
-//        
-//        return videoPlane
-//    }
     
     private func stopAnimationFlex() {
         self.serialQueue.sync {

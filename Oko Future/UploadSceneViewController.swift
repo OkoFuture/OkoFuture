@@ -26,6 +26,8 @@ final class UploadSceneViewController: UIViewController {
         view.addSubview(welcomeImage)
         welcomeImage.frame.size = CGSize(width: 113, height: 134)
         welcomeImage.center = view.center
+        /// удолить
+        navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
