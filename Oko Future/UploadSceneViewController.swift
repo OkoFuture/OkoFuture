@@ -44,8 +44,8 @@ final class UploadSceneViewController: UIViewController {
         let cameraEntity = PerspectiveCamera()
         cameraEntity.camera.fieldOfViewInDegrees = 39
         
-        var nodeGirl: Entity?
-        var nodeAvatar: Entity?
+        var nodeGirl: ModelEntity?
+        var nodeAvatar: ModelEntity?
         
         let scaleAvatar: Float = 0.75
         
