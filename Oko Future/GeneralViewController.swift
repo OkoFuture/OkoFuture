@@ -28,8 +28,10 @@ final class GeneralViewController: UIViewController {
     
     private var cameraEntity = PerspectiveCamera()
     private var sceneEntity: ModelEntity
-    private var nodeGirl: Entity?
-    private var nodeAvatar: Entity?
+//    private var nodeGirl: Entity?
+//    private var nodeAvatar: Entity?
+    private var nodeGirl: ModelEntity?
+    private var nodeAvatar: ModelEntity?
     
     public var chooseModel = 0
     private var chooseLevel = 1
@@ -160,7 +162,7 @@ final class GeneralViewController: UIViewController {
         return btn
     }()
     
-    init(arView: ARView, sceneEntity: ModelEntity, nodeGirl: Entity, nodeAvatar: Entity) {
+    init(arView: ARView, sceneEntity: ModelEntity, nodeGirl: ModelEntity, nodeAvatar: ModelEntity) {
         self.arView = arView
         self.sceneEntity = sceneEntity
         self.nodeGirl = nodeGirl
@@ -444,6 +446,10 @@ final class GeneralViewController: UIViewController {
     }
     
     @objc private func tapLevel1() {
+        if self.animateMode == .emoji {
+            return
+        }
+        
         chooseLevel = 1
         
         UIView.animate(withDuration: 0.4, animations: {
@@ -461,6 +467,10 @@ final class GeneralViewController: UIViewController {
     }
     
     @objc private func tapLevel2() {
+        if self.animateMode == .emoji {
+            return
+        }
+        
         chooseLevel = 2
         
         UIView.animate(withDuration: 0.4, animations: {
@@ -599,6 +609,16 @@ final class GeneralViewController: UIViewController {
             light.move(to: transLight, relativeTo: light, duration: TimeInterval(self.durationZoomCamera))
         }
         
+        switch chooseLevel {
+        case 1: addPlayerEmojiLevel1()
+        case 2: addPlayerEmojiLevel2()
+        default: break
+        }
+            
+        self.startAnimationEmoji()
+    }
+    
+    private func addPlayerEmojiLevel1() {
         if self.videoPlayerEmoji != nil {
             self.videoPlayerEmoji = nil
         }
@@ -627,8 +647,81 @@ final class GeneralViewController: UIViewController {
         self.durationZoomCamera = 0
         
         self.videoPlayerEmoji?.play()
-            
-        self.startAnimationEmoji()
+    }
+    
+    func generateVideoPlane() {
+        
+        let nameVideo = "fx element_[000-299]-1"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
+        
+        videoPlayerPlane = AVPlayer(playerItem: item)
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlane)
+        
+        nodeGirl?.model?.materials[3] = videoMaterial
+        
+        videoPlayerPlane.play()
+    }
+    
+    private func generateOkoBot() -> ModelEntity? {
+        
+        let nameVideo = "okoBotVizor_[000-299]-1"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
+        
+        videoPlayerOkoBot = AVPlayer(playerItem: item)
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerOkoBot)
+        videoPlayerOkoBot.play()
+        
+        let okoRobot1 = try! ModelEntity.loadModel(named: "okobot_2305")
+        
+        okoRobot1.model?.materials[0] = videoMaterial
+        
+        return okoRobot1
+    }
+    
+    private func generateScreen() -> ModelEntity? {
+        let screen = try! ModelEntity.loadModel(named: "screen_2405")
+        
+        let scale: Float = 10
+        screen.scale = [scale,scale,scale]
+        
+        let nameVideo = "flip_vert_[000-299]-1"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
+        
+        videoPlayerScreen = AVPlayer(playerItem: item)
+        videoPlayerScreen.play()
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerScreen)
+//        videoPlayerScreen.play()
+        screen.model?.materials[1] = videoMaterial
+        
+        return screen
+    }
+    
+    func addPlayerEmojiLevel2() {
+        
+        generateVideoPlane()
+        guard let okoBot = generateOkoBot() else {return}
+        guard let screen = generateScreen() else {return}
+        
+        screen.transform.translation = [0, 1.7, 0.7]
+        
+        okoBot.transform.translation = [-0.3, 2.6, 1.5]
+        
+        let startScale: Float = 0
+        okoBot.scale = [startScale, startScale, startScale]
+        
+        okoBot.playAnimation(okoBot.availableAnimations[0].repeat())
+        
+        let finalScale: Float = 0.1
+
+        arView.scene.anchors[0].addChild(screen)
+        arView.scene.anchors[0].addChild(okoBot)
+        
+        let transOkoBot = Transform(scale: SIMD3(x: finalScale, y: finalScale, z: finalScale), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: [-0.3, 0.3, 1.5])
+        
+        okoBot.move(to: transOkoBot, relativeTo: nil, duration: TimeInterval(2))
     }
     
     private func startAnimationFlex() {
@@ -776,6 +869,17 @@ final class GeneralViewController: UIViewController {
     private func stopDemo() {
         self.stopAnimationEmoji()
         
+        switch chooseLevel {
+        case 1: stopDemoLevel1()
+        case 2:
+            arView.scene.anchors[0].children[2].removeFromParent()
+            arView.scene.anchors[0].children[2].removeFromParent()
+            nodeGirl?.model?.materials[3] = (nodeAvatar?.model?.materials[3])!
+        default: break
+        }
+    }
+    
+    private func stopDemoLevel1() {
         arView.scene.anchors[0].children[2].removeFromParent()
             self.videoPlayerEmoji?.pause()
 //            self.videoPlayerEmoji?.removeAllItems()
@@ -784,7 +888,7 @@ final class GeneralViewController: UIViewController {
             self.arrayPlayerItem.removeAll()
             self.dowloadVideos()
     }
-    
+        
     @objc private func rotateDragY(_ gesture: UIPanGestureRecognizer) {
         
 //        let point = gesture.translation(in: view)
