@@ -43,12 +43,7 @@ final class LevelTwoViewController: UIViewController {
         }
     }
     
-    let model: VNCoreMLModel = {
-        let config = MLModelConfiguration()
-        let model = try! CNNEmotions(configuration: config)
-        let mlModel = try! VNCoreMLModel(for: model.model)
-        return mlModel
-    }()
+    var model: VNCoreMLModel?
     
     private var emoji: EmojiLVL2? = nil {
         didSet {
@@ -124,6 +119,8 @@ final class LevelTwoViewController: UIViewController {
         photoVideoButton.addTarget(self, action: #selector(snapshotSave), for: .touchUpInside)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(recordScreen))
         photoVideoButton.addGestureRecognizer(longPressRecognizer)
+        
+        uploadCoreModel()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -144,6 +141,23 @@ final class LevelTwoViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         stopSession()
+    }
+    
+    private func uploadCoreModel() {
+        
+        DispatchQueue.global().async {
+            let config = MLModelConfiguration()
+            
+            guard let model = try? CNNEmotions(configuration: config) else {
+                fatalError("Loading CoreML Model failed.")
+            }
+            
+            guard let model1 = try? VNCoreMLModel(for: model.model) else {
+                fatalError("Loading CoreML Model failed.")
+            }
+            
+            self.model = model1
+        }
     }
     
     private func startSession() {
@@ -350,10 +364,13 @@ final class LevelTwoViewController: UIViewController {
     }
     
     func emojiTrack() {
+        
+        guard let model = self.model else { return }
+        
         let pixelBuffer = self.arView.session.currentFrame?.capturedImage
         
         let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer!)
-        let request = VNCoreMLRequest(model: self.model) { [weak self] request, error in
+        let request = VNCoreMLRequest(model: model) { [weak self] request, error in
             self?.handleClassifierResults(request.results)
         }
         

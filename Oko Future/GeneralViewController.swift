@@ -304,15 +304,29 @@ final class GeneralViewController: UIViewController {
                                 width: view.frame.width - (sideNavButton + 21 + 10) * 2,
                                 height: sideNavButton)
         
-        level1Button.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
-                                                y: view.frame.height - 130 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
-                                                width: sideSysBigButton,
-                                                height: sideSysBigButton)
-        
-        level2Button.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
-                                                  y: view.frame.height - 130 - sideSysButton,
-                                                  width: sideSysButton,
-                                                  height: sideSysButton)
+        switch chooseLevel {
+        case 1:
+            level1Button.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
+                                                    y: view.frame.height - 130 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
+                                                    width: sideSysBigButton,
+                                                    height: sideSysBigButton)
+            
+            level2Button.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
+                                                      y: view.frame.height - 130 - sideSysButton,
+                                                      width: sideSysButton,
+                                                      height: sideSysButton)
+        case 2:
+            self.level1Button.frame = CGRect(x: self.view.center.x - 16 - self.sideSysButton - (self.sideSysBigButton / 2),
+                                                    y: self.view.frame.height - 130 - self.sideSysButton,
+                                                    width: self.sideSysButton,
+                                                    height: self.sideSysButton)
+            
+            self.level2Button.frame = CGRect(x: self.view.center.x - self.sideSysBigButton / 2,
+                                                          y: self.level2Button.frame.origin.y - ((self.sideSysBigButton - self.sideSysButton) / 2),
+                                                          width: self.sideSysBigButton,
+                                                          height: self.sideSysBigButton)
+        default: break
+        }
         
         firstModelWardrobeButton.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
                                                 y: view.frame.height - 46 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
@@ -521,8 +535,6 @@ final class GeneralViewController: UIViewController {
         
         if ARFaceTrackingConfiguration.isSupported {
             
-//            let vc = CleanFaceTrackViewController(arView: self.arView)
-//            let vc = LevelTwoViewController(arView: self.arView)
             switch chooseLevel {
             case 1: let vc = CleanFaceTrackViewController(arView: self.arView)
                 self.navigationController?.pushViewController(vc,
@@ -533,8 +545,6 @@ final class GeneralViewController: UIViewController {
             default: break
             }
             
-//            self.navigationController?.pushViewController(vc,
-//                 animated: true)
         } else {
             print ("log ARFaceTrackingConfiguration.isSupported == false")
         }
