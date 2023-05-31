@@ -16,8 +16,8 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
         let navigate = UINavigationController()
-//        let welcomeVC = WelcomeViewController()
-        let welcomeVC = UploadSceneViewController()
+        let welcomeVC = WelcomeViewController()
+//        let welcomeVC = UploadSceneViewController()
         navigate.pushViewController(welcomeVC, animated: false)
         window = UIWindow(frame: windowScene.coordinateSpace.bounds)
         window?.windowScene = windowScene

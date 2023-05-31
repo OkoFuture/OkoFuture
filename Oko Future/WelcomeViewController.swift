@@ -6,33 +6,19 @@
 //
 
 import UIKit
+import AVFoundation
 
 final class WelcomeViewController: UIViewController {
     
     let logoImageView: UIImageView = {
         let img = UIImage(named: "okoLogoColor")
-//        let img = UIImage(named: "Welcome")
         let imgV = UIImageView(image: img)
         imgV.contentMode = .scaleAspectFill
         return imgV
     }()
     
-//    let welcomeLabel: UILabel = {
-//        let lbl = UILabel()
-//        lbl.text = "Welcome to"
-//        lbl.font = Helper().fontChakra500(size: 16)
-//        lbl.textColor = .black
-//        return lbl
-//    }()
-//
-//    let okoFutureLabel: UILabel = {
-//        let lbl = UILabel()
-//        lbl.text = "OKO FUTURE"
-////        lbl.font = Helper().fontChakra600(size: 32)
-//        lbl.font = lbl.font.withSize(32)
-//        lbl.textColor = .black
-//        return lbl
-//    }()
+    private var logoPlayer = AVPlayer()
+    private var videoView = UIView()
     
     private let welcomeImage: UIImageView = {
         let img = UIImage(named: "Welcome")
@@ -55,6 +41,7 @@ final class WelcomeViewController: UIViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         setupLayout()
+        setupPlayer()
     }
     
     private func setupView() {
@@ -62,12 +49,40 @@ final class WelcomeViewController: UIViewController {
         
         view.addSubview(welcomeImage)
         view.addSubview(logoImageView)
-//        view.addSubview(welcomeLabel)
-//        view.addSubview(okoFutureLabel)
         view.addSubview(getStartButton)
+//        view.addSubview(videoView)
         
         getStartButton.addTarget(self, action: #selector(tapStartButton), for: .touchUpInside)
         navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    private func setupPlayer() {
+        guard let path = Bundle.main.path(forResource: "Intro_v4", ofType: "mp4") else {
+            print("Failed get path intro_v4")
+            return
+        }
+        
+        let videoURL = URL(fileURLWithPath: path)
+        let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
+        
+        guard let alphaMovieURL = url else {
+            print("Failed get url intro_v4")
+            return
+        }
+        
+        let videoAsset = AVURLAsset(url: alphaMovieURL)
+        
+        let item: AVPlayerItem = .init(asset: videoAsset)
+        
+        logoPlayer = AVPlayer(playerItem: item)
+        
+        let playerLayer = AVPlayerLayer(player: logoPlayer)
+
+        playerLayer.frame = self.videoView.frame
+        playerLayer.videoGravity = .resizeAspectFill
+        self.videoView.layer.addSublayer(playerLayer)
+        
+        logoPlayer.play()
     }
     
     private func setupLayout() {
@@ -75,12 +90,13 @@ final class WelcomeViewController: UIViewController {
         
         welcomeImage.frame = view.frame
         
+        videoView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
+        
         logoImageView.frame = CGRect(x: (view.bounds.width - 200)/2, y: 80, width: 200, height: 200)
         
-//        welcomeLabel.frame = CGRect(x: (view.bounds.width - 91)/2, y: logoImageView.frame.origin.y + 200 + 54, width: 91, height: 22)
-//        okoFutureLabel.frame = CGRect(x: (view.bounds.width - 194)/2, y: welcomeLabel.frame.origin.y + 22 + 4, width: 194, height: 42)
-        
         getStartButton.frame = CGRect(x: 20, y: view.bounds.height - heightOko - 58, width: view.bounds.width - 40, height: heightOko)
+        
+        logoPlayer.play()
     }
     
     @objc private func tapStartButton() {
