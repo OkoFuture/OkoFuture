@@ -126,6 +126,19 @@ final class GeneralViewController: UIViewController {
         return sw
     }()
     
+    private let tShirtLabel: UILabel = {
+        let lbl = UILabel()
+        lbl.text = "T-SHIRT"
+        lbl.textColor = .white
+        return lbl
+    }()
+    
+    private let tShirtEmphasize: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    
     private let level1Button: OkoDefaultButton = {
        let btn = OkoDefaultButton()
 //        btn.setImage(UIImage(named: "istockphoto-1"), for: .normal)
@@ -269,8 +282,10 @@ final class GeneralViewController: UIViewController {
         view.addSubview(level1Button)
         view.addSubview(level2Button)
         
-        view.addSubview(firstModelWardrobeButton)
-        view.addSubview(secondModelWardrobeButton)
+        view.addSubview(tShirtLabel)
+        view.addSubview(tShirtEmphasize)
+//        view.addSubview(firstModelWardrobeButton)
+//        view.addSubview(secondModelWardrobeButton)
         
         view.addSubview(arViewButton)
         
@@ -307,17 +322,17 @@ final class GeneralViewController: UIViewController {
         switch chooseLevel {
         case 1:
             level1Button.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
-                                                    y: view.frame.height - 130 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
+                                                    y: view.frame.height - 82 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
                                                     width: sideSysBigButton,
                                                     height: sideSysBigButton)
             
             level2Button.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
-                                                      y: view.frame.height - 130 - sideSysButton,
+                                                      y: view.frame.height - 82 - sideSysButton,
                                                       width: sideSysButton,
                                                       height: sideSysButton)
         case 2:
             self.level1Button.frame = CGRect(x: self.view.center.x - 16 - self.sideSysButton - (self.sideSysBigButton / 2),
-                                                    y: self.view.frame.height - 130 - self.sideSysButton,
+                                                    y: self.view.frame.height - 82 - self.sideSysButton,
                                                     width: self.sideSysButton,
                                                     height: self.sideSysButton)
             
@@ -328,15 +343,18 @@ final class GeneralViewController: UIViewController {
         default: break
         }
         
-        firstModelWardrobeButton.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
-                                                y: view.frame.height - 46 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
-                                                width: sideSysBigButton,
-                                                height: sideSysBigButton)
+        tShirtLabel.frame = CGRect(x: (view.bounds.width - 65) / 2, y: view.bounds.height - 24 - 42, width: 65, height: 24)
+        tShirtEmphasize.frame = CGRect(x: tShirtLabel.frame.origin.x, y: tShirtLabel.frame.origin.y + 26, width: 65, height: 2)
         
-        secondModelWardrobeButton.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
-                                                  y: view.frame.height - 46 - sideSysButton,
-                                                  width: sideSysButton,
-                                                  height: sideSysButton)
+//        firstModelWardrobeButton.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
+//                                                y: view.frame.height - 46 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
+//                                                width: sideSysBigButton,
+//                                                height: sideSysBigButton)
+//
+//        secondModelWardrobeButton.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
+//                                                  y: view.frame.height - 46 - sideSysButton,
+//                                                  width: sideSysButton,
+//                                                  height: sideSysButton)
         
     }
     
@@ -476,7 +494,7 @@ final class GeneralViewController: UIViewController {
                                                     height: self.sideSysBigButton)
             
             self.level2Button.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
-                                                           y: self.view.frame.height - 130 - self.sideSysButton,
+                                                           y: self.view.frame.height - 82 - self.sideSysButton,
                                                            width: self.sideSysButton,
                                                            height: self.sideSysButton)
         })
@@ -492,7 +510,7 @@ final class GeneralViewController: UIViewController {
         UIView.animate(withDuration: 0.4, animations: {
             
             self.level1Button.frame = CGRect(x: self.view.center.x - 16 - self.sideSysButton - (self.sideSysBigButton / 2),
-                                                    y: self.view.frame.height - 130 - self.sideSysButton,
+                                                    y: self.view.frame.height - 82 - self.sideSysButton,
                                                     width: self.sideSysButton,
                                                     height: self.sideSysButton)
             
