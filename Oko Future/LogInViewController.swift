@@ -10,7 +10,7 @@ import UIKit
 final class LogInViewController: UIViewController {
     
     let logoImageView: UIImageView = {
-        let img = UIImage(named: "okoLogoColor")
+        let img = UIImage(named: "okoLogoBlack")
         let imgV = UIImageView(image: img)
         imgV.contentMode = .scaleAspectFill
         return imgV
