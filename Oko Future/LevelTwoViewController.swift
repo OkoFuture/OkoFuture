@@ -14,6 +14,10 @@ public enum EmojiLVL2 {
     case surprise, cry, cuteness
 }
 
+public enum ArmSide {
+    case left, right
+}
+
 final class LevelTwoViewController: UIViewController {
     
     private var arView: ARView
@@ -89,8 +93,9 @@ final class LevelTwoViewController: UIViewController {
         }
     }
     
-//    var headAnchorID: UUID? = nil
-    var imageAnchorID: UUID? = nil
+    var leftArmAnchorID: UUID? = nil
+    var rightArmAnchorID: UUID? = nil
+    var planeBodyAnchorID: UUID? = nil
     
     private let backButton: OkoDefaultButton = {
         let btn = OkoDefaultButton()
@@ -171,8 +176,10 @@ final class LevelTwoViewController: UIViewController {
         arView.scene.anchors.removeAll()
         arView.cameraMode = .ar
         
-        let configuration = ARImageTrackingConfiguration()
-        configuration.trackingImages = referenceImages
+//        let configuration = ARImageTrackingConfiguration()
+//        configuration.trackingImages = referenceImages
+        let configuration = ARBodyTrackingConfiguration()
+        configuration.detectionImages = referenceImages
         
         arView.session.run(configuration)
     }
@@ -274,21 +281,6 @@ final class LevelTwoViewController: UIViewController {
         videoPlayerOkoBot.seek(to: currentTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
     }
     
-    func generateVideoPlane() -> ModelEntity? {
-        
-        let nameVideo = "fx element_[000-299]-1"
-        let item = returnAVPlayerItem(nameVideo: nameVideo)
-        
-        videoPlayerPlane = AVPlayer(playerItem: item)
-        
-        let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlane)
-        videoPlayerPlane.play()
-        
-        let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, height: 0.5), materials: [videoMaterial])
-        
-        return videoPlane
-    }
-    
     private func generateOkoBot() -> ModelEntity? {
         
         let nameVideo = "okoBotVizor_[000-299]-1"
@@ -309,11 +301,6 @@ final class LevelTwoViewController: UIViewController {
     private func generateScreen() -> ModelEntity? {
         let screen = try! ModelEntity.loadModel(named: "screen_2405")
         
-        let scale: Float = 7
-        screen.scale = [scale,scale,scale]
-        
-        screen.transform.translation = [0,-0.5,-0.04]
-        
         let nameVideo = "flip_vert_[000-299]-1"
 //        let nameVideo = "Debug_futage_[000-299]-1"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
@@ -327,20 +314,22 @@ final class LevelTwoViewController: UIViewController {
         return screen
     }
     
-    func addPlaneTshirt(imageAnchor: ARImageAnchor) {
+//    func addPlaneTshirt(imageAnchor: ARImageAnchor) {
+    func addModelTshirt(bodyAnchor: ARBodyAnchor) {
         
         print ("kjkljljkljkjnkljnkl addPlaneTshirt", arView.scene.anchors.count)
         
-        guard let videoPlane = generateVideoPlane() else {return}
         guard let okoBot = generateOkoBot() else {return}
         guard let screen = generateScreen() else {return}
-        
-        videoPlane.transform.translation.y = videoPlane.transform.translation.y + 0.1
         
         okoBot.transform.translation = [-0.3, 0.3, 0]
         let startScale: Float = 0.1
 //        let startScale: Float = 0
         okoBot.scale = [startScale, startScale, startScale]
+        
+        let scale: Float = 7
+        screen.scale = [scale,scale,scale]
+        screen.transform.translation = [0,-0.5,-0.04]
         
         okoBot.playAnimation(okoBot.availableAnimations[0].repeat())
         
@@ -351,16 +340,16 @@ final class LevelTwoViewController: UIViewController {
 //        okoRobot1.move(to: trans1, relativeTo: anchor, duration: TimeInterval(2))
 //        okoRobot1.move(to: trans1, relativeTo: nil, duration: TimeInterval(2))
         
-        let anchor = AnchorEntity(anchor: imageAnchor)
+        let anchor = AnchorEntity(anchor: bodyAnchor)
         
-        anchor.addChild(videoPlane)
+//        anchor.addChild(videoPlane)
         anchor.addChild(screen)
         anchor.addChild(okoBot)
         
         anchor.transform.rotation = simd_quatf(angle: -1.5708, axis: [1,0,0])
         
         arView.scene.addAnchor(anchor)
-        imageAnchorID = anchor.anchorIdentifier
+//        imageAnchorID = anchor.anchorIdentifier
     }
     
     func emojiTrack() {
@@ -412,14 +401,32 @@ final class LevelTwoViewController: UIViewController {
 extension LevelTwoViewController: ARSessionDelegate {
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
         
-        if arView.scene.anchors.count > 0 {
-            return
-        }
+//        if arView.scene.anchors.count > 0 {
+//            return
+//        }
         
         for anchor in anchors {
-            if let imageAnchor = anchor as? ARImageAnchor {
-                isOKO = true
-                addPlaneTshirt(imageAnchor: imageAnchor)
+//            if let imageAnchor = anchor as? ARImageAnchor {
+//                isOKO = true
+//            }
+            
+//            if !isOKO {
+//                return
+//            }
+            
+            if let bodyAnchor = anchor as? ARBodyAnchor {
+                addPlaneBody(bodyAnchor: bodyAnchor)
+                addModelTshirt(bodyAnchor: bodyAnchor)
+            }
+        }
+    }
+    
+    func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
+        
+        for anchor in anchors {
+            
+            if let bodyAnchor = anchor as? ARBodyAnchor {
+                updatePlane(bodyAnchor: bodyAnchor)
             }
         }
     }
@@ -427,8 +434,206 @@ extension LevelTwoViewController: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
     
         if isOKO {
-            emojiTrack()
+//            emojiTrack()
         }
+    }
+    
+    func addPlaneBody(bodyAnchor: ARBodyAnchor) {
+        
+        let armLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_arm_joint"))!
+        let armRight = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "right_arm_joint"))!
+        
+        let forearmLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_forearm_joint"))!
+        let forearmRight = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "right_forearm_joint"))!
+        
+        let legLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_upLeg_joint"))!
+        
+        let spine = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "spine_5_joint"))!
+        
+        generatePlaneArm(bonesTransStart: armLeft, bonesTransFinish: forearmLeft, rootTrans: bodyAnchor.transform, armSide: .left)
+        generatePlaneArm(bonesTransStart: armRight, bonesTransFinish: forearmRight, rootTrans: bodyAnchor.transform, armSide: .right)
+        
+        generatePlaneBody(armLeft: armLeft, armRight: armRight, legLeft: legLeft, spine: spine, rootTrans: bodyAnchor.transform)
+    }
+    
+    func generatePlaneArm(bonesTransStart: simd_float4x4,bonesTransFinish: simd_float4x4, rootTrans: simd_float4x4, armSide: ArmSide) {
+        
+        let bonesStartForRoot: SIMD3<Float> = simd_make_float3(bonesTransStart.columns.3)
+        let bonesFinishForRoot: SIMD3<Float> = simd_make_float3(bonesTransFinish.columns.3)
+        let root: SIMD3<Float> = simd_make_float3(rootTrans.columns.3)
+        
+        let bonesStartWorld = bonesStartForRoot + root
+        let bonesFinishWorld = bonesFinishForRoot + root
+        
+        let height = simd_distance(bonesStartWorld, bonesFinishWorld) * 2
+        
+        let planeMesh = MeshResource.generatePlane(width: height, height: height / 2)
+        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
+        
+        let anchor = AnchorEntity(world: [(bonesStartWorld.x + bonesFinishWorld.x) / 2, (bonesStartWorld.y + bonesFinishWorld.y) / 2, bonesStartWorld.z])
+        anchor.addChild(planeModel)
+        arView.scene.addAnchor(anchor)
+        
+        switch armSide {
+        case .left:
+            planeModel.transform.translation = [-0.1,-0.15,0]
+            leftArmAnchorID = anchor.anchorIdentifier
+        case .right:
+            planeModel.transform.translation = [0.1,0.15,0]
+            rightArmAnchorID = anchor.anchorIdentifier
+        }
+        
+        let quatArm = Transform(matrix: bonesTransStart).rotation
+        
+        anchor.orientation = quatArm
+        
+        let angle = 0 - abs(bonesTransStart.eulerAngles.z)
+        
+        let quatFix: simd_quatf = .init(angle: angle, axis: [1,0,0])
+        
+        planeModel.setOrientation(quatFix, relativeTo: anchor)
+    }
+    
+    func generatePlaneBody(armLeft: simd_float4x4, armRight: simd_float4x4, legLeft: simd_float4x4,spine: simd_float4x4, rootTrans: simd_float4x4){
+        
+        let root: SIMD3<Float> = simd_make_float3(rootTrans.columns.3)
+        
+        let planeUpLeftForRoot: SIMD3<Float> = simd_make_float3(armLeft.columns.3)
+//        let planeUpRightForRoot: SIMD3<Float> = simd_make_float3(armRight.columns.3)
+        let planeDownLeftForRoot: SIMD3<Float> = simd_make_float3(legLeft.columns.3)
+        
+        let planeUpLeft = planeUpLeftForRoot + root
+//        let planeUpRight = planeUpRightForRoot + root
+        let planeDownLeft = planeDownLeftForRoot + root
+        
+        /// 8 к 14
+        let height = simd_distance(planeUpLeft, planeDownLeft) * 2.5
+        let planeMesh = MeshResource.generatePlane(width: height , height: height / 1.75)
+        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
+        
+        let spineWorld = simd_make_float3(spine.columns.3) + root
+        
+        let anchor = AnchorEntity(world: [spineWorld.x, (planeUpLeft.y + planeDownLeft.y) / 2, spineWorld.z])
+        
+        anchor.addChild(planeModel)
+        arView.scene.addAnchor(anchor)
+         
+        planeBodyAnchorID = anchor.anchorIdentifier
+        
+        let quatArm = Transform(matrix: spine).rotation
+        
+        anchor.orientation = quatArm
+        
+        let angle = 0 - abs(spine.eulerAngles.z)
+        
+        let quatFix: simd_quatf = .init(angle: angle, axis: [1,0,0])
+        
+        planeModel.setOrientation(quatFix, relativeTo: anchor)
+    }
+    
+    func updatePlane(bodyAnchor: ARBodyAnchor) {
+        
+        let armLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_arm_joint"))!
+        let armRight = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "right_arm_joint"))!
+        
+        let forearmLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_forearm_joint"))!
+        let forearmRight = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "right_forearm_joint"))!
+        
+        let legLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_upLeg_joint"))!
+        
+        let spine = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "spine_5_joint"))!
+        
+        updatePlaneArmLeft(bonesTransStart: armLeft, bonesTransFinish: forearmLeft, rootTrans: bodyAnchor.transform)
+        updatePlaneArmRight(bonesTransStart: armRight, bonesTransFinish: forearmRight, rootTrans: bodyAnchor.transform)
+        updatePlaneBody(armLeft: armLeft, armRight: armRight, legLeft: legLeft, spine: spine, rootTrans: bodyAnchor.transform)
+    }
+    
+    func updatePlaneArmLeft(bonesTransStart: simd_float4x4,bonesTransFinish: simd_float4x4, rootTrans: simd_float4x4) {
+        let root: SIMD3<Float> = simd_make_float3(rootTrans.columns.3)
+        
+        let bonesStartForRootLeft: SIMD3<Float> = simd_make_float3(bonesTransStart.columns.3)
+        let bonesFinishForRootLeft: SIMD3<Float> = simd_make_float3(bonesTransFinish.columns.3)
+        
+        let bonesStartWorldLeft = bonesStartForRootLeft + root
+        let bonesFinishWorldLeft = bonesFinishForRootLeft + root
+        
+        let quatArmLeft = Transform(matrix: bonesTransStart).rotation
+        
+        var anchorLeft = AnchorEntity()
+        
+        for anchor in arView.scene.anchors {
+            if leftArmAnchorID == anchor.anchorIdentifier {
+                anchorLeft = anchor as! AnchorEntity
+            }
+        }
+        
+        anchorLeft.transform.translation = [(bonesStartWorldLeft.x + bonesFinishWorldLeft.x) / 2, (bonesStartWorldLeft.y + bonesFinishWorldLeft.y) / 2, bonesStartWorldLeft.z]
+        anchorLeft.orientation = quatArmLeft
+        
+        let angleLeft = 0 + abs(bonesTransStart.eulerAngles.z)
+        
+        let quatFixLeft: simd_quatf = .init(angle: angleLeft, axis: [1,0,0])
+        anchorLeft.children[0].setOrientation(quatFixLeft, relativeTo: anchorLeft)
+    }
+    
+    func updatePlaneArmRight(bonesTransStart: simd_float4x4,bonesTransFinish: simd_float4x4, rootTrans: simd_float4x4) {
+        let root: SIMD3<Float> = simd_make_float3(rootTrans.columns.3)
+        
+        let bonesStartForRootLeft: SIMD3<Float> = simd_make_float3(bonesTransStart.columns.3)
+        let bonesFinishForRootLeft: SIMD3<Float> = simd_make_float3(bonesTransFinish.columns.3)
+        
+        let bonesStartWorldLeft = bonesStartForRootLeft + root
+        let bonesFinishWorldLeft = bonesFinishForRootLeft + root
+        
+        let quatArmLeft = Transform(matrix: bonesTransStart).rotation
+        
+        var anchorRight = AnchorEntity()
+        
+        for anchor in arView.scene.anchors {
+            if rightArmAnchorID == anchor.anchorIdentifier {
+                anchorRight = anchor as! AnchorEntity
+            }
+        }
+        
+        anchorRight.transform.translation = [(bonesStartWorldLeft.x + bonesFinishWorldLeft.x) / 2, (bonesStartWorldLeft.y + bonesFinishWorldLeft.y) / 2, bonesStartWorldLeft.z]
+        anchorRight.orientation = quatArmLeft
+        
+        let angleLeft = 0 - abs(bonesTransStart.eulerAngles.z)
+        
+        let quatFixLeft: simd_quatf = .init(angle: angleLeft, axis: [1,0,0])
+        anchorRight.children[0].setOrientation(quatFixLeft, relativeTo: anchorRight)
+    }
+    
+    func updatePlaneBody(armLeft: simd_float4x4, armRight: simd_float4x4, legLeft: simd_float4x4, spine: simd_float4x4, rootTrans: simd_float4x4) {
+        let root: SIMD3<Float> = simd_make_float3(rootTrans.columns.3)
+        
+        let planeUpLeftForRoot: SIMD3<Float> = simd_make_float3(armLeft.columns.3)
+        let planeDownLeftForRoot: SIMD3<Float> = simd_make_float3(legLeft.columns.3)
+//
+        let planeUpLeft = planeUpLeftForRoot + root
+        let planeDownLeft = planeDownLeftForRoot + root
+        
+        let spineWorld = simd_make_float3(spine.columns.3) + root
+        
+        var anchorBody = AnchorEntity()
+        
+        for anchor in arView.scene.anchors {
+            if planeBodyAnchorID == anchor.anchorIdentifier {
+                anchorBody = anchor as! AnchorEntity
+            }
+        }
+        
+        anchorBody.transform.translation = [spineWorld.x, (planeUpLeft.y + planeDownLeft.y) / 2, spineWorld.z]
+        
+        let quatArm = Transform(matrix: spine).rotation
+        
+        anchorBody.orientation = quatArm
+        
+        let angle = 0 - abs(spine.eulerAngles.z)
+        
+        let quatFix: simd_quatf = .init(angle: angle, axis: [1,0,0])
+        
+        anchorBody.children[0].setOrientation(quatFix, relativeTo: anchorBody)
     }
 }
 
@@ -437,5 +642,15 @@ extension LevelTwoViewController: RPPreviewViewControllerDelegate {
       previewController.dismiss(animated: true) { [weak self] in
       /// после исчезновения previewController
       }
+    }
+}
+
+extension simd_float4x4 {
+    var eulerAngles: simd_float3 {
+        simd_float3(
+            x: asin(-self[2][1]),
+            y: atan2(self[2][0], self[2][2]),
+            z: atan2(self[0][1], self[1][1])
+        )
     }
 }
