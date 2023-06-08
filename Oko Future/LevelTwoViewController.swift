@@ -314,7 +314,6 @@ final class LevelTwoViewController: UIViewController {
         return screen
     }
     
-//    func addPlaneTshirt(imageAnchor: ARImageAnchor) {
     func addModelTshirt(bodyAnchor: ARBodyAnchor) {
         
         print ("kjkljljkljkjnkljnkl addPlaneTshirt", arView.scene.anchors.count)
@@ -416,7 +415,7 @@ extension LevelTwoViewController: ARSessionDelegate {
             
             if let bodyAnchor = anchor as? ARBodyAnchor {
                 addPlaneBody(bodyAnchor: bodyAnchor)
-                addModelTshirt(bodyAnchor: bodyAnchor)
+//                addModelTshirt(bodyAnchor: bodyAnchor)
             }
         }
     }
@@ -467,8 +466,24 @@ extension LevelTwoViewController: ARSessionDelegate {
         
         let height = simd_distance(bonesStartWorld, bonesFinishWorld) * 2
         
+        var nameVideo = ""
+        
+        switch armSide {
+        case .left:
+            nameVideo = "lefthand_lvl2"
+        case .right:
+            nameVideo = "righthand_lvl2"
+        }
+        
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
+        
+        let videoPlayer = AVPlayer(playerItem: item)
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
+        
         let planeMesh = MeshResource.generatePlane(width: height, height: height / 2)
-        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
+//        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
+        let planeModel = ModelEntity(mesh: planeMesh, materials: [videoMaterial])
         
         let anchor = AnchorEntity(world: [(bonesStartWorld.x + bonesFinishWorld.x) / 2, (bonesStartWorld.y + bonesFinishWorld.y) / 2, bonesStartWorld.z])
         anchor.addChild(planeModel)
@@ -499,17 +514,22 @@ extension LevelTwoViewController: ARSessionDelegate {
         let root: SIMD3<Float> = simd_make_float3(rootTrans.columns.3)
         
         let planeUpLeftForRoot: SIMD3<Float> = simd_make_float3(armLeft.columns.3)
-//        let planeUpRightForRoot: SIMD3<Float> = simd_make_float3(armRight.columns.3)
         let planeDownLeftForRoot: SIMD3<Float> = simd_make_float3(legLeft.columns.3)
         
         let planeUpLeft = planeUpLeftForRoot + root
-//        let planeUpRight = planeUpRightForRoot + root
         let planeDownLeft = planeDownLeftForRoot + root
         
+        let nameVideo = "body_lvl2"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
+        
+        let videoPlayer = AVPlayer(playerItem: item)
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
         /// 8 к 14
         let height = simd_distance(planeUpLeft, planeDownLeft) * 2.5
         let planeMesh = MeshResource.generatePlane(width: height , height: height / 1.75)
-        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
+//        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
+        let planeModel = ModelEntity(mesh: planeMesh, materials: [videoMaterial])
         
         let spineWorld = simd_make_float3(spine.columns.3) + root
         

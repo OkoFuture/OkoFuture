@@ -35,6 +35,9 @@
 		D15E140D2A1F9FE00090584D /* fx element_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D15E140C2A1F9FE00090584D /* fx element_[000-299]-1.mov */; };
 		D16981DB2A08CC1E00F82292 /* loc_new_textures 08.05.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D16981D92A08CC1D00F82292 /* loc_new_textures 08.05.usdz */; };
 		D16981E02A08E71B00F82292 /* amy_anim_0505x100_2.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D16981DF2A08E71B00F82292 /* amy_anim_0505x100_2.usdz */; };
+		D188947E2A30CA5D00146348 /* lefthand_lvl2.mov in Resources */ = {isa = PBXBuildFile; fileRef = D188947B2A30CA5A00146348 /* lefthand_lvl2.mov */; };
+		D188947F2A30CA5D00146348 /* body_lvl2.mov in Resources */ = {isa = PBXBuildFile; fileRef = D188947C2A30CA5C00146348 /* body_lvl2.mov */; };
+		D18894802A30CA5D00146348 /* righthand_lvl2.mov in Resources */ = {isa = PBXBuildFile; fileRef = D188947D2A30CA5D00146348 /* righthand_lvl2.mov */; };
 		D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB029F553340003F3EC /* OkoDefaultButton.swift */; };
 		D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */; };
 		D1AC4DA42A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */; };
@@ -84,6 +87,9 @@
 		D15E140C2A1F9FE00090584D /* fx element_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "fx element_[000-299]-1.mov"; sourceTree = "<group>"; };
 		D16981D92A08CC1D00F82292 /* loc_new_textures 08.05.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = "loc_new_textures 08.05.usdz"; sourceTree = "<group>"; };
 		D16981DF2A08E71B00F82292 /* amy_anim_0505x100_2.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = amy_anim_0505x100_2.usdz; sourceTree = "<group>"; };
+		D188947B2A30CA5A00146348 /* lefthand_lvl2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = lefthand_lvl2.mov; sourceTree = "<group>"; };
+		D188947C2A30CA5C00146348 /* body_lvl2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = body_lvl2.mov; sourceTree = "<group>"; };
+		D188947D2A30CA5D00146348 /* righthand_lvl2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = righthand_lvl2.mov; sourceTree = "<group>"; };
 		D188FBB029F553340003F3EC /* OkoDefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoDefaultButton.swift; sourceTree = "<group>"; };
 		D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigSwitch.swift; sourceTree = "<group>"; };
 		D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Debug_futage_[000-299]-1.mov"; sourceTree = "<group>"; };
@@ -116,6 +122,9 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				D188947C2A30CA5C00146348 /* body_lvl2.mov */,
+				D188947B2A30CA5A00146348 /* lefthand_lvl2.mov */,
+				D188947D2A30CA5D00146348 /* righthand_lvl2.mov */,
 				D11F10612A277E26004C49CE /* Intro_v4.mp4 */,
 				D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */,
 				D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */,
@@ -247,6 +256,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D188947E2A30CA5D00146348 /* lefthand_lvl2.mov in Resources */,
+				D188947F2A30CA5D00146348 /* body_lvl2.mov in Resources */,
+				D18894802A30CA5D00146348 /* righthand_lvl2.mov in Resources */,
 				D11F10622A277E26004C49CE /* Intro_v4.mp4 in Resources */,
 				D1AC4DA62A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov in Resources */,
 				D1AC4DA42A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov in Resources */,
