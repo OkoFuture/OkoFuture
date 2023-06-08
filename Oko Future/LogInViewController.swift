@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import AuthenticationServices
 
 final class LogInViewController: UIViewController {
     
@@ -103,6 +104,7 @@ final class LogInViewController: UIViewController {
         view.addSubview(googleSignUpButton)
         
         sendCodeButton.addTarget(self, action: #selector(tapSendButton), for: .touchUpInside)
+        appleSignUpButton.addTarget(self, action: #selector(tapLogInApple), for: .touchUpInside)
     }
     
     private func setupLayout() {
@@ -126,8 +128,53 @@ final class LogInViewController: UIViewController {
         
     }
     
-    @objc private func tapSendButton() {
+    private func pushToPasswordViewController() {
         let vc = PasswordViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
+    
+    @objc private func tapSendButton() {
+        pushToPasswordViewController()
+    }
+    
+    @objc private func tapLogInApple() {
+        let provider = ASAuthorizationAppleIDProvider()
+        let requvest = provider.createRequest()
+        requvest.requestedScopes = [.fullName, .email]
+        
+        let controller = ASAuthorizationController(authorizationRequests: [requvest])
+        controller.delegate = self
+        controller.presentationContextProvider = self
+        controller.performRequests()
+        
+    }
 }
+
+extension LogInViewController: ASAuthorizationControllerDelegate {
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithError error: Error) {
+        print ("log in with apple fail", error.localizedDescription)
+    }
+    
+    func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        switch authorization.credential {
+        case let credentials as ASAuthorizationAppleIDCredential:
+            let firstName = credentials.fullName?.givenName
+            let lastName = credentials.fullName?.familyName
+            let email = credentials.email
+            
+            pushToPasswordViewController()
+            
+            print ("log in with apple completed", firstName, lastName, email)
+            break
+        default:
+            break
+        }
+    }
+}
+
+extension LogInViewController: ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return view.window!
+    }
+}
+
