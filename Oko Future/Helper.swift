@@ -7,9 +7,7 @@
 
 import UIKit
 
-enum UserData: CaseIterable {
-    case name, email, password
-}
+
 
 final class Helper {
     
@@ -18,11 +16,15 @@ final class Helper {
     }()
     
     public func setUser(user: User) {
-        UserDefaults.standard.set(user, forKey: "user")
+        if let encoded = try? JSONEncoder().encode(user) {
+            UserDefaults.standard.set(encoded, forKey: "user")
+        }
     }
     
     public func getUser() -> User? {
-        return UserDefaults.standard.object(forKey: "user") as? User
+        guard let data = UserDefaults.standard.object(forKey: "user") as? Data else { return nil }
+        guard let user = try? JSONDecoder().decode(User.self, from: data) else { return nil }
+        return user
     }
     
     public func updateUserData(typeUserData: UserData, userData: String) {
@@ -42,7 +44,15 @@ final class Helper {
         setUser(user: user)
     }
     
-    private func deleteUser() {
+    public func updateUserLogStatus(logStatus: UserLogStatus) {
+        guard let user = getUser() else { return }
+        
+        user.logStatus = logStatus
+        
+        setUser(user: user)
+    }
+    
+    public func deleteUser() {
         UserDefaults.standard.removeObject(forKey: "user")
     }
     

@@ -7,6 +7,9 @@
 
 import UIKit
 import AuthenticationServices
+//import FirebaseCore
+import Firebase
+import GoogleSignIn
 
 final class LogInViewController: UIViewController {
     
@@ -105,6 +108,7 @@ final class LogInViewController: UIViewController {
         
         sendCodeButton.addTarget(self, action: #selector(tapSendButton), for: .touchUpInside)
         appleSignUpButton.addTarget(self, action: #selector(tapLogInApple), for: .touchUpInside)
+        googleSignUpButton.addTarget(self, action: #selector(tapLogInGoogle), for: .touchUpInside)
     }
     
     private func setupLayout() {
@@ -137,6 +141,11 @@ final class LogInViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
+    private func pushToProfileSettingViewController() {
+        let vc = ProfileSettingViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+    
     @objc private func tapSendButton() {
         
         guard let email = emailTextField.text else { return }
@@ -157,6 +166,69 @@ final class LogInViewController: UIViewController {
         controller.performRequests()
         
     }
+    
+    @objc private func tapLogInGoogle() {
+        signIn()
+    }
+    
+    func signIn() {
+        
+      if GIDSignIn.sharedInstance.hasPreviousSignIn() {
+        GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
+            authenticateUser(for: user, with: error)
+        }
+      } else {
+          
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        let configuration = GIDConfiguration(clientID: clientID)
+          
+        GIDSignIn.sharedInstance.configuration = configuration
+          
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+        guard let rootViewController = windowScene.windows.first?.rootViewController else { return }
+          
+          GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController, hint: nil, completion: { [unowned self] result, error in
+              authenticateUser(for: result?.user, with: error)
+            })
+      }
+    }
+    
+    private func authenticateUser(for user: GIDGoogleUser?, with error: Error?) {
+        if let error = error {
+            print(error.localizedDescription)
+            return
+        }
+        
+        guard let accessToken = user?.accessToken, let idToken = user?.idToken else { return }
+
+        let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
+
+      Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
+        if let error = error {
+          print(error.localizedDescription)
+        } else {
+            
+            if let fullname = user?.profile?.name, let email = user?.profile?.email {
+                for userDate in UserData.allCases {
+                    switch userDate {
+                    case .name:
+                        Helper().updateUserData(typeUserData: .name, userData: fullname)
+                    case .email:
+                        Helper().updateUserData(typeUserData: .email, userData: email)
+                    default: break
+                    }
+                }
+            }
+            
+            print ("log in with google completed", user?.profile?.email, user?.profile?.name, user?.profile?.givenName, user?.profile?.familyName, user?.profile?.imageURL(withDimension: 320))
+            
+            Helper().updateUserLogStatus(logStatus: .logInWithGoogle)
+            pushToProfileSettingViewController()
+        }
+      }
+    }
+
 }
 
 extension LogInViewController: ASAuthorizationControllerDelegate {
@@ -167,27 +239,24 @@ extension LogInViewController: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         switch authorization.credential {
         case let credentials as ASAuthorizationAppleIDCredential:
-            pushToPasswordViewController(email: "")
             
-            /// везде nil, надо решить что с этим делать
-            guard let firstName = credentials.fullName?.givenName else { return }
-            guard let lastName = credentials.fullName?.familyName else { return }
-            guard let email = credentials.email else { return }
-            
-            for userDate in UserData.allCases {
-                switch userDate {
-                case .name:
-                    Helper().updateUserData(typeUserData: .name, userData: firstName + " " + lastName)
-                case .email:
-                    Helper().updateUserData(typeUserData: .email, userData: email)
-                default: break
+            if let firstName = credentials.fullName?.givenName, let lastName = credentials.fullName?.familyName, let email = credentials.email {
+                for userDate in UserData.allCases {
+                    switch userDate {
+                    case .name:
+                        Helper().updateUserData(typeUserData: .name, userData: firstName + " " + lastName)
+                    case .email:
+                        Helper().updateUserData(typeUserData: .email, userData: email)
+                    default: break
+                    }
                 }
             }
             
-//            pushToPasswordViewController(email: email)
+            print ("log in with apple completed", credentials.fullName, credentials.email, credentials.user, credentials.realUserStatus, credentials.state, credentials.identityToken)
             
-            print ("log in with apple completed", firstName, lastName, email)
-            break
+            Helper().updateUserLogStatus(logStatus: .logInWithApple)
+            pushToProfileSettingViewController()
+            
         default:
             break
         }
