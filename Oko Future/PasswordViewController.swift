@@ -94,7 +94,16 @@ final class PasswordViewController: UIViewController {
     }
     
     @objc func passwordDidChange(textField: UITextField) {
-        if textField.text?.count == 5 {
+        
+        guard let password = textField.text else { return }
+        guard let user = Helper().getUser() else { return }
+        
+        if user.password == password {
+            /// можно так, можно дать возможность поменять имя далее
+//            if user.logInWithApple || user.logInWithGoogle {
+//                UploadSceneViewController()
+//            }
+            
             let vc = ProfileSettingViewController()
             navigationController?.pushViewController(vc, animated: true)
         }

@@ -48,6 +48,10 @@ final class ProfileSettingViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
+        
+        guard let user = Helper().getUser() else { return }
+        nameTextField.text = user.name
+        
         setupView()
     }
     
@@ -85,6 +89,13 @@ final class ProfileSettingViewController: UIViewController {
     }
     
     @objc private func tapSaveStartButton() {
+        
+        guard let name = nameTextField.text else { return }
+        
+        if name.count == 0 { return }
+        
+        Helper().updateUserData(typeUserData: .name, userData: name)
+        
         let vc = UploadSceneViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
