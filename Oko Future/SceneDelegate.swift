@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import FirebaseCore
+import GoogleSignIn
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
@@ -29,9 +31,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             case _ where (user.email != nil):
                 startViewController = PasswordViewController()
                 
-            case _ where user.logInWithApple:
-                startViewController = PasswordViewController()
-            case _ where user.logInWithGoogle:
+            case _ where user.logStatus == .logInWithApple:
+                startViewController = ProfileSettingViewController()
+            case _ where user.logStatus == .logInWithGoogle:
+                startViewController = ProfileSettingViewController()
+                
+            case _ where user.logStatus == .logInWithEmail:
                 startViewController = PasswordViewController()
                 
             default: startViewController = WelcomeViewController()
@@ -39,6 +44,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             }
             
         } else {
+            
             Helper().setUser(user: User())
             startViewController = WelcomeViewController()
         }

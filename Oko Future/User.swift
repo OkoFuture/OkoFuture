@@ -7,7 +7,15 @@
 
 import Foundation
 
-final class User {
+enum UserData: CaseIterable, Codable {
+    case name, email, password
+}
+
+enum UserLogStatus: Codable {
+    case logInWithApple, logInWithGoogle, logInWithEmail, logOut
+}
+
+final class User: Codable {
     
     var name: String? = nil
     var email: String? = nil
@@ -15,7 +23,5 @@ final class User {
     
     var imageAvatar: URL? = nil
     
-    var logInWithApple: Bool = false
-    var logInWithGoogle: Bool = false
-    var logIn: Bool = false
+    var logStatus: UserLogStatus = .logOut
 }
