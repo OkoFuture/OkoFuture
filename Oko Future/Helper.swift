@@ -7,11 +7,44 @@
 
 import UIKit
 
+enum UserData: CaseIterable {
+    case name, email, password
+}
+
 final class Helper {
     
     static var app: Helper = {
         return Helper()
     }()
+    
+    public func setUser(user: User) {
+        UserDefaults.standard.set(user, forKey: "user")
+    }
+    
+    public func getUser() -> User? {
+        return UserDefaults.standard.object(forKey: "user") as? User
+    }
+    
+    public func updateUserData(typeUserData: UserData, userData: String) {
+        
+        guard let user = getUser() else { return }
+        
+        switch typeUserData {
+            
+        case .name:
+            user.name = userData
+        case .email:
+            user.email = userData
+        case .password:
+            user.password = userData
+        }
+        
+        setUser(user: user)
+    }
+    
+    private func deleteUser() {
+        UserDefaults.standard.removeObject(forKey: "user")
+    }
     
     public func arrayNameAvatarUSDZ() -> [String] {
         ["avtr_anim_0805.usdz", "avtr_anim_0805.usdz"]

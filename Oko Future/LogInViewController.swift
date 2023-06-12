@@ -128,13 +128,22 @@ final class LogInViewController: UIViewController {
         
     }
     
-    private func pushToPasswordViewController() {
+    private func pushToPasswordViewController(email: String) {
+        
+        /// вот тут запрос для получение пароля юзера
+        Helper().updateUserData(typeUserData: .password, userData: "11111")
+        
         let vc = PasswordViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
     
     @objc private func tapSendButton() {
-        pushToPasswordViewController()
+        
+        guard let email = emailTextField.text else { return }
+        
+        if email.count == 0 { return }
+        
+        pushToPasswordViewController(email: email)
     }
     
     @objc private func tapLogInApple() {
@@ -158,11 +167,24 @@ extension LogInViewController: ASAuthorizationControllerDelegate {
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         switch authorization.credential {
         case let credentials as ASAuthorizationAppleIDCredential:
-            let firstName = credentials.fullName?.givenName
-            let lastName = credentials.fullName?.familyName
-            let email = credentials.email
+            pushToPasswordViewController(email: "")
             
-            pushToPasswordViewController()
+            /// везде nil, надо решить что с этим делать
+            guard let firstName = credentials.fullName?.givenName else { return }
+            guard let lastName = credentials.fullName?.familyName else { return }
+            guard let email = credentials.email else { return }
+            
+            for userDate in UserData.allCases {
+                switch userDate {
+                case .name:
+                    Helper().updateUserData(typeUserData: .name, userData: firstName + " " + lastName)
+                case .email:
+                    Helper().updateUserData(typeUserData: .email, userData: email)
+                default: break
+                }
+            }
+            
+//            pushToPasswordViewController(email: email)
             
             print ("log in with apple completed", firstName, lastName, email)
             break
