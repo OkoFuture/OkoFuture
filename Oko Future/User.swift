@@ -21,7 +21,7 @@ final class User: Codable {
     var email: String? = nil
     var password: String? = nil
     
-    var imageAvatar: URL? = nil
+    var imageProfile: URL? = nil
     
     var logStatus: UserLogStatus = .logOut
 }

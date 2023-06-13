@@ -24,6 +24,8 @@
 		92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */; };
 		92D6DF8F29E01547009E5909 /* shocked__228-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92D6DF8E29E01547009E5909 /* shocked__228-1.mov */; };
 		D10B06F829F7FDB6002B9868 /* CleanFaceTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10B06F729F7FDB6002B9868 /* CleanFaceTrackViewController.swift */; };
+		D117FB772A3872A000BE7DAA /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = D117FB762A3872A000BE7DAA /* FirebaseDatabase */; };
+		D117FB792A38AE6000BE7DAA /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */; };
 		D11F10622A277E26004C49CE /* Intro_v4.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D11F10612A277E26004C49CE /* Intro_v4.mp4 */; };
 		D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15A35B129F697EC00E3F6E1 /* Helper.swift */; };
 		D15A35BA29F69BF300E3F6E1 /* ChakraPetch-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */; };
@@ -81,6 +83,7 @@
 		92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewContoller.swift; sourceTree = "<group>"; };
 		92D6DF8E29E01547009E5909 /* shocked__228-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "shocked__228-1.mov"; sourceTree = "<group>"; };
 		D10B06F729F7FDB6002B9868 /* CleanFaceTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanFaceTrackViewController.swift; sourceTree = "<group>"; };
+		D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		D11F10612A277E26004C49CE /* Intro_v4.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Intro_v4.mp4; sourceTree = "<group>"; };
 		D15A35B129F697EC00E3F6E1 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ChakraPetch-Medium.ttf"; sourceTree = "<group>"; };
@@ -123,6 +126,7 @@
 			files = (
 				D199EC232A3216CB00968291 /* GoogleSignInSwift in Frameworks */,
 				D199EC1E2A3215D400968291 /* FirebaseAuth in Frameworks */,
+				D117FB772A3872A000BE7DAA /* FirebaseDatabase in Frameworks */,
 				D199EC212A3216CB00968291 /* GoogleSignIn in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -158,6 +162,7 @@
 				920BF14229CC804A001D40DA /* hd1833.mov */,
 				920BF12729CC3D33001D40DA /* Oko Future */,
 				920BF12629CC3D33001D40DA /* Products */,
+				D117FB752A3872A000BE7DAA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -176,6 +181,7 @@
 				920BF12829CC3D33001D40DA /* AppDelegate.swift */,
 				920BF12A29CC3D33001D40DA /* SceneDelegate.swift */,
 				920BF12C29CC3D33001D40DA /* GeneralViewController.swift */,
+				D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */,
 				9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */,
 				D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */,
 				D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */,
@@ -201,6 +207,13 @@
 				920BF13629CC3D34001D40DA /* Info.plist */,
 			);
 			path = "Oko Future";
+			sourceTree = "<group>";
+		};
+		D117FB752A3872A000BE7DAA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 		D15A35B329F698FD00E3F6E1 /* Font */ = {
@@ -232,6 +245,7 @@
 				D199EC1D2A3215D400968291 /* FirebaseAuth */,
 				D199EC202A3216CB00968291 /* GoogleSignIn */,
 				D199EC222A3216CB00968291 /* GoogleSignInSwift */,
+				D117FB762A3872A000BE7DAA /* FirebaseDatabase */,
 			);
 			productName = "Oko Future";
 			productReference = 920BF12529CC3D33001D40DA /* Oko Future.app */;
@@ -326,6 +340,7 @@
 				D1D5B3BD2A24CE9C00E03647 /* PasswordViewController.swift in Sources */,
 				D1D5B3BF2A24D31800E03647 /* ProfileSettingViewController.swift in Sources */,
 				D1FC93462A1615B8002A3B05 /* CNNEmotions.mlmodel in Sources */,
+				D117FB792A38AE6000BE7DAA /* UserProfileViewController.swift in Sources */,
 				D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */,
 				D1FC93422A160F84002A3B05 /* LevelTwoViewController.swift in Sources */,
 				D1D5B3BB2A24C8AE00E03647 /* WelcomeViewController.swift in Sources */,
@@ -578,6 +593,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		D117FB762A3872A000BE7DAA /* FirebaseDatabase */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = D199EC1C2A3215D400968291 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseDatabase;
+		};
 		D199EC1D2A3215D400968291 /* FirebaseAuth */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = D199EC1C2A3215D400968291 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

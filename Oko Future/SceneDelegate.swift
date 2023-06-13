@@ -45,7 +45,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
         } else {
             
-            Helper().setUser(user: User())
+            Helper().createUser()
             startViewController = WelcomeViewController()
         }
         

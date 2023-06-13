@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import Firebase
 
 
 final class Helper {
@@ -15,10 +15,31 @@ final class Helper {
         return Helper()
     }()
     
+    public func createUser() {
+        Helper().setUser(user: User())
+    }
+    
+    public func addUserFirebase(email: String, password: String) {
+        
+        Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
+            
+        }
+    }
+    
+    public func updateUserFirebase() {
+        guard let user = getUser() else { return }
+        
+//        let userFire: FirebaseAuth.User =
+        
+//        Auth.auth().updateCurrentUser(user)
+    }
+    
     public func setUser(user: User) {
         if let encoded = try? JSONEncoder().encode(user) {
             UserDefaults.standard.set(encoded, forKey: "user")
         }
+        
+//        Auth.auth().updateCurrentUser(<#T##user: User##User#>)
     }
     
     public func getUser() -> User? {
@@ -52,8 +73,24 @@ final class Helper {
         setUser(user: user)
     }
     
-    public func deleteUser() {
+    private func deleteUser() {
+        
         UserDefaults.standard.removeObject(forKey: "user")
+    }
+    
+    public func deleteUserFirebase() {
+        Auth.auth()
+    }
+    
+    public func logOut() {
+        let firebaseAuth = Auth.auth()
+        do {
+          try firebaseAuth.signOut()
+        } catch let signOutError as NSError {
+          print("Error signing out: %@", signOutError)
+        }
+        
+        deleteUser()
     }
     
     public func arrayNameAvatarUSDZ() -> [String] {

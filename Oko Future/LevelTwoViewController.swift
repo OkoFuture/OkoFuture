@@ -507,6 +507,8 @@ extension LevelTwoViewController: ARSessionDelegate {
         let quatFix: simd_quatf = .init(angle: angle, axis: [1,0,0])
         
         planeModel.setOrientation(quatFix, relativeTo: anchor)
+        
+        videoPlayer.play()
     }
     
     func generatePlaneBody(armLeft: simd_float4x4, armRight: simd_float4x4, legLeft: simd_float4x4,spine: simd_float4x4, rootTrans: simd_float4x4){
@@ -549,6 +551,8 @@ extension LevelTwoViewController: ARSessionDelegate {
         let quatFix: simd_quatf = .init(angle: angle, axis: [1,0,0])
         
         planeModel.setOrientation(quatFix, relativeTo: anchor)
+        
+        videoPlayer.play()
     }
     
     func updatePlane(bodyAnchor: ARBodyAnchor) {
