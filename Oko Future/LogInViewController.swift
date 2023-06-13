@@ -7,11 +7,14 @@
 
 import UIKit
 import AuthenticationServices
-//import FirebaseCore
 import Firebase
 import GoogleSignIn
+import FirebaseDatabase
+import MessageUI
 
 final class LogInViewController: UIViewController {
+    
+    var ref: DatabaseReference!
     
     let logoImageView: UIImageView = {
         let img = UIImage(named: "okoLogoBlack")
@@ -38,6 +41,16 @@ final class LogInViewController: UIViewController {
     }()
     
     let emailTextField: UITextField = {
+        let txt = UITextField()
+        txt.textColor = .black
+        txt.backgroundColor = .white
+        txt.layer.borderWidth = 1
+        txt.layer.borderColor = UIColor.black.cgColor
+        txt.textAlignment = .center
+        return txt
+    }()
+    
+    let passwordTextField: UITextField = {
         let txt = UITextField()
         txt.textColor = .black
         txt.backgroundColor = .white
@@ -87,6 +100,7 @@ final class LogInViewController: UIViewController {
     }()
     
     override func viewDidLoad() {
+        ref = Database.database().reference()
         setupView()
     }
     
@@ -132,10 +146,13 @@ final class LogInViewController: UIViewController {
         
     }
     
-    private func pushToPasswordViewController(email: String) {
+    private func pushToPasswordViewController(email: String, password: String) {
         
         /// вот тут запрос для получение пароля юзера
-        Helper().updateUserData(typeUserData: .password, userData: "11111")
+//        Helper().updateUserData(typeUserData: .password, userData: "11111")
+        Helper().addUserFirebase(email: email, password: password)
+        
+//        self.ref.child("awd").setValue("dfg")
         
         let vc = PasswordViewController()
         navigationController?.pushViewController(vc, animated: true)
@@ -148,11 +165,23 @@ final class LogInViewController: UIViewController {
     
     @objc private func tapSendButton() {
         
-        guard let email = emailTextField.text else { return }
+//        guard let email = emailTextField.text else { return }
+//
+//        if email.count == 0 { return }
         
-        if email.count == 0 { return }
+//        sendEmailButtonTapped()
         
-        pushToPasswordViewController(email: email)
+//        self.ref.child(“user_id”).setValue(123456)
+        
+//        pushToPasswordViewController(email: email)
+        
+//        admin.firestore().collection('mail').add({
+//          to: 'someone@example.com',
+//          message: {
+//            subject: 'Hello from Firebase!',
+//            html: 'This is an <code>HTML</code> email body.',
+//          },
+//        })
     }
     
     @objc private func tapLogInApple() {
@@ -267,5 +296,44 @@ extension LogInViewController: ASAuthorizationControllerPresentationContextProvi
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return view.window!
     }
+}
+
+extension LogInViewController: MFMailComposeViewControllerDelegate {
+    
+    private func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
+        controller.dismiss(animated: true, completion: nil)
+    }
+    
+    func sendEmailButtonTapped() {
+            let mailComposeViewController = configuredMailComposeViewController()
+            if MFMailComposeViewController.canSendMail() {
+                self.present(mailComposeViewController, animated: true, completion: nil)
+            } else {
+                self.showSendMailErrorAlert()
+            }
+        }
+
+        func configuredMailComposeViewController() -> MFMailComposeViewController {
+            let mailComposerVC = MFMailComposeViewController()
+            mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
+
+            mailComposerVC.setToRecipients(["kalinin.denis187@gmail.com"])
+            mailComposerVC.setSubject("Sending you an in-app e-mail...")
+            mailComposerVC.setMessageBody("Sending e-mail in-app is not so bad!", isHTML: false)
+
+            return mailComposerVC
+        }
+
+        func showSendMailErrorAlert() {
+            let sendMailErrorAlert = UIAlertController(title: "баля", message: "не вышло брат", preferredStyle: .actionSheet)
+            
+            let closeButton = UIAlertAction(title: "Close", style: .cancel, handler: { alert in
+//                alert
+            })
+            
+            sendMailErrorAlert.addAction(closeButton)
+            
+            present(sendMailErrorAlert, animated: true)
+        }
 }
 
