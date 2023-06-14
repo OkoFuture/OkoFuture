@@ -28,8 +28,6 @@ final class GeneralViewController: UIViewController {
     
     private var cameraEntity = PerspectiveCamera()
     private var sceneEntity: ModelEntity
-//    private var nodeGirl: Entity?
-//    private var nodeAvatar: Entity?
     private var nodeGirl: ModelEntity?
     private var nodeAvatar: ModelEntity?
     
@@ -177,6 +175,12 @@ final class GeneralViewController: UIViewController {
         return btn
     }()
     
+    private let profileSettingButton: OkoDefaultButton = {
+       let btn = OkoDefaultButton()
+        btn.setTitle("P", for: .normal)
+        return btn
+    }()
+    
     init(arView: ARView, sceneEntity: ModelEntity, nodeGirl: ModelEntity, nodeAvatar: ModelEntity) {
         self.arView = arView
         self.sceneEntity = sceneEntity
@@ -187,6 +191,10 @@ final class GeneralViewController: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        print("deinit called GeneralViewController")
     }
     
     override func viewDidLoad() {
@@ -210,6 +218,7 @@ final class GeneralViewController: UIViewController {
     override func viewWillDisappear(_ animated: Bool) {
         
         stopSession()
+        print ("kjjklnklkl", CFGetRetainCount(self))
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -288,6 +297,7 @@ final class GeneralViewController: UIViewController {
 //        view.addSubview(secondModelWardrobeButton)
         
         view.addSubview(arViewButton)
+        view.addSubview(profileSettingButton)
         
         view.addSubview(arSwitch)
         
@@ -301,6 +311,7 @@ final class GeneralViewController: UIViewController {
         secondModelWardrobeButton.addTarget(self, action: #selector(tapSecond), for: .touchUpInside)
         
         arViewButton.addTarget(self, action: #selector(tapArView), for: .touchUpInside)
+        profileSettingButton.addTarget(self, action: #selector(tapProfileButton), for: .touchUpInside)
         
         arSwitch.setOnActive(active: tapZoomOut)
         arSwitch.setOffActive(active: tapZoomIn)
@@ -314,6 +325,12 @@ final class GeneralViewController: UIViewController {
                                     y: 61,
                                     width: sideNavButton,
                                     height: sideNavButton)
+        
+        profileSettingButton.frame = CGRect(x: 20,
+                                            y: 61,
+                                    width: sideNavButton,
+                                    height: sideNavButton)
+        
         arSwitch.frame = CGRect(x: sideNavButton + 21 + 10,
                                 y: 61,
                                 width: view.frame.width - (sideNavButton + 21 + 10) * 2,
@@ -566,6 +583,12 @@ final class GeneralViewController: UIViewController {
         } else {
             print ("log ARFaceTrackingConfiguration.isSupported == false")
         }
+    }
+    
+    @objc private func tapProfileButton() {
+        let vc = UserProfileViewController()
+        self.navigationController?.pushViewController(vc,
+             animated: true)
     }
     
     @objc private func tapZoomIn() {

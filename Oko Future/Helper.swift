@@ -79,7 +79,7 @@ final class Helper {
     }
     
     public func deleteUserFirebase() {
-        Auth.auth()
+//        Auth.auth()
     }
     
     public func logOut() {

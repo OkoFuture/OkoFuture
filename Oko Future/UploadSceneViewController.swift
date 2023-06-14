@@ -34,6 +34,11 @@ final class UploadSceneViewController: UIViewController {
         uploadScene()
     }
     
+    deinit {
+        print("deinit called UploadSceneViewController")
+    }
+    
+    
     private func uploadScene() {
         
         let arView = ARView(frame: .zero, cameraMode: .nonAR, automaticallyConfigureSession: false)
