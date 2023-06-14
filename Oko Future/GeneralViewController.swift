@@ -222,6 +222,7 @@ final class GeneralViewController: UIViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
+        print ("kjjklnklkl", CFGetRetainCount(self))
     }
     
     override func didReceiveMemoryWarning() {
@@ -284,6 +285,9 @@ final class GeneralViewController: UIViewController {
     
     func stopSession() {
         arView.session.pause()
+        self.animationController = nil
+        self.timerAnimation?.invalidate()
+        self.timerAnimation = nil
     }
     
     private func setupView() {
