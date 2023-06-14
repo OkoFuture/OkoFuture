@@ -26,7 +26,7 @@ final class LogInViewController: UIViewController {
     let logInLabel: UILabel = {
         let lbl = UILabel()
         lbl.text = "Log in"
-//        lbl.font = Helper().fontChakra600(size: 32)
+        //        lbl.font = Helper().fontChakra600(size: 32)
         lbl.font = lbl.font.withSize(32)
         lbl.textColor = .black
         return lbl
@@ -63,7 +63,7 @@ final class LogInViewController: UIViewController {
     let sendCodeButton: OkoBigButton = {
         let btn = OkoBigButton()
         btn.setTitle("Send code", for: .normal)
-//        btn.font = Helper().fontChakra500(size: 16)!
+        //        btn.font = Helper().fontChakra500(size: 16)!
         return btn
     }()
     
@@ -79,7 +79,7 @@ final class LogInViewController: UIViewController {
         let btn = OkoBigButton()
         btn.setTitle("Apple", for: .normal)
         btn.setImage(UIImage(named: "AppleLogo"), for: .normal)
-//        btn.font = Helper().fontChakra500(size: 16)!
+        //        btn.font = Helper().fontChakra500(size: 16)!
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.black.cgColor
         btn.setTitleColor(.black, for: .normal)
@@ -91,7 +91,7 @@ final class LogInViewController: UIViewController {
         let btn = OkoBigButton()
         btn.setTitle("Google", for: .normal)
         btn.setImage(UIImage(named: "GoogleLogo"), for: .normal)
-//        btn.font = Helper().fontChakra500(size: 16)!
+        //        btn.font = Helper().fontChakra500(size: 16)!
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.black.cgColor
         btn.setTitleColor(.black, for: .normal)
@@ -115,6 +115,7 @@ final class LogInViewController: UIViewController {
         view.addSubview(logInLabel)
         view.addSubview(emailLabel)
         view.addSubview(emailTextField)
+        view.addSubview(passwordTextField)
         view.addSubview(sendCodeButton)
         view.addSubview(signUpLabel)
         view.addSubview(appleSignUpButton)
@@ -136,7 +137,10 @@ final class LogInViewController: UIViewController {
         
         emailLabel.frame = CGRect(x: (view.bounds.width - 60)/2, y: emailTextField.frame.origin.y - 24 - 8, width: 60, height: 24)
         
-        sendCodeButton.frame = CGRect(x: 20, y: view.center.y + 4, width: view.bounds.width - 40, height: heightOko)
+        passwordTextField.frame = CGRect(x: 20, y: view.center.y + 4, width: view.bounds.width - 40, height: heightOko)
+        passwordTextField.layer.cornerRadius = emailTextField.bounds.size.height / 2.0
+        
+        sendCodeButton.frame = CGRect(x: 20, y: passwordTextField.frame.origin.y + heightOko + 8, width: view.bounds.width - 40, height: heightOko)
         
         signUpLabel.frame = CGRect(x: (view.bounds.width - 120)/2, y: view.bounds.height - 178 - 24, width: 120, height: 24)
         
@@ -148,14 +152,11 @@ final class LogInViewController: UIViewController {
     
     private func pushToPasswordViewController(email: String, password: String) {
         
-        /// вот тут запрос для получение пароля юзера
-//        Helper().updateUserData(typeUserData: .password, userData: "11111")
-        Helper().addUserFirebase(email: email, password: password)
-        
-//        self.ref.child("awd").setValue("dfg")
-        
-        let vc = PasswordViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        Helper().addUserFirebase(email: email, password: password, completedHangler: { [weak self] in
+            guard let navigationController = self?.navigationController else {return}
+            let vc = PasswordViewController()
+            navigationController.pushViewController(vc, animated: true)
+        })
     }
     
     private func pushToProfileSettingViewController() {
@@ -165,23 +166,11 @@ final class LogInViewController: UIViewController {
     
     @objc private func tapSendButton() {
         
-//        guard let email = emailTextField.text else { return }
-//
-//        if email.count == 0 { return }
+        guard let email = emailTextField.text, let password = passwordTextField.text else { return }
         
-//        sendEmailButtonTapped()
+        if email.count == 0 || password.count == 0 { return }
         
-//        self.ref.child(“user_id”).setValue(123456)
-        
-//        pushToPasswordViewController(email: email)
-        
-//        admin.firestore().collection('mail').add({
-//          to: 'someone@example.com',
-//          message: {
-//            subject: 'Hello from Firebase!',
-//            html: 'This is an <code>HTML</code> email body.',
-//          },
-//        })
+        pushToPasswordViewController(email: email, password: password)
     }
     
     @objc private func tapLogInApple() {

@@ -19,10 +19,12 @@ final class Helper {
         Helper().setUser(user: User())
     }
     
-    public func addUserFirebase(email: String, password: String) {
+    public func addUserFirebase(email: String, password: String, completedHangler: @escaping (() -> Void)) {
         
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
-            
+            if error == nil {
+                completedHangler()
+            }
         }
     }
     
@@ -38,8 +40,6 @@ final class Helper {
         if let encoded = try? JSONEncoder().encode(user) {
             UserDefaults.standard.set(encoded, forKey: "user")
         }
-        
-//        Auth.auth().updateCurrentUser(<#T##user: User##User#>)
     }
     
     public func getUser() -> User? {
