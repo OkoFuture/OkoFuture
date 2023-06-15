@@ -36,26 +36,10 @@ final class WelcomeViewController: UIViewController {
     
     override func viewDidLoad() {
         
-        
-//        if self.navigationController?.viewControllers.count != 1 {
-//
-//            for i in 1..<navigationController!.viewControllers.count {
-//
-//                navigationController!.viewControllers.remove(at: 1)
-//                print ("rgdefasawf puk 1", navigationController!.viewControllers.count)
-//            }
-//
-//            print ("rgdefasawf puk 2", self.navigationController?.viewControllers.count)
-//        }
-//
-        print ("rgdefasawf", self.navigationController?.viewControllers.count)
-        
         setupView()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
-        print ("rgdefasawf", self.navigationController?.viewControllers.count)
         
         setupLayout()
         setupPlayer()

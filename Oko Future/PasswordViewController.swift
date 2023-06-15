@@ -96,9 +96,9 @@ final class PasswordViewController: UIViewController {
     @objc func passwordDidChange(textField: UITextField) {
         
         guard let password = textField.text else { return }
-        guard let user = Helper().getUser() else { return }
+//        guard let user = Helper().getUser() else { return }
         
-        if user.password == password {
+        if Helper().passwordСheck(password: password) {
             /// можно так, можно дать возможность поменять имя далее
 //            if user.logInWithApple || user.logInWithGoogle {
 //                UploadSceneViewController()

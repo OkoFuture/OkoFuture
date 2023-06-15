@@ -94,7 +94,7 @@ final class ProfileSettingViewController: UIViewController {
         
         if name.count == 0 { return }
         
-        Helper().updateUserData(typeUserData: .name, userData: name)
+        Helper().updateUserData(typeUserData: .name, userData: name, needUpdateFirebase: true)
         
         let vc = UploadSceneViewController()
         navigationController?.pushViewController(vc, animated: true)
