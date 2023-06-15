@@ -118,7 +118,7 @@ final class UserProfileViewController: UIViewController {
     }
     
     @objc func deleteUserButtonTap() {
-//        Helper().deleteUserFirebase()
+        Helper().deleteUserFirebase()
         logOutButtonTap()
     }
     

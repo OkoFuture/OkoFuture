@@ -14,6 +14,8 @@ import MessageUI
 
 final class LogInViewController: UIViewController {
     
+    var keyboardHeight = CGFloat(0)
+    
     var ref: DatabaseReference!
     
     let logoImageView: UIImageView = {
@@ -121,9 +123,21 @@ final class LogInViewController: UIViewController {
         view.addSubview(appleSignUpButton)
         view.addSubview(googleSignUpButton)
         
+        emailTextField.delegate = self
+        passwordTextField.delegate = self
+        
         sendCodeButton.addTarget(self, action: #selector(tapSendButton), for: .touchUpInside)
         appleSignUpButton.addTarget(self, action: #selector(tapLogInApple), for: .touchUpInside)
         googleSignUpButton.addTarget(self, action: #selector(tapLogInGoogle), for: .touchUpInside)
+        
+//        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillShow(notification: <#T##NSNotification#>)), name: UIResponder.keyboardWillShowNotification, object: nil)
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(keyboardWillShow),
+            name: UIResponder.keyboardWillShowNotification,
+            object: nil
+        )
     }
     
     private func setupLayout() {
@@ -152,11 +166,14 @@ final class LogInViewController: UIViewController {
     
     private func pushToPasswordViewController(email: String, password: String) {
         
-        Helper().addUserFirebase(email: email, password: password, completedHangler: { [weak self] in
-            guard let navigationController = self?.navigationController else {return}
-            let vc = PasswordViewController()
-            navigationController.pushViewController(vc, animated: true)
-        })
+        if Auth.auth().currentUser != nil {
+            pushToProfileSettingViewController()
+        } else {
+            Helper().addUserFirebase(email: email, password: password, completedHangler: { [weak self] in
+                guard let self = self else { return }
+                self.pushToProfileSettingViewController()
+            })
+        }
     }
     
     private func pushToProfileSettingViewController() {
@@ -168,7 +185,7 @@ final class LogInViewController: UIViewController {
         
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
         
-        if email.count == 0 || password.count == 0 { return }
+        if email.count == 0 || password.count < 6 { return }
         
         pushToPasswordViewController(email: email, password: password)
     }
@@ -231,9 +248,9 @@ final class LogInViewController: UIViewController {
                 for userDate in UserData.allCases {
                     switch userDate {
                     case .name:
-                        Helper().updateUserData(typeUserData: .name, userData: fullname)
+                        Helper().updateUserData(typeUserData: .name, userData: fullname, needUpdateFirebase: false)
                     case .email:
-                        Helper().updateUserData(typeUserData: .email, userData: email)
+                        Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
                     default: break
                     }
                 }
@@ -255,26 +272,56 @@ extension LogInViewController: ASAuthorizationControllerDelegate {
     }
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
+        
+        
         switch authorization.credential {
+            
         case let credentials as ASAuthorizationAppleIDCredential:
             
-            if let firstName = credentials.fullName?.givenName, let lastName = credentials.fullName?.familyName, let email = credentials.email {
-                for userDate in UserData.allCases {
-                    switch userDate {
-                    case .name:
-                        Helper().updateUserData(typeUserData: .name, userData: firstName + " " + lastName)
-                    case .email:
-                        Helper().updateUserData(typeUserData: .email, userData: email)
-                    default: break
+            if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+                guard let nonce = currentNonce else {
+                    fatalError("Invalid state: A login callback was received, but no login request was sent.")
+                }
+                guard let appleIDToken = appleIDCredential.identityToken else {
+                    print("Unable to fetch identity token")
+                    return
+                }
+                guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+                    print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+                    return
+                }
+                // Initialize a Firebase credential, including the user's full name.
+                let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
+                                                               rawNonce: nonce,
+                                                               fullName: appleIDCredential.fullName)
+                
+                Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
+                    if let error = error {
+                        print(error.localizedDescription)
+                    } else {
+                        //                  if let firstName = credentials.fullName?.givenName, let lastName = credentials.fullName?.familyName, let email = credentials.email {
+                        //                  if let email = credentials.email {
+                        //                      for userDate in UserData.allCases {
+                        //                          switch userDate {
+                        ////                          case .name:
+                        ////                              Helper().updateUserData(typeUserData: .name, userData: firstName + " " + lastName, needUpdateFirebase: false)
+                        //                          case .email:
+                        //                              Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
+                        //                          default: break
+                        //                          }
+                        //                      }
+                        //                  }
+                        
+                        //                  print ("log in with apple completed", credentials.fullName, credentials.email, credentials.user, credentials.realUserStatus, credentials.state, credentials.identityToken)
+                        
+                        Helper().updateUserLogStatus(logStatus: .logInWithApple)
+                        pushToProfileSettingViewController()
                     }
                 }
+                
+                //            Helper().updateUserLogStatus(logStatus: .logInWithApple)
+                //            pushToProfileSettingViewController()
             }
-            
-            print ("log in with apple completed", credentials.fullName, credentials.email, credentials.user, credentials.realUserStatus, credentials.state, credentials.identityToken)
-            
-            Helper().updateUserLogStatus(logStatus: .logInWithApple)
-            pushToProfileSettingViewController()
-            
         default:
             break
         }
@@ -323,6 +370,54 @@ extension LogInViewController: MFMailComposeViewControllerDelegate {
             sendMailErrorAlert.addAction(closeButton)
             
             present(sendMailErrorAlert, animated: true)
+        }
+}
+
+extension LogInViewController: UITextFieldDelegate {
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+            
+            textField.resignFirstResponder() // Always dismiss KB upon textField 'Return'
+                 return false
+        }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        
+        var moveValueDown: CGFloat = 0.0
+        
+        if textField == passwordTextField {
+            moveValueDown = CGFloat(keyboardHeight)
+        }
+        
+        if moveValueDown > 0 {
+//            animateViewMoving(false, moveValue: moveValueDown)
+        }
+    }
+    
+    func animateViewMoving (_ up:Bool, moveValue :CGFloat){
+//            let movementDuration:TimeInterval = 0.3
+            let movement:CGFloat = ( up ? -moveValue : moveValue)
+//            UIView.beginAnimations( "animateView", context: nil)
+//            UIView.setAnimationBeginsFromCurrentState(true)
+//            UIView.setAnimationDuration(movementDuration )
+            self.view.frame = self.view.frame.offsetBy(dx: 0,  dy: movement)
+//            UIView.commitAnimations()
+        }
+        
+        @objc func keyboardWillShow(notification: NSNotification) {
+            
+            // IMPORTANT Use    UIKeyboardFrameEndUserInfoKey
+            //                  UIKeyboardFrameBeginUserInfoKey (gives inconsistent KB heights)
+            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+              keyboardHeight = keyboardSize.height
+              print(#function, keyboardHeight)
+                // The 1st keyboardWillShow gets the keyboard size height then observer removed as no need to get keyboard height every time it shows or hides
+                NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
+                
+                // Store KeyboardHeight in UserDefaults to use when in Edit Mode
+//                UserDefaults.standard.set(keyboardHeight, forKey: "KeyboardHeight")
+//                UserDefaults.standard.synchronize()
+            }
         }
 }
 

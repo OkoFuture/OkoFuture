@@ -47,7 +47,7 @@
 		D199EC1E2A3215D400968291 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D199EC1D2A3215D400968291 /* FirebaseAuth */; };
 		D199EC212A3216CB00968291 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D199EC202A3216CB00968291 /* GoogleSignIn */; };
 		D199EC232A3216CB00968291 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D199EC222A3216CB00968291 /* GoogleSignInSwift */; };
-		D199EC252A32196800968291 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D199EC242A32196800968291 /* GoogleService-Info.plist */; };
+		D19B3C6B2A3B201B008C906A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D19B3C6A2A3B201B008C906A /* GoogleService-Info.plist */; };
 		D1AC4DA42A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */; };
 		D1AC4DA62A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */; };
 		D1D5B3BB2A24C8AE00E03647 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */; };
@@ -104,7 +104,7 @@
 		D188FBB029F553340003F3EC /* OkoDefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoDefaultButton.swift; sourceTree = "<group>"; };
 		D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigSwitch.swift; sourceTree = "<group>"; };
 		D199EC1B2A32123900968291 /* Oko Future.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Oko Future.entitlements"; sourceTree = "<group>"; };
-		D199EC242A32196800968291 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		D19B3C6A2A3B201B008C906A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D1AC4DA32A20AC2900F5ED6D /* Debug_futage_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Debug_futage_[000-299]-1.mov"; sourceTree = "<group>"; };
 		D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "flip_vert_[000-299]-1.mov"; sourceTree = "<group>"; };
 		D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
@@ -206,7 +206,7 @@
 				D15A35B129F697EC00E3F6E1 /* Helper.swift */,
 				920BF13129CC3D34001D40DA /* Assets.xcassets */,
 				920BF13329CC3D34001D40DA /* LaunchScreen.storyboard */,
-				D199EC242A32196800968291 /* GoogleService-Info.plist */,
+				D19B3C6A2A3B201B008C906A /* GoogleService-Info.plist */,
 				920BF13629CC3D34001D40DA /* Info.plist */,
 			);
 			path = "Oko Future";
@@ -306,10 +306,10 @@
 				D15E140B2A1F9F2A0090584D /* okoBotVizor_[000-299]-1.mov in Resources */,
 				D15E14092A1F75A40090584D /* okobot_2305.usdz in Resources */,
 				D15E14062A1F70D30090584D /* 2405_screenwords_[000-299]Com-1.mov in Resources */,
+				D19B3C6B2A3B201B008C906A /* GoogleService-Info.plist in Resources */,
 				D15E14072A1F70D30090584D /* screen_2405.usdz in Resources */,
 				D1FC93442A1614DA002A3B05 /* okobot_1710scale_all.usdz in Resources */,
 				D1DF2F6B2A09505200E17DA9 /* avtr_anim_0805.usdz in Resources */,
-				D199EC252A32196800968291 /* GoogleService-Info.plist in Resources */,
 				D16981E02A08E71B00F82292 /* amy_anim_0505x100_2.usdz in Resources */,
 				D16981DB2A08CC1E00F82292 /* loc_new_textures 08.05.usdz in Resources */,
 				92D6DF8F29E01547009E5909 /* shocked__228-1.mov in Resources */,

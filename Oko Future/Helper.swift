@@ -7,7 +7,8 @@
 
 import UIKit
 import Firebase
-
+import AuthenticationServices
+import CryptoKit
 
 final class Helper {
     
@@ -23,17 +24,46 @@ final class Helper {
         
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if error == nil {
+                
+                Helper().updateUserData(typeUserData: .password, userData: password, needUpdateFirebase: false)
+                Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
                 completedHangler()
+            } else {
+                print ("createUser is fail", error?.localizedDescription)
             }
         }
     }
     
-    public func updateUserFirebase() {
-        guard let user = getUser() else { return }
+    private func updateUserFirebase(user: User) {
+        guard let userFire: FirebaseAuth.User = Auth.auth().currentUser else { return }
         
-//        let userFire: FirebaseAuth.User =
+        if let userEmail = user.email {
+            userFire.updateEmail(to: userEmail)
+        }
         
-//        Auth.auth().updateCurrentUser(user)
+        if let userPassword = user.password {
+            userFire.updatePassword(to: userPassword)
+        }
+        
+        if let userName = user.name {
+            let changeRequest = userFire.createProfileChangeRequest()
+            changeRequest.displayName = userName
+            
+            changeRequest.commitChanges { error in
+              // ...
+            }
+        }
+        
+        if let urlPhoto = user.imageProfile {
+            let changeRequest = userFire.createProfileChangeRequest()
+            changeRequest.photoURL = urlPhoto
+            
+            changeRequest.commitChanges { error in
+              // ...
+            }
+        }
+        
+        Auth.auth().updateCurrentUser(userFire)
     }
     
     public func setUser(user: User) {
@@ -48,7 +78,32 @@ final class Helper {
         return user
     }
     
-    public func updateUserData(typeUserData: UserData, userData: String) {
+    public func passwordСheck(password: String) -> Bool {
+        guard let user = getUser() else { return false }
+        
+        if user.password == password{
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    public func userСheck() -> Bool {
+        
+        if let _ = getUser() {
+            return true
+        } else {
+            return false
+        }
+    }
+    
+    public func returnUserLogStatus() -> UserLogStatus? {
+        guard let user = getUser() else { return nil }
+        
+        return user.logStatus
+    }
+    
+    public func updateUserData(typeUserData: UserData, userData: String, needUpdateFirebase: Bool) {
         
         guard let user = getUser() else { return }
         
@@ -63,6 +118,10 @@ final class Helper {
         }
         
         setUser(user: user)
+        
+        if needUpdateFirebase {
+            updateUserFirebase(user: user)
+        }
     }
     
     public func updateUserLogStatus(logStatus: UserLogStatus) {
@@ -79,7 +138,62 @@ final class Helper {
     }
     
     public func deleteUserFirebase() {
-//        Auth.auth()
+        guard let user = Auth.auth().currentUser else { return }
+        
+        user.delete(completion: { error in
+            if let error = error {
+                
+            } else {
+                
+            }
+        })
+    }
+    
+//    public func deleteUserApple() {
+//          do {
+//            let nonce = try CryptoUtils.randomNonceString()
+//            currentNonce = nonce
+//            let appleIDProvider = ASAuthorizationAppleIDProvider()
+//            let request = appleIDProvider.createRequest()
+//            request.requestedScopes = [.fullName, .email]
+//            request.nonce = CryptoUtils.sha256(nonce)
+//
+//            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+//            authorizationController.delegate = self
+//            authorizationController.presentationContextProvider = self
+//            authorizationController.performRequests()
+//          } catch {
+//            // In the unlikely case that nonce generation fails, show error view.
+//            displayError(error)
+//          }
+//    }
+    
+    public func reauthenticateUser() {
+        let user = Auth.auth().currentUser
+        var credential: AuthCredential
+       
+        // Prompt the user to re-provide their sign-in credentials
+
+//        user?.reauthenticate(with: credential) { result, error  in
+//          if let error = error {
+//            // An error happened.
+//          } else {
+//            // User re-authenticated.
+//          }
+//        }
+        
+        /// apple
+//        let credential = OAuthProvider.credential(
+//          withProviderID: "apple.com",
+//          IDToken: appleIdToken,
+//          rawNonce: rawNonce
+//        )
+//        // Reauthenticate current Apple user with fresh Apple credential.
+//        Auth.auth().currentUser.reauthenticate(with: credential) { (authResult, error) in
+//          guard error != nil else { return }
+//          // Apple user successfully re-authenticated.
+//          // ...
+//        }
     }
     
     public func logOut() {
