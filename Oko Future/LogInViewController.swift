@@ -190,78 +190,16 @@ final class LogInViewController: UIViewController {
         pushToPasswordViewController(email: email, password: password)
     }
     
-    @objc private func tapLogInApple() {
-        let provider = ASAuthorizationAppleIDProvider()
-        let requvest = provider.createRequest()
-        requvest.requestedScopes = [.fullName, .email]
-        
-        let controller = ASAuthorizationController(authorizationRequests: [requvest])
-        controller.delegate = self
-        controller.presentationContextProvider = self
-        controller.performRequests()
-        
+    @objc @available(iOS 13, *)
+    func tapLogInApple() {
+        Helper().tapLogInApple(delegate: self, presentationContextProvider: self)
     }
     
     @objc private func tapLogInGoogle() {
-        signIn()
-    }
-    
-    func signIn() {
-        
-      if GIDSignIn.sharedInstance.hasPreviousSignIn() {
-        GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
-            authenticateUser(for: user, with: error)
-        }
-      } else {
-          
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-        
-        let configuration = GIDConfiguration(clientID: clientID)
-          
-        GIDSignIn.sharedInstance.configuration = configuration
-          
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-        guard let rootViewController = windowScene.windows.first?.rootViewController else { return }
-          
-          GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController, hint: nil, completion: { [unowned self] result, error in
-              authenticateUser(for: result?.user, with: error)
-            })
-      }
-    }
-    
-    private func authenticateUser(for user: GIDGoogleUser?, with error: Error?) {
-        if let error = error {
-            print(error.localizedDescription)
-            return
-        }
-        
-        guard let accessToken = user?.accessToken, let idToken = user?.idToken else { return }
-
-        let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
-
-      Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
-        if let error = error {
-          print(error.localizedDescription)
-        } else {
-            
-            if let fullname = user?.profile?.name, let email = user?.profile?.email {
-                for userDate in UserData.allCases {
-                    switch userDate {
-                    case .name:
-                        Helper().updateUserData(typeUserData: .name, userData: fullname, needUpdateFirebase: false)
-                    case .email:
-                        Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
-                    default: break
-                    }
-                }
-            }
-            
-            print ("log in with google completed", user?.profile?.email, user?.profile?.name, user?.profile?.givenName, user?.profile?.familyName, user?.profile?.imageURL(withDimension: 320))
-            
-            Helper().updateUserLogStatus(logStatus: .logInWithGoogle)
-            pushToProfileSettingViewController()
-        }
-      }
+        Helper().signIn(completionHandler: { [weak self] in
+            guard let self = self else { return }
+            self.pushToProfileSettingViewController()
+        })
     }
 
 }
@@ -279,7 +217,7 @@ extension LogInViewController: ASAuthorizationControllerDelegate {
         case let credentials as ASAuthorizationAppleIDCredential:
             
             if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-                guard let nonce = currentNonce else {
+                guard let nonce = Helper().currentNonce else {
                     fatalError("Invalid state: A login callback was received, but no login request was sent.")
                 }
                 guard let appleIDToken = appleIDCredential.identityToken else {
@@ -290,7 +228,7 @@ extension LogInViewController: ASAuthorizationControllerDelegate {
                     print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
                     return
                 }
-                // Initialize a Firebase credential, including the user's full name.
+                
                 let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
                                                                rawNonce: nonce,
                                                                fullName: appleIDCredential.fullName)
@@ -299,28 +237,24 @@ extension LogInViewController: ASAuthorizationControllerDelegate {
                     if let error = error {
                         print(error.localizedDescription)
                     } else {
-                        //                  if let firstName = credentials.fullName?.givenName, let lastName = credentials.fullName?.familyName, let email = credentials.email {
-                        //                  if let email = credentials.email {
-                        //                      for userDate in UserData.allCases {
-                        //                          switch userDate {
-                        ////                          case .name:
-                        ////                              Helper().updateUserData(typeUserData: .name, userData: firstName + " " + lastName, needUpdateFirebase: false)
-                        //                          case .email:
-                        //                              Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
-                        //                          default: break
-                        //                          }
-                        //                      }
-                        //                  }
+                        if let firstName = appleIDCredential.fullName?.givenName, let lastName = appleIDCredential.fullName?.familyName, let email = appleIDCredential.email {
+                            for userDate in UserData.allCases {
+                                switch userDate {
+                                case .name:
+                                    Helper().updateUserData(typeUserData: .name, userData: firstName + " " + lastName, needUpdateFirebase: false)
+                                case .email:
+                                    Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
+                                default: break
+                                }
+                            }
+                        }
                         
-                        //                  print ("log in with apple completed", credentials.fullName, credentials.email, credentials.user, credentials.realUserStatus, credentials.state, credentials.identityToken)
+                        print ("log in with apple completed", appleIDCredential.fullName?.givenName, appleIDCredential.fullName?.familyName)
                         
                         Helper().updateUserLogStatus(logStatus: .logInWithApple)
                         pushToProfileSettingViewController()
                     }
                 }
-                
-                //            Helper().updateUserLogStatus(logStatus: .logInWithApple)
-                //            pushToProfileSettingViewController()
             }
         default:
             break
