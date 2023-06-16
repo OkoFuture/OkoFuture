@@ -6,8 +6,12 @@
 //
 
 import UIKit
+import AuthenticationServices
+import Firebase
 
 final class UserProfileViewController: UIViewController {
+    
+    private var currentNonce: String?
     
     private let backButton: OkoDefaultButton = {
         let btn = OkoDefaultButton()
@@ -77,7 +81,7 @@ final class UserProfileViewController: UIViewController {
         backButton.addTarget(self, action: #selector(backButtonTap), for: .touchUpInside)
         
         let logOutTapGesture = UITapGestureRecognizer(target: self, action: #selector(logOutButtonTap))
-        let deleteUserTapGesture = UITapGestureRecognizer(target: deleteUserButton, action: #selector(deleteUserButtonTap))
+        let deleteUserTapGesture = UITapGestureRecognizer(target: self, action: #selector(deleteUserButtonTap))
         
         logOutButton.configureView(image: UIImage(), text: "Log out", tapGesture: logOutTapGesture)
         deleteUserButton.configureView(image: UIImage(), text: "Delete Account", tapGesture: deleteUserTapGesture)
@@ -105,8 +109,13 @@ final class UserProfileViewController: UIViewController {
     }
     
     @objc func logOutButtonTap() {
+        Helper().logOut(delegate: self, presentationContextProvider: self)
+        backToWelcomeViewController()
+    }
+    
+    private func backToWelcomeViewController() {
         guard let navigationController = self.navigationController else { return }
-//        Helper().logOut()
+        
         if let welcomeVc = navigationController.viewControllers[0] as? WelcomeViewController {
             navigationController.popToViewController(welcomeVc, animated: true)
         } else {
@@ -114,12 +123,54 @@ final class UserProfileViewController: UIViewController {
             navigationController.viewControllers.removeAll()
             navigationController.pushViewController(startVc, animated: true)
         }
-        
     }
     
     @objc func deleteUserButtonTap() {
-        Helper().deleteUserFirebase()
-        logOutButtonTap()
+        currentNonce = Helper().deleteUser(delegate: self, presentationContextProvider: self) { [weak self] in
+            guard let self = self else { return }
+            backToWelcomeViewController()
+        }
     }
     
+}
+
+extension UserProfileViewController: ASAuthorizationControllerDelegate, ASAuthorizationControllerPresentationContextProviding {
+    func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
+        return view.window!
+    }
+    
+    func authorizationController(controller: ASAuthorizationController,
+                                 didCompleteWithAuthorization authorization: ASAuthorization) {
+        
+      guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential
+      else {
+        print("Unable to retrieve AppleIDCredential")
+        return
+      }
+
+        guard let _ = currentNonce else {
+        fatalError("Invalid state: A login callback was received, but no login request was sent.")
+      }
+
+      guard let appleAuthCode = appleIDCredential.authorizationCode else {
+        print("Unable to fetch authorization code")
+        return
+      }
+
+      guard let authCodeString = String(data: appleAuthCode, encoding: .utf8) else {
+        print("Unable to serialize auth code string from data: \(appleAuthCode.debugDescription)")
+        return
+      }
+
+      Task {
+        do {
+          try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
+            try await Auth.auth().currentUser?.delete()
+          backToWelcomeViewController()
+        } catch {
+            print ("delete user Apple fail, error =", error.localizedDescription)
+        }
+      }
+    }
+
 }
