@@ -9,8 +9,11 @@ import UIKit
 import Firebase
 import AuthenticationServices
 import CryptoKit
+import GoogleSignIn
 
 final class Helper {
+    
+    public var currentNonce: String?
     
     static var app: Helper = {
         return Helper()
@@ -18,6 +21,64 @@ final class Helper {
     
     public func createUser() {
         Helper().setUser(user: User())
+    }
+    
+    func signIn(completionHandler: @escaping (() -> Void)) {
+        
+      if GIDSignIn.sharedInstance.hasPreviousSignIn() {
+        GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
+            authenticateUser(for: user, with: error, completionHandler: completionHandler)
+        }
+      } else {
+          
+        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+        
+        let configuration = GIDConfiguration(clientID: clientID)
+          
+        GIDSignIn.sharedInstance.configuration = configuration
+          
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
+        guard let rootViewController = windowScene.windows.first?.rootViewController else { return }
+          
+          GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController, hint: nil, completion: { [unowned self] result, error in
+              authenticateUser(for: result?.user, with: error, completionHandler: completionHandler)
+            })
+      }
+    }
+    
+    private func authenticateUser(for user: GIDGoogleUser?, with error: Error?, completionHandler: @escaping (() -> Void)) {
+        if let error = error {
+            print(error.localizedDescription)
+            return
+        }
+        
+        guard let accessToken = user?.accessToken, let idToken = user?.idToken else { return }
+
+        let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
+
+      Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
+        if let error = error {
+          print(error.localizedDescription)
+        } else {
+            
+            if let fullname = user?.profile?.name, let email = user?.profile?.email {
+                for userDate in UserData.allCases {
+                    switch userDate {
+                    case .name:
+                        Helper().updateUserData(typeUserData: .name, userData: fullname, needUpdateFirebase: false)
+                    case .email:
+                        Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
+                    default: break
+                    }
+                }
+            }
+            
+            print ("log in with google completed", user?.profile?.email, user?.profile?.name, user?.profile?.givenName, user?.profile?.familyName, user?.profile?.imageURL(withDimension: 320))
+            
+            Helper().updateUserLogStatus(logStatus: .logInWithGoogle)
+            completionHandler()
+        }
+      }
     }
     
     public func addUserFirebase(email: String, password: String, completedHangler: @escaping (() -> Void)) {
@@ -149,24 +210,73 @@ final class Helper {
         })
     }
     
-//    public func deleteUserApple() {
-//          do {
-//            let nonce = try CryptoUtils.randomNonceString()
-//            currentNonce = nonce
-//            let appleIDProvider = ASAuthorizationAppleIDProvider()
-//            let request = appleIDProvider.createRequest()
-//            request.requestedScopes = [.fullName, .email]
-//            request.nonce = CryptoUtils.sha256(nonce)
-//
-//            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-//            authorizationController.delegate = self
-//            authorizationController.presentationContextProvider = self
-//            authorizationController.performRequests()
-//          } catch {
-//            // In the unlikely case that nonce generation fails, show error view.
+    @available(iOS 13, *)
+    func tapLogInApple(delegate: ASAuthorizationControllerDelegate, presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) {
+        let nonce = Helper().randomNonceString()
+        currentNonce = nonce
+      let appleIDProvider = ASAuthorizationAppleIDProvider()
+      let request = appleIDProvider.createRequest()
+      request.requestedScopes = [.fullName, .email]
+        request.nonce = Helper().sha256(nonce)
+
+      let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+      authorizationController.delegate = delegate
+      authorizationController.presentationContextProvider = presentationContextProvider
+      authorizationController.performRequests()
+    }
+    
+    public func randomNonceString(length: Int = 32) -> String {
+      precondition(length > 0)
+      var randomBytes = [UInt8](repeating: 0, count: length)
+      let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+      if errorCode != errSecSuccess {
+        fatalError(
+          "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+        )
+      }
+
+      let charset: [Character] =
+        Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
+
+      let nonce = randomBytes.map { byte in
+        // Pick a random character from the set, wrapping around if needed.
+        charset[Int(byte) % charset.count]
+      }
+
+      return String(nonce)
+    }
+
+    @available(iOS 13, *)
+    public func sha256(_ input: String) -> String {
+      let inputData = Data(input.utf8)
+      let hashedData = SHA256.hash(data: inputData)
+      let hashString = hashedData.compactMap {
+        String(format: "%02x", $0)
+      }.joined()
+
+      return hashString
+    }
+
+        
+    
+    public func deleteUserApple(delegate: ASAuthorizationControllerDelegate,presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) {
+          do {
+            let nonce = try randomNonceString()
+            currentNonce = nonce
+            let appleIDProvider = ASAuthorizationAppleIDProvider()
+            let request = appleIDProvider.createRequest()
+            request.requestedScopes = [.fullName, .email]
+            request.nonce = sha256(nonce)
+
+            let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+            authorizationController.delegate = delegate
+            authorizationController.presentationContextProvider = presentationContextProvider
+            authorizationController.performRequests()
+          } catch {
+            // In the unlikely case that nonce generation fails, show error view.
 //            displayError(error)
-//          }
-//    }
+          }
+    }
     
     public func reauthenticateUser() {
         let user = Auth.auth().currentUser
