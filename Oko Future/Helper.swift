@@ -13,72 +13,12 @@ import GoogleSignIn
 
 final class Helper {
     
-    public var currentNonce: String?
-    
     static var app: Helper = {
         return Helper()
     }()
     
     public func createUser() {
         Helper().setUser(user: User())
-    }
-    
-    func signIn(completionHandler: @escaping (() -> Void)) {
-        
-      if GIDSignIn.sharedInstance.hasPreviousSignIn() {
-        GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
-            authenticateUser(for: user, with: error, completionHandler: completionHandler)
-        }
-      } else {
-          
-        guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-        
-        let configuration = GIDConfiguration(clientID: clientID)
-          
-        GIDSignIn.sharedInstance.configuration = configuration
-          
-        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-        guard let rootViewController = windowScene.windows.first?.rootViewController else { return }
-          
-          GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController, hint: nil, completion: { [unowned self] result, error in
-              authenticateUser(for: result?.user, with: error, completionHandler: completionHandler)
-            })
-      }
-    }
-    
-    private func authenticateUser(for user: GIDGoogleUser?, with error: Error?, completionHandler: @escaping (() -> Void)) {
-        if let error = error {
-            print(error.localizedDescription)
-            return
-        }
-        
-        guard let accessToken = user?.accessToken, let idToken = user?.idToken else { return }
-
-        let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
-
-      Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
-        if let error = error {
-          print(error.localizedDescription)
-        } else {
-            
-            if let fullname = user?.profile?.name, let email = user?.profile?.email {
-                for userDate in UserData.allCases {
-                    switch userDate {
-                    case .name:
-                        Helper().updateUserData(typeUserData: .name, userData: fullname, needUpdateFirebase: false)
-                    case .email:
-                        Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
-                    default: break
-                    }
-                }
-            }
-            
-            print ("log in with google completed", user?.profile?.email, user?.profile?.name, user?.profile?.givenName, user?.profile?.familyName, user?.profile?.imageURL(withDimension: 320))
-            
-            Helper().updateUserLogStatus(logStatus: .logInWithGoogle)
-            completionHandler()
-        }
-      }
     }
     
     public func addUserFirebase(email: String, password: String, completedHangler: @escaping (() -> Void)) {
@@ -111,7 +51,7 @@ final class Helper {
             changeRequest.displayName = userName
             
             changeRequest.commitChanges { error in
-              // ...
+                // ...
             }
         }
         
@@ -120,7 +60,7 @@ final class Helper {
             changeRequest.photoURL = urlPhoto
             
             changeRequest.commitChanges { error in
-              // ...
+                // ...
             }
         }
         
@@ -193,120 +133,168 @@ final class Helper {
         setUser(user: user)
     }
     
-    private func deleteUser() {
+    private func deleteUserUserDefaults() {
         
         UserDefaults.standard.removeObject(forKey: "user")
     }
     
-    public func deleteUserFirebase() {
+    private func deleteUserFirebase(completionHandler: @escaping (() -> Void)) {
         guard let user = Auth.auth().currentUser else { return }
         
         user.delete(completion: { error in
             if let error = error {
                 
             } else {
-                
+                completionHandler()
             }
         })
     }
     
     @available(iOS 13, *)
-    func tapLogInApple(delegate: ASAuthorizationControllerDelegate, presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) {
+    func tapLogInApple(delegate: ASAuthorizationControllerDelegate, presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) -> String {
         let nonce = Helper().randomNonceString()
-        currentNonce = nonce
-      let appleIDProvider = ASAuthorizationAppleIDProvider()
-      let request = appleIDProvider.createRequest()
-      request.requestedScopes = [.fullName, .email]
+//        currentNonce = nonce
+        let appleIDProvider = ASAuthorizationAppleIDProvider()
+        let request = appleIDProvider.createRequest()
+        request.requestedScopes = [.fullName, .email]
         request.nonce = Helper().sha256(nonce)
-
-      let authorizationController = ASAuthorizationController(authorizationRequests: [request])
-      authorizationController.delegate = delegate
-      authorizationController.presentationContextProvider = presentationContextProvider
-      authorizationController.performRequests()
+        
+        let authorizationController = ASAuthorizationController(authorizationRequests: [request])
+        authorizationController.delegate = delegate
+        authorizationController.presentationContextProvider = presentationContextProvider
+        authorizationController.performRequests()
+        
+        return nonce
     }
     
     public func randomNonceString(length: Int = 32) -> String {
-      precondition(length > 0)
-      var randomBytes = [UInt8](repeating: 0, count: length)
-      let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
-      if errorCode != errSecSuccess {
-        fatalError(
-          "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
-        )
-      }
-
-      let charset: [Character] =
+        precondition(length > 0)
+        var randomBytes = [UInt8](repeating: 0, count: length)
+        let errorCode = SecRandomCopyBytes(kSecRandomDefault, randomBytes.count, &randomBytes)
+        if errorCode != errSecSuccess {
+            fatalError(
+                "Unable to generate nonce. SecRandomCopyBytes failed with OSStatus \(errorCode)"
+            )
+        }
+        
+        let charset: [Character] =
         Array("0123456789ABCDEFGHIJKLMNOPQRSTUVXYZabcdefghijklmnopqrstuvwxyz-._")
-
-      let nonce = randomBytes.map { byte in
-        // Pick a random character from the set, wrapping around if needed.
-        charset[Int(byte) % charset.count]
-      }
-
-      return String(nonce)
+        
+        let nonce = randomBytes.map { byte in
+            // Pick a random character from the set, wrapping around if needed.
+            charset[Int(byte) % charset.count]
+        }
+        
+        return String(nonce)
     }
-
+    
     @available(iOS 13, *)
     public func sha256(_ input: String) -> String {
-      let inputData = Data(input.utf8)
-      let hashedData = SHA256.hash(data: inputData)
-      let hashString = hashedData.compactMap {
-        String(format: "%02x", $0)
-      }.joined()
-
-      return hashString
-    }
-
+        let inputData = Data(input.utf8)
+        let hashedData = SHA256.hash(data: inputData)
+        let hashString = hashedData.compactMap {
+            String(format: "%02x", $0)
+        }.joined()
         
+        return hashString
+    }
     
-    public func deleteUserApple(delegate: ASAuthorizationControllerDelegate,presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) {
-          do {
-            let nonce = try randomNonceString()
-            currentNonce = nonce
+    private func deleteUserApple(delegate: ASAuthorizationControllerDelegate,presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) -> String {
+        do {
+//            let nonce = try randomNonceString()
+            let nonce = Helper().randomNonceString()
+//            currentNonce = nonce
             let appleIDProvider = ASAuthorizationAppleIDProvider()
             let request = appleIDProvider.createRequest()
             request.requestedScopes = [.fullName, .email]
             request.nonce = sha256(nonce)
-
+            
             let authorizationController = ASAuthorizationController(authorizationRequests: [request])
             authorizationController.delegate = delegate
             authorizationController.presentationContextProvider = presentationContextProvider
             authorizationController.performRequests()
-          } catch {
-            // In the unlikely case that nonce generation fails, show error view.
-//            displayError(error)
-          }
+            
+            return nonce
+        } catch {
+            print ("delete user Apple error =", error.localizedDescription)
+        }
     }
     
-    public func reauthenticateUser() {
-        let user = Auth.auth().currentUser
-        var credential: AuthCredential
-       
-        // Prompt the user to re-provide their sign-in credentials
-
-//        user?.reauthenticate(with: credential) { result, error  in
-//          if let error = error {
-//            // An error happened.
-//          } else {
-//            // User re-authenticated.
-//          }
-//        }
+    public func deleteUser(delegate: ASAuthorizationControllerDelegate, presentationContextProvider: ASAuthorizationControllerPresentationContextProviding, completionHandler: @escaping () -> Void) -> String? {
+        guard let user = getUser() else { return nil}
         
-        /// apple
-//        let credential = OAuthProvider.credential(
-//          withProviderID: "apple.com",
-//          IDToken: appleIdToken,
-//          rawNonce: rawNonce
-//        )
-//        // Reauthenticate current Apple user with fresh Apple credential.
-//        Auth.auth().currentUser.reauthenticate(with: credential) { (authResult, error) in
-//          guard error != nil else { return }
-//          // Apple user successfully re-authenticated.
-//          // ...
+        var currentNonce: String? = nil
+        
+//        switch user.logStatus {
+//
+//        case .logInWithApple:
+//            currentNonce = deleteUserApple(delegate: delegate, presentationContextProvider: presentationContextProvider)
+//        case _ where user.logStatus == .logInWithGoogle || user.logStatus == .logInWithEmail:
+//            deleteUserFirebase(completionHandler: completionHandler)
+//        default: break
 //        }
+        deleteUserFirebase(completionHandler: completionHandler)
+        self.deleteUserUserDefaults()
+        
+        return currentNonce
     }
     
-    public func logOut() {
+    /// надо разбить по частям и доделать
+//    public func reauthenticateUser(authorization: ASAuthorization) {
+//        guard let userStatus = getUser()?.logStatus else { return }
+//
+//        let user = Auth.auth().currentUser
+//        var credential: AuthCredential
+//
+//        switch userStatus {
+//
+//        case .logInWithApple:
+//            if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
+//                guard let nonce = Helper().currentNonce else {
+//                    fatalError("Invalid state: A login callback was received, but no login request was sent.")
+//                }
+//                guard let appleIDToken = appleIDCredential.identityToken else {
+//                    print("Unable to fetch identity token")
+//                    return
+//                }
+//                guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
+//                    print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
+//                    return
+//                }
+//
+//                let credential = OAuthProvider.credential (
+//                    withProviderID: "apple.com",
+//                    IDToken: appleIdToken,
+//                    rawNonce: rawNonce
+//                )
+//                Auth.auth().currentUser.reauthenticate(with: credential) { (authResult, error) in
+//                    guard error != nil else { return }
+//                }
+//            case _ where user.logStatus == .logInWithGoogle || user.logStatus == .logInWithEmail:
+//                user?.reauthenticate(with: credential) { result, error  in
+//                    if let error = error {
+//
+//                    } else {
+//
+//                    }
+//                }
+//            }
+//        default: break
+//        }
+//    }
+//}
+    
+    public func logOut(delegate: ASAuthorizationControllerDelegate,presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) {
+        
+        guard let user = getUser() else { return }
+        
+        switch user.logStatus {
+            
+        case .logInWithApple:
+            deleteUserApple(delegate: delegate, presentationContextProvider: presentationContextProvider)
+        default: break
+        }
+        
         let firebaseAuth = Auth.auth()
         do {
           try firebaseAuth.signOut()
@@ -314,7 +302,7 @@ final class Helper {
           print("Error signing out: %@", signOutError)
         }
         
-        deleteUser()
+        deleteUserUserDefaults()
     }
     
     public func arrayNameAvatarUSDZ() -> [String] {
