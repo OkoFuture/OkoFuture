@@ -51,6 +51,7 @@ final class LogInViewController: UIViewController {
         txt.layer.borderWidth = 1
         txt.layer.borderColor = UIColor.black.cgColor
         txt.textAlignment = .center
+        txt.placeholder = "enter email"
         return txt
     }()
     
@@ -61,12 +62,14 @@ final class LogInViewController: UIViewController {
         txt.layer.borderWidth = 1
         txt.layer.borderColor = UIColor.black.cgColor
         txt.textAlignment = .center
+        txt.isSecureTextEntry = true
+        txt.placeholder = "enter password"
         return txt
     }()
     
     let sendCodeButton: OkoBigButton = {
         let btn = OkoBigButton()
-        btn.setTitle("Send code", for: .normal)
+        btn.setTitle("Registration/login", for: .normal)
         //        btn.font = Helper().fontChakra500(size: 16)!
         return btn
     }()
