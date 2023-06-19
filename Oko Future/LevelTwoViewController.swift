@@ -9,6 +9,7 @@ import ARKit
 import UIKit
 import RealityKit
 import ReplayKit
+import Combine
 
 public enum EmojiLVL2 {
     case surprise, cry, cuteness
@@ -21,6 +22,9 @@ public enum ArmSide {
 final class LevelTwoViewController: UIViewController {
     
     private var arView: ARView
+    
+    private var okoBot: ModelEntity? = nil
+    private var okoScreen: ModelEntity? = nil
     
     private var videoPlayerPlane = AVPlayer() {
         didSet {
@@ -124,6 +128,7 @@ final class LevelTwoViewController: UIViewController {
         photoVideoButton.addTarget(self, action: #selector(snapshotSave), for: .touchUpInside)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(recordScreen))
         photoVideoButton.addGestureRecognizer(longPressRecognizer)
+        uploadModelEntity()
         
         uploadCoreModel()
     }
@@ -146,6 +151,38 @@ final class LevelTwoViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         stopSession()
+    }
+    
+    private func uploadModelEntity() {
+        var cancellableBot: AnyCancellable? = nil
+        var cancellableScreen: AnyCancellable? = nil
+        
+        let scaleAvatar: Float = 1
+         
+        cancellableBot = ModelEntity.loadModelAsync(named: "okoBotVizor_[000-299]-1")
+            .sink(receiveCompletion: { error in
+              print("Unexpected error: \(error)")
+                cancellableBot?.cancel()
+            }, receiveValue: { entity in
+
+                entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
+                
+                self.okoBot = entity
+                cancellableBot?.cancel()
+            })
+        
+        cancellableScreen = ModelEntity.loadModelAsync(named: "screen_2405")
+          .sink(receiveCompletion: { error in
+            print("Unexpected error: \(error)")
+              cancellableScreen?.cancel()
+          }, receiveValue: { entity in
+
+              entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
+              
+              self.okoScreen = entity
+
+              cancellableScreen?.cancel()
+          })
     }
     
     private func uploadCoreModel() {
@@ -283,6 +320,8 @@ final class LevelTwoViewController: UIViewController {
     
     private func generateOkoBot() -> ModelEntity? {
         
+        guard let okoBot = self.okoBot else { return nil}
+        
         let nameVideo = "okoBotVizor_[000-299]-1"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
         
@@ -291,15 +330,17 @@ final class LevelTwoViewController: UIViewController {
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerOkoBot)
         videoPlayerOkoBot.play()
         
-        let okoRobot1 = try! ModelEntity.loadModel(named: "okobot_2305")
+//        let okoBot = try! ModelEntity.loadModel(named: "okobot_2305")
         
-        okoRobot1.model?.materials[0] = videoMaterial
+        okoBot.model?.materials[0] = videoMaterial
         
-        return okoRobot1
+        return okoBot
     }
     
     private func generateScreen() -> ModelEntity? {
-        let screen = try! ModelEntity.loadModel(named: "screen_2405")
+//        let screen = try! ModelEntity.loadModel(named: "screen_2405")
+        
+        guard let screen = self.okoBot else { return nil}
         
         let nameVideo = "flip_vert_[000-299]-1"
 //        let nameVideo = "Debug_futage_[000-299]-1"
@@ -415,7 +456,7 @@ extension LevelTwoViewController: ARSessionDelegate {
             
             if let bodyAnchor = anchor as? ARBodyAnchor {
                 addPlaneBody(bodyAnchor: bodyAnchor)
-//                addModelTshirt(bodyAnchor: bodyAnchor)
+                addModelTshirt(bodyAnchor: bodyAnchor)
             }
         }
     }
@@ -528,6 +569,7 @@ extension LevelTwoViewController: ARSessionDelegate {
         
         let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
         /// 8 к 14
+        /// надо повернуть на 90 градусов
         let height = simd_distance(planeUpLeft, planeDownLeft) * 2.5
         let planeMesh = MeshResource.generatePlane(width: height , height: height / 1.75)
 //        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
