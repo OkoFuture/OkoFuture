@@ -212,10 +212,12 @@ final class LogInViewController: UIViewController {
                 
                 Helper().addUserFirebase(email: withEmail, password: password, completedHangler: { [weak self] in
                     guard let self = self else { return }
+                    Helper().updateUserLogStatus(logStatus: .logInWithEmail)
                     self.pushToProfileSettingViewController()
                 })
             } else {
-                strongSelf.pushToUploadSceneViewController()
+                Helper().updateUserLogStatus(logStatus: .logInWithEmail)
+                strongSelf.pushToProfileSettingViewController()
             }
         }
     }
@@ -370,7 +372,7 @@ extension LogInViewController: MFMailComposeViewControllerDelegate {
             if MFMailComposeViewController.canSendMail() {
                 self.present(mailComposeViewController, animated: true, completion: nil)
             } else {
-                self.showSendMailErrorAlert()
+//                self.showSendMailErrorAlert()
             }
         }
 
@@ -385,17 +387,6 @@ extension LogInViewController: MFMailComposeViewControllerDelegate {
             return mailComposerVC
         }
 
-        func showSendMailErrorAlert() {
-            let sendMailErrorAlert = UIAlertController(title: "баля", message: "не вышло брат", preferredStyle: .actionSheet)
-            
-            let closeButton = UIAlertAction(title: "Close", style: .cancel, handler: { alert in
-//                alert
-            })
-            
-            sendMailErrorAlert.addAction(closeButton)
-            
-            present(sendMailErrorAlert, animated: true)
-        }
 }
 
 extension LogInViewController: UITextFieldDelegate {

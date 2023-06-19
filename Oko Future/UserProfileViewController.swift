@@ -110,6 +110,7 @@ final class UserProfileViewController: UIViewController {
     
     @objc func logOutButtonTap() {
         Helper().logOut(delegate: self, presentationContextProvider: self)
+        
         backToWelcomeViewController()
     }
     

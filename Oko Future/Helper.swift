@@ -288,12 +288,12 @@ final class Helper {
         
         guard let user = getUser() else { return }
         
-        switch user.logStatus {
-            
-        case .logInWithApple:
-            deleteUserApple(delegate: delegate, presentationContextProvider: presentationContextProvider)
-        default: break
-        }
+//        switch user.logStatus {
+//
+//        case .logInWithApple:
+//            deleteUserApple(delegate: delegate, presentationContextProvider: presentationContextProvider)
+//        default: break
+//        }
         
         let firebaseAuth = Auth.auth()
         do {
@@ -303,6 +303,16 @@ final class Helper {
         }
         
         deleteUserUserDefaults()
+    }
+    
+    public func showAlert(title: String?, message: String?, view: UIViewController, actions: [UIAlertAction], animated: Bool = true, completion: (() -> Void)? = nil) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        for action in actions {
+            alert.addAction(action)
+        }
+        
+        view.present(alert, animated: animated, completion: completion)
     }
     
     public func arrayNameAvatarUSDZ() -> [String] {
