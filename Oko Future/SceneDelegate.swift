@@ -37,7 +37,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 startViewController = ProfileSettingViewController()
                 
             case _ where user.logStatus == .logInWithEmail:
-                startViewController = PasswordViewController()
+                startViewController = ProfileSettingViewController()
                 
             default: startViewController = WelcomeViewController()
                 break
