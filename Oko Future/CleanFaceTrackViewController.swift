@@ -97,7 +97,7 @@ final class CleanFaceTrackViewController: UIViewController {
         view.addSubview(stepImageView)
         view.addSubview(backButton)
         view.addSubview(photoVideoButton)
-        backButton.addTarget(self, action: #selector(backButtonTap), for: .touchUpInside)
+//        backButton.addTarget(self, action: #selector(backButtonTap), for: .touchUpInside)
         
         photoVideoButton.addTarget(self, action: #selector(snapshotSave), for: .touchUpInside)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(recordScreen))

@@ -26,30 +26,20 @@ final class LevelTwoViewController: UIViewController {
     private var okoBot: ModelEntity? = nil
     private var okoScreen: ModelEntity? = nil
     
-    private var videoPlayerPlane = AVPlayer() {
-        didSet {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                print ("kjkljljkljkjnkljnkl videoPlayerPlane", self.videoPlayerPlane.currentItem?.status.rawValue)
-                print ("kjkljljkljkjnkljnkl videoPlayerPlane", self.videoPlayerPlane.currentItem?.canPlayFastForward)
-            })
-        }
-    }
-    private var videoPlayerScreen = AVPlayer() {
-        didSet {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                print ("kjkljljkljkjnkljnkl videoPlayerScreen", self.videoPlayerScreen.currentItem?.status.rawValue)
-                print ("kjkljljkljkjnkljnkl videoPlayerScreen", self.videoPlayerScreen.currentItem?.canPlayFastForward)
-            })
-        }
-    }
-    private var videoPlayerOkoBot = AVPlayer() {
-        didSet {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-                print ("kjkljljkljkjnkljnkl videoPlayerOkoBot", self.videoPlayerOkoBot.currentItem?.status.rawValue)
-                print ("kjkljljkljkjnkljnkl videoPlayerOkoBot", self.videoPlayerOkoBot.currentItem?.canPlayFastForward)
-            })
-        }
-    }
+    private var videoPlayerScreen = AVPlayer()
+    private var videoPlayerOkoBot = AVPlayer()
+    
+    private var videoPlayerPlaneBody = AVPlayer()
+    private var videoPlayerPlaneLeftHand = AVPlayer()
+    private var videoPlayerPlaneRightHand = AVPlayer()
+    
+    private var playerItemSurpris = [String : AVPlayerItem]()
+    private var playerItemCry = [String : AVPlayerItem]()
+    private var playerItemCuteness = [String : AVPlayerItem]()
+    
+    private let nameSurpriseItem = ["screen_Shock_lvl2_ar", "okoBotVizor_Shock_lvl2_ar", "body_shock_lvl2_ar", "leftHand_Shock_lvl2_ar", "righthand_Shock_lvl2_ar"]
+    private let nameCryItem = ["screen_Cry_lvl2_ar", "okoBotVizor_Cry_lvl2_ar", "body_cry_lvl2_ar", "leftHand_Cry_lvl2_ar", "righthand_Cry_lvl2_ar"]
+    private let nameCutenessItem = ["screen_Cut_lvl2_ar", "okoBotVizor_Cut_lvl2_ar", "body_Cut_lvl2_ar", "leftHand_Cut_lvl2_ar", "righthand_Cut_lvl2_ar"]
     
     var model: VNCoreMLModel?
     
@@ -57,7 +47,8 @@ final class LevelTwoViewController: UIViewController {
         didSet {
             if emoji != oldValue, let emoji = emoji {
                 self.emoji = emoji
-                self.rewindVideoEmoji(emoji: emoji)
+                self.changeVideoFivePlayer(emoji: emoji)
+//                self.rewindVideoEmoji(emoji: emoji)
             }
         }
     }
@@ -124,7 +115,7 @@ final class LevelTwoViewController: UIViewController {
         view.addSubview(backButton)
         view.addSubview(photoVideoButton)
         view.addSubview(stepImageView)
-        backButton.addTarget(self, action: #selector(backButtonTap), for: .touchUpInside)
+//        backButton.addTarget(self, action: #selector(backButtonTap), for: .touchUpInside)
         photoVideoButton.addTarget(self, action: #selector(snapshotSave), for: .touchUpInside)
         let longPressRecognizer = UILongPressGestureRecognizer(target: self, action: #selector(recordScreen))
         photoVideoButton.addGestureRecognizer(longPressRecognizer)
@@ -153,19 +144,33 @@ final class LevelTwoViewController: UIViewController {
         stopSession()
     }
     
+    override func didReceiveMemoryWarning() {
+        print ("ПАМЯТЬ КОНЧИЛАСЬ")
+    }
+    
+    private func setPlayerItem() {
+        for name in nameSurpriseItem {
+            playerItemSurpris[name] = returnAVPlayerItem(nameVideo: name)
+        }
+        
+        for name in nameCryItem {
+            playerItemCry[name] = returnAVPlayerItem(nameVideo: name)
+        }
+        
+        for name in nameCutenessItem {
+            playerItemCuteness[name] = returnAVPlayerItem(nameVideo: name)
+        }
+    }
+    
     private func uploadModelEntity() {
         var cancellableBot: AnyCancellable? = nil
         var cancellableScreen: AnyCancellable? = nil
         
-        let scaleAvatar: Float = 1
-         
         cancellableBot = ModelEntity.loadModelAsync(named: "okobot_2305")
             .sink(receiveCompletion: { error in
               print("Unexpected error: \(error)")
                 cancellableBot?.cancel()
             }, receiveValue: { entity in
-
-                entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
                 
                 self.okoBot = entity
                 cancellableBot?.cancel()
@@ -176,8 +181,6 @@ final class LevelTwoViewController: UIViewController {
             print("Unexpected error: \(error)")
               cancellableScreen?.cancel()
           }, receiveValue: { entity in
-
-              entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
               
               self.okoScreen = entity
 
@@ -213,8 +216,6 @@ final class LevelTwoViewController: UIViewController {
         arView.scene.anchors.removeAll()
         arView.cameraMode = .ar
         
-//        let configuration = ARImageTrackingConfiguration()
-//        configuration.trackingImages = referenceImages
         let configuration = ARBodyTrackingConfiguration()
         configuration.detectionImages = referenceImages
         
@@ -287,9 +288,36 @@ final class LevelTwoViewController: UIViewController {
         
         let videoAsset = AVURLAsset(url: alphaMovieURL)
         
-        var item: AVPlayerItem = .init(asset: videoAsset)
+        let item: AVPlayerItem = .init(asset: videoAsset)
         
         return item
+    }
+    
+    func changeVideoFivePlayer(emoji: EmojiLVL2) {
+        switch emoji {
+            
+        case .surprise:
+            updatePlayers(name: nameSurpriseItem)
+        case .cry:
+            updatePlayers(name: nameCryItem)
+        case .cuteness:
+            updatePlayers(name: nameCutenessItem)
+        }
+    }
+    
+    func updatePlayers(name: [String]) {
+        self.videoPlayerScreen = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[0]))
+        self.videoPlayerOkoBot = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[1]))
+        
+        self.videoPlayerPlaneBody = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[2]))
+        self.videoPlayerPlaneLeftHand = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[3]))
+        self.videoPlayerPlaneRightHand = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[4]))
+        
+        self.videoPlayerScreen.play()
+        self.videoPlayerOkoBot.play()
+        self.videoPlayerPlaneBody.play()
+        self.videoPlayerPlaneLeftHand.play()
+        self.videoPlayerPlaneRightHand.play()
     }
     
     func rewindVideoEmoji(emoji: EmojiLVL2) {
@@ -313,7 +341,7 @@ final class LevelTwoViewController: UIViewController {
         
         let currentTime = CMTimeMake(value: Int64(time), timescale: 1)
         
-        videoPlayerPlane.seek(to: currentTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
+//        videoPlayerPlane.seek(to: currentTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         videoPlayerScreen.seek(to: currentTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
         videoPlayerOkoBot.seek(to: currentTime, toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
     }
@@ -341,7 +369,7 @@ final class LevelTwoViewController: UIViewController {
     private func generateScreen() -> ModelEntity? {
 //        let screen = try! ModelEntity.loadModel(named: "screen_2405")
         
-        guard let screen = self.okoBot else { return nil}
+        guard let screen = self.okoScreen else { return nil}
         
         let nameVideo = "flip_vert_[000-299]-1"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
@@ -362,14 +390,15 @@ final class LevelTwoViewController: UIViewController {
         guard let okoBot = generateOkoBot() else {return}
         guard let screen = generateScreen() else {return}
         
-        okoBot.transform.translation = [-0.3, 0.3, 0]
+//        okoBot.transform.translation = [-0.3, 0.3, 0]
+        okoBot.transform.translation = [-0.3, 0.7, 0]
         let startScale: Float = 0.1
 //        let startScale: Float = 0
         okoBot.scale = [startScale, startScale, startScale]
         
         let scale: Float = 7
         screen.scale = [scale,scale,scale]
-        screen.transform.translation = [0,-0.5,-0.04]
+        screen.transform.translation = [0,-0.2,-0.04]
         
         okoBot.playAnimation(okoBot.availableAnimations[0].repeat())
         
@@ -382,11 +411,10 @@ final class LevelTwoViewController: UIViewController {
         
         let anchor = AnchorEntity(anchor: bodyAnchor)
         
-//        anchor.addChild(videoPlane)
         anchor.addChild(screen)
         anchor.addChild(okoBot)
         
-        anchor.transform.rotation = simd_quatf(angle: -1.5708, axis: [1,0,0])
+//        anchor.transform.rotation = simd_quatf(angle: -1.5708, axis: [1,0,0])
         
         arView.scene.addAnchor(anchor)
 //        imageAnchorID = anchor.anchorIdentifier
@@ -423,7 +451,7 @@ final class LevelTwoViewController: UIViewController {
       DispatchQueue.main.async { [weak self] in
         let confidence = (firstResult.confidence * 100).rounded()
           
-          if confidence > 80 {
+          if confidence > 50 {
               switch firstResult.identifier {
                   
               case "Surprise": self?.emoji = .surprise
@@ -446,15 +474,16 @@ extension LevelTwoViewController: ARSessionDelegate {
 //        }
         
         for anchor in anchors {
-//            if let imageAnchor = anchor as? ARImageAnchor {
-//                isOKO = true
-//            }
+            if let imageAnchor = anchor as? ARImageAnchor {
+                isOKO = true
+            }
             
-//            if !isOKO {
-//                return
-//            }
+            if !isOKO {
+                return
+            }
             
             if let bodyAnchor = anchor as? ARBodyAnchor {
+                
                 addPlaneBody(bodyAnchor: bodyAnchor)
                 addModelTshirt(bodyAnchor: bodyAnchor)
             }
@@ -474,7 +503,7 @@ extension LevelTwoViewController: ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
     
         if isOKO {
-//            emojiTrack()
+            emojiTrack()
         }
     }
     
@@ -507,24 +536,28 @@ extension LevelTwoViewController: ARSessionDelegate {
         
         let height = simd_distance(bonesStartWorld, bonesFinishWorld) * 2
         
-        var nameVideo = ""
+        var videoMaterial = VideoMaterial(avPlayer: AVPlayer())
+//        var nameVideo = ""
         
         switch armSide {
         case .left:
-            nameVideo = "lefthand_lvl2"
+//            nameVideo = "lefthand_lvl2"
+            let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlaneLeftHand)
         case .right:
-            nameVideo = "righthand_lvl2"
+//            nameVideo = "righthand_lvl2"
+            videoMaterial = VideoMaterial(avPlayer: videoPlayerPlaneRightHand)
         }
         
-        let item = returnAVPlayerItem(nameVideo: nameVideo)
+//        let item = returnAVPlayerItem(nameVideo: nameVideo)
+//
+//        let videoPlayer = AVPlayer(playerItem: item)
         
-        let videoPlayer = AVPlayer(playerItem: item)
-        
-        let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
+//        let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
         
         let planeMesh = MeshResource.generatePlane(width: height, height: height / 2)
 //        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
         let planeModel = ModelEntity(mesh: planeMesh, materials: [videoMaterial])
+        
         
         let anchor = AnchorEntity(world: [(bonesStartWorld.x + bonesFinishWorld.x) / 2, (bonesStartWorld.y + bonesFinishWorld.y) / 2, bonesStartWorld.z])
         anchor.addChild(planeModel)
@@ -548,8 +581,6 @@ extension LevelTwoViewController: ARSessionDelegate {
         let quatFix: simd_quatf = .init(angle: angle, axis: [1,0,0])
         
         planeModel.setOrientation(quatFix, relativeTo: anchor)
-        
-        videoPlayer.play()
     }
     
     func generatePlaneBody(armLeft: simd_float4x4, armRight: simd_float4x4, legLeft: simd_float4x4,spine: simd_float4x4, rootTrans: simd_float4x4){
@@ -565,11 +596,10 @@ extension LevelTwoViewController: ARSessionDelegate {
         let nameVideo = "body_lvl2"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
         
-        let videoPlayer = AVPlayer(playerItem: item)
+//        let videoPlayer = AVPlayer(playerItem: item)
+//
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlaneBody)
         
-        let videoMaterial = VideoMaterial(avPlayer: videoPlayer)
-        /// 8 к 14
-        /// надо повернуть на 90 градусов
         let height = simd_distance(planeUpLeft, planeDownLeft) * 2.5
         let planeMesh = MeshResource.generatePlane(width: height , height: height / 1.75)
 //        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
@@ -593,8 +623,6 @@ extension LevelTwoViewController: ARSessionDelegate {
         let quatFix: simd_quatf = .init(angle: angle, axis: [1,0,0])
         
         planeModel.setOrientation(quatFix, relativeTo: anchor)
-        
-        videoPlayer.play()
     }
     
     func updatePlane(bodyAnchor: ARBodyAnchor) {

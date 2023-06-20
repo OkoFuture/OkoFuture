@@ -29,7 +29,8 @@ final class GeneralViewController: UIViewController {
     private var cameraEntity = PerspectiveCamera()
     private var sceneEntity: ModelEntity
     private var nodeGirl: ModelEntity?
-    private var nodeAvatar: ModelEntity?
+    private let materialTshirt: Material
+//    private var nodeAvatar: ModelEntity?
     
     private var okoBot: ModelEntity? = nil
     private var okoScreen: ModelEntity? = nil
@@ -96,7 +97,7 @@ final class GeneralViewController: UIViewController {
     private let timingFinishFlex5:Float = 360/24
     
 //    private let timingStartEmoji1:Float = 360/24
-    private let timingStartEmoji1:Float = 400/24
+    private let timingStartEmoji1:Float = 440/24
     private let timingFinishEmoji1:Float = 455/24
     
     private let timingStartEmoji2:Float = 455/24
@@ -189,11 +190,12 @@ final class GeneralViewController: UIViewController {
         return btn
     }()
     
-    init(arView: ARView, sceneEntity: ModelEntity, nodeGirl: ModelEntity, nodeAvatar: ModelEntity) {
+    init(arView: ARView, sceneEntity: ModelEntity, nodeGirl: ModelEntity) {
         self.arView = arView
         self.sceneEntity = sceneEntity
         self.nodeGirl = nodeGirl
-        self.nodeAvatar = nodeAvatar
+        self.materialTshirt = (nodeGirl.model?.materials[3])!
+//        self.nodeAvatar = nodeAvatar
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -217,6 +219,7 @@ final class GeneralViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         
 //        startTimerFlex()
+        uploadModelEntity()
         startAnimationFlex()
         subAnim()
         setupLayout()
@@ -226,6 +229,8 @@ final class GeneralViewController: UIViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         
+        self.okoBot = nil
+        self.okoScreen = nil
         stopSession()
         print ("kjjklnklkl", CFGetRetainCount(self))
     }
@@ -237,16 +242,17 @@ final class GeneralViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
-        if self.chooseModel == 0 {
-            self.nodeAvatar = nil
-        } else {
+//        if self.chooseModel == 0 {
+//            self.nodeAvatar = nil
+//        } else {
             self.nodeGirl = nil
-        }
+//        }
     }
     
     private func setupScene() {
         
-        guard let nodeAvatar = self.nodeAvatar, let nodeGirl = self.nodeGirl else {return}
+//        guard let nodeAvatar = self.nodeAvatar, let nodeGirl = self.nodeGirl else {return}
+        guard let nodeGirl = self.nodeGirl else {return}
         
         let anchor = AnchorEntity(world: self.startPoint)
         arView.scene.addAnchor(anchor)
@@ -259,7 +265,7 @@ final class GeneralViewController: UIViewController {
                
         arView.scene.addAnchor(cameraAnchor)
         
-        nodeAvatar.transform.translation = SIMD3(x: 0.07, y: 0.7, z: 0.3)
+//        nodeAvatar.transform.translation = SIMD3(x: 0.07, y: 0.7, z: 0.3)
         
         nodeGirl.transform.translation = SIMD3(x: 0.07, y: 0.7, z: 0.3)
         
@@ -323,7 +329,7 @@ final class GeneralViewController: UIViewController {
         level2Button.addTarget(self, action: #selector(tapLevel2), for: .touchUpInside)
         
         firstModelWardrobeButton.addTarget(self, action: #selector(tapFirst), for: .touchUpInside)
-        secondModelWardrobeButton.addTarget(self, action: #selector(tapSecond), for: .touchUpInside)
+//        secondModelWardrobeButton.addTarget(self, action: #selector(tapSecond), for: .touchUpInside)
         
         arViewButton.addTarget(self, action: #selector(tapArView), for: .touchUpInside)
         profileSettingButton.addTarget(self, action: #selector(tapProfileButton), for: .touchUpInside)
@@ -428,10 +434,10 @@ final class GeneralViewController: UIViewController {
             let animGirl = availableAnimationsGirl[0]
             
             let flex1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex1), end: .init(timingFinishFlex1), duration: nil)))
-            let flex2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
-            let flex3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex3), end: .init(timingFinishFlex3), duration: nil)))
-            let flex4: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex4), end: .init(timingFinishFlex4), duration: nil)))
-            let flex5: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex5), end: .init(timingFinishFlex5), duration: nil)))
+//            let flex2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
+//            let flex3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex3), end: .init(timingFinishFlex3), duration: nil)))
+//            let flex4: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex4), end: .init(timingFinishFlex4), duration: nil)))
+//            let flex5: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex5), end: .init(timingFinishFlex5), duration: nil)))
             
 //            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
 //            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
@@ -440,10 +446,10 @@ final class GeneralViewController: UIViewController {
             let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji5), duration: nil)))
             
             dictAnimationRes1["flex1"] = flex1
-            dictAnimationRes1["flex2"] = flex2
-            dictAnimationRes1["flex3"] = flex3
-            dictAnimationRes1["flex4"] = flex4
-            dictAnimationRes1["flex5"] = flex5
+//            dictAnimationRes1["flex2"] = flex2
+//            dictAnimationRes1["flex3"] = flex3
+//            dictAnimationRes1["flex4"] = flex4
+//            dictAnimationRes1["flex5"] = flex5
             
             dictAnimationRes1["emoji1"] = emoji1
             dictAnimationRes1["emoji2"] = emoji2
@@ -498,12 +504,12 @@ final class GeneralViewController: UIViewController {
         if self.chooseModel != 1 {
             self.chooseModel = 1
             
-            if self.nodeAvatar != nil {
-                arView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
-                arView.scene.anchors[0].addChild(self.nodeAvatar!)
-            } else {
-                self.uploadChooseSceneInBackground()
-            }
+//            if self.nodeAvatar != nil {
+//                arView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
+//                arView.scene.anchors[0].addChild(self.nodeAvatar!)
+//            } else {
+//                self.uploadChooseSceneInBackground()
+//            }
             
 //            self.startTimerFlex()
             self.startAnimationFlex()
@@ -580,11 +586,11 @@ final class GeneralViewController: UIViewController {
 
               print ("uploadChooseSceneInBackground")
               
-              if self.chooseModel == 0 {
+//              if self.chooseModel == 0 {
                   self.nodeGirl = entity
-              } else {
-                  self.nodeAvatar = entity
-              }
+//              } else {
+//                  self.nodeAvatar = entity
+//              }
               
               self.arView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
               self.arView.scene.anchors[0].addChild(entity)
@@ -596,6 +602,8 @@ final class GeneralViewController: UIViewController {
     @objc private func tapArView() {
         
         if ARFaceTrackingConfiguration.isSupported {
+            
+            self.nodeGirl = nil
             
             switch chooseLevel {
             case 1: let vc = CleanFaceTrackViewController(arView: self.arView)
@@ -724,7 +732,7 @@ final class GeneralViewController: UIViewController {
         videoPlane.move(to: transformVideoPlane, relativeTo: videoPlane, duration: TimeInterval(self.durationZoomCamera))
         backgroundPlane.move(to: transformVideoPlane, relativeTo: backgroundPlane, duration: TimeInterval(self.durationZoomCamera))
         
-        self.durationZoomCamera = 0
+//        self.durationZoomCamera = 0
         
         self.videoPlayerEmoji?.play()
 //        self.videoPlayerEmoji?.rate = 1.3
@@ -825,16 +833,16 @@ final class GeneralViewController: UIViewController {
     private func startTimerFlex() {
         
         self.serialQueue.sync {
-            self.timerAnimation = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
-                
-                self.durationZoomCamera += 0.1
-                
-                if self.durationZoomCamera >= self.timingFinishFlex1 {
-                    self.durationZoomCamera = 0
-                }
+//            self.timerAnimation = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { timer in
+//
+//                self.durationZoomCamera += 0.1
+//
+//                if self.durationZoomCamera >= self.timingFinishFlex1 {
+//                    self.durationZoomCamera = 0
+//                }
                 
 //                print ("timer flex", self.durationZoomCamera)
-            }
+//            }
         }
     }
     
@@ -851,10 +859,10 @@ final class GeneralViewController: UIViewController {
             switch self.animateMode {
             case .waiting:
                 
-                let flex = "flex" + String(self.flexCounter)
-                print ("awdhjbjhbhj", flex)
+//                let flex = "flex" + String(self.flexCounter)
+//                print ("awdhjbjhbhj", flex)
                 
-                self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1[flex]!)
+                self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["flex1"]!)
                 
                 self.flexCounter += 1
                 
@@ -872,6 +880,7 @@ final class GeneralViewController: UIViewController {
                         
                         if self.emojiCounter == 1 {
                             self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
+//                            self.animationController?.speed = 1.15
                         }
                         
                         if self.emojiCounter == 2 {
@@ -912,14 +921,14 @@ final class GeneralViewController: UIViewController {
         
         self.serialQueue.sync {
         
-            self.timerAnimation = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
-                
-                self.durationZoomCamera += 0.01
-                
-                if self.durationZoomCamera >= (self.timingFinishEmoji1 - self.timingStartEmoji1) {
-                    self.durationZoomCamera = 0
-                }
-            }
+//            self.timerAnimation = Timer.scheduledTimer(withTimeInterval: 0.01, repeats: true) { timer in
+//
+//                self.durationZoomCamera += 0.01
+//
+//                if self.durationZoomCamera >= (self.timingFinishEmoji1 - self.timingStartEmoji1) {
+//                    self.durationZoomCamera = 0
+//                }
+//            }
             
             self.animateMode = .emoji
         }
@@ -944,7 +953,8 @@ final class GeneralViewController: UIViewController {
         case 2:
             arView.scene.anchors[0].children[2].removeFromParent()
             arView.scene.anchors[0].children[2].removeFromParent()
-            nodeGirl?.model?.materials[3] = (nodeAvatar?.model?.materials[3])!
+//            nodeGirl?.model?.materials[3] = (nodeAvatar?.model?.materials[3])!
+            nodeGirl?.model?.materials[3] = self.materialTshirt
         default: break
         }
     }
