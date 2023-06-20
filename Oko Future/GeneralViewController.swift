@@ -46,7 +46,8 @@ final class GeneralViewController: UIViewController {
     
     private var videoPlayerEmoji: AVQueuePlayer? = nil
     
-    private var durationZoomCamera: Float = 1
+//    private var durationZoomCamera: Float = 1
+    private var durationZoomCamera: Float = 1.5
     private var timerAnimation: Timer? = nil
     private var animationController: AnimationPlaybackController? = nil
     private var animateMode: AnimationMode = .waiting
@@ -98,6 +99,8 @@ final class GeneralViewController: UIViewController {
     
     private let timingStartEmoji3:Float = 551/24
     private let timingFinishEmoji3:Float = 647/24
+    
+    private let timingFinishEmoji5:Float = 840/24
     
     private var dictAnimationRes1 = [String : AnimationResource]()
     private var dictAnimationRes2 = [String : AnimationResource]()
@@ -203,13 +206,14 @@ final class GeneralViewController: UIViewController {
         setupView()
         dowloadVideos()
         createAnimRes()
-        subAnim()
+//        subAnim()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-        startTimerFlex()
+//        startTimerFlex()
         startAnimationFlex()
+        subAnim()
         setupLayout()
         
         setupScene()
@@ -286,6 +290,8 @@ final class GeneralViewController: UIViewController {
     func stopSession() {
         arView.session.pause()
         self.animationController = nil
+        subAnimComplete?.cancel()
+//        self.subAnimComplete = nil
         self.timerAnimation?.invalidate()
         self.timerAnimation = nil
     }
@@ -390,9 +396,11 @@ final class GeneralViewController: UIViewController {
             let flex4: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex4), end: .init(timingFinishFlex4), duration: nil)))
             let flex5: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex5), end: .init(timingFinishFlex5), duration: nil)))
             
-            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
-            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
-            let emoji3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
+//            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
+//            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
+//            let emoji3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
+            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji3), duration: nil)))
+            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji5), duration: nil)))
             
             dictAnimationRes1["flex1"] = flex1
             dictAnimationRes1["flex2"] = flex2
@@ -402,7 +410,9 @@ final class GeneralViewController: UIViewController {
             
             dictAnimationRes1["emoji1"] = emoji1
             dictAnimationRes1["emoji2"] = emoji2
-            dictAnimationRes1["emoji3"] = emoji3
+//            dictAnimationRes1["emoji1"] = emoji1
+//            dictAnimationRes1["emoji2"] = emoji2
+//            dictAnimationRes1["emoji3"] = emoji3
         }
         
         if let availableAnimationsAvatar = self.nodeAvatar?.availableAnimations, self.nodeAvatar?.availableAnimations.count != 0 {
@@ -447,7 +457,7 @@ final class GeneralViewController: UIViewController {
                 self.uploadChooseSceneInBackground()
             }
             
-            self.startTimerFlex()
+//            self.startTimerFlex()
             self.startAnimationFlex()
             
             UIView.animate(withDuration: 0.4, animations: {
@@ -482,7 +492,7 @@ final class GeneralViewController: UIViewController {
                 self.uploadChooseSceneInBackground()
             }
             
-            self.startTimerFlex()
+//            self.startTimerFlex()
             self.startAnimationFlex()
             
             UIView.animate(withDuration: 0.4, animations: {
@@ -615,11 +625,11 @@ final class GeneralViewController: UIViewController {
             light.move(to: transLight, relativeTo: light, duration: TimeInterval(self.durationZoomCamera))
         }
         
-        self.durationZoomCamera = 0
+//        self.durationZoomCamera = 0
         
         self.stopDemo()
         
-        self.startTimerFlex()
+//        self.startTimerFlex()
     }
     
     private func returnAVPlayerItem(nameVideo: String) -> AVPlayerItem? {
@@ -704,11 +714,12 @@ final class GeneralViewController: UIViewController {
         self.durationZoomCamera = 0
         
         self.videoPlayerEmoji?.play()
+//        self.videoPlayerEmoji?.rate = 1.3
     }
     
     func generateVideoPlane() {
         
-        let nameVideo = "fx element_[000-299]-1"
+        let nameVideo = "UVmatch_final"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
         
         videoPlayerPlane = AVPlayer(playerItem: item)
@@ -816,8 +827,12 @@ final class GeneralViewController: UIViewController {
     }
     
     private func subAnim() {
-        
-        subAnimComplete = arView.scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: nil, { event in
+        /// может тут сабака зарыта
+//        subAnimComplete = arView.scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: nil, { event in
+        subAnimComplete = arView.scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: self.nodeGirl, { event in
+            
+            /// может тут сабака зарыта
+//            print ("klmnkmljnkl", event.playbackController ==)
             
             self.serialQueue.sync {
             
@@ -848,21 +863,34 @@ final class GeneralViewController: UIViewController {
                 
                 switch self.chooseModel {
                 case 0:
-                    if self.emojiCounter == 1 {
-//                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
-                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji3"]!)
+                    
+//                    self.videoPlayerEmoji?.advanceToNextItem()
+                    /// конец
+//                    NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying(_:)), name: AVPlayerItemDidPlayToEndTimeNotification, object: self.videoPlayerEmoji.currentItem)
+                    
+                    switch self.chooseLevel {
+                    case 1: self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
+                        self.animationController?.speed = 1.4
+                    case 2: self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
+                    default: break
                     }
-
-                    if self.emojiCounter == 2 {
-//                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
-                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
-                    }
-
-                    if self.emojiCounter == 3 {
+                    
+//                    self.animationController?.speed = 1.3
+//                    if self.emojiCounter == 1 {
+////                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
 //                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji3"]!)
-                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
-                    }
+//                    }
 //
+//                    if self.emojiCounter == 2 {
+////                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
+//                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
+//                    }
+//
+//                    if self.emojiCounter == 3 {
+////                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji3"]!)
+//                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
+//                    }
+                    
                 case 1:
                     if self.emojiCounter == 1 {
                         self.animationController = self.nodeAvatar?.playAnimation(self.dictAnimationRes2["emoji1"]!)
@@ -878,7 +906,7 @@ final class GeneralViewController: UIViewController {
                 default: break
                 }
 //                self.videoPlayerEmoji?.play()
-//                self.animationController?.speed = 0.2
+//                self.animationController?.speed = 1.2
                 self.emojiCounter += 1
 //                self.videoPlayerEmoji?.advanceToNextItem()
             }
