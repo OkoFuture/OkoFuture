@@ -316,7 +316,8 @@ final class Helper {
     }
     
     public func arrayNameAvatarUSDZ() -> [String] {
-        ["avtr_anim_0805.usdz", "avtr_anim_0805.usdz"]
+//        ["avtr_anim_0805.usdz", "avtr_anim_0805.usdz"]
+        ["avtr_anim_0606", "avtr_anim_0606"]
     }
     
     public func fontChakra500(size: CGFloat) -> UIFont? {
