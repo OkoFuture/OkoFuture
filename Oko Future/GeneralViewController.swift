@@ -103,7 +103,7 @@ final class GeneralViewController: UIViewController {
     private let timingFinishEmoji5:Float = 840/24
     
     private var dictAnimationRes1 = [String : AnimationResource]()
-    private var dictAnimationRes2 = [String : AnimationResource]()
+//    private var dictAnimationRes2 = [String : AnimationResource]()
     
     private var mode: AvatarMode = .general
     
@@ -413,30 +413,6 @@ final class GeneralViewController: UIViewController {
 //            dictAnimationRes1["emoji1"] = emoji1
 //            dictAnimationRes1["emoji2"] = emoji2
 //            dictAnimationRes1["emoji3"] = emoji3
-        }
-        
-        if let availableAnimationsAvatar = self.nodeAvatar?.availableAnimations, self.nodeAvatar?.availableAnimations.count != 0 {
-            let animAvatar = availableAnimationsAvatar[0]
-            
-            let flex1av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartFlex1), end: .init(timingFinishFlex1), duration: nil)))
-            let flex2av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
-            let flex3av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartFlex3), end: .init(timingFinishFlex3), duration: nil)))
-            let flex4av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartFlex4), end: .init(timingFinishFlex4), duration: nil)))
-            let flex5av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartFlex5), end: .init(timingFinishFlex5), duration: nil)))
-            
-            let emoji1av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
-            let emoji2av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
-            let emoji3av: AnimationResource = try! .generate(with: (animAvatar.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
-            
-            dictAnimationRes2["flex1"] = flex1av
-            dictAnimationRes2["flex2"] = flex2av
-            dictAnimationRes2["flex3"] = flex3av
-            dictAnimationRes2["flex4"] = flex4av
-            dictAnimationRes2["flex5"] = flex5av
-            
-            dictAnimationRes2["emoji1"] = emoji1av
-            dictAnimationRes2["emoji2"] = emoji2av
-            dictAnimationRes2["emoji3"] = emoji3av
         }
         
     }
@@ -801,10 +777,6 @@ final class GeneralViewController: UIViewController {
             if let animRes = self.dictAnimationRes1["flex1"] {
                 self.animationController = self.nodeGirl?.playAnimation(animRes)
             }
-        case 1:
-            if let animRes = self.dictAnimationRes2["flex1"] {
-                self.animationController = self.nodeAvatar?.playAnimation(animRes)
-            }
         default: break
         }
         }
@@ -840,19 +812,9 @@ final class GeneralViewController: UIViewController {
             case .waiting:
                 
                 let flex = "flex" + String(self.flexCounter)
-                
                 print ("awdhjbjhbhj", flex)
-                switch self.chooseModel {
-                case 0:
-                    
-                    self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1[flex]!)
-                    
-                case 1:
-                    
-                    self.animationController = self.nodeAvatar?.playAnimation(self.dictAnimationRes2[flex]!)
-                    
-                default: break
-                }
+                
+                self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1[flex]!)
                 
                 self.flexCounter += 1
                 
@@ -860,9 +822,6 @@ final class GeneralViewController: UIViewController {
                 
                 let emoji = "emoji" + String(self.emojiCounter)
                 print ("awdhjbjhbhj", emoji)
-                
-                switch self.chooseModel {
-                case 0:
                     
 //                    self.videoPlayerEmoji?.advanceToNextItem()
                     /// конец
@@ -874,41 +833,7 @@ final class GeneralViewController: UIViewController {
                     case 2: self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
                     default: break
                     }
-                    
-//                    self.animationController?.speed = 1.3
-//                    if self.emojiCounter == 1 {
-////                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
-//                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji3"]!)
-//                    }
-//
-//                    if self.emojiCounter == 2 {
-////                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
-//                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
-//                    }
-//
-//                    if self.emojiCounter == 3 {
-////                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji3"]!)
-//                        self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
-//                    }
-                    
-                case 1:
-                    if self.emojiCounter == 1 {
-                        self.animationController = self.nodeAvatar?.playAnimation(self.dictAnimationRes2["emoji1"]!)
-                    }
-
-                    if self.emojiCounter == 2 {
-                        self.animationController = self.nodeAvatar?.playAnimation(self.dictAnimationRes2["emoji2"]!)
-                    }
-
-                    if self.emojiCounter == 3 {
-                        self.animationController = self.nodeAvatar?.playAnimation(self.dictAnimationRes2["emoji3"]!)
-                    }
-                default: break
-                }
-//                self.videoPlayerEmoji?.play()
-//                self.animationController?.speed = 1.2
                 self.emojiCounter += 1
-//                self.videoPlayerEmoji?.advanceToNextItem()
             }
             }
         })
