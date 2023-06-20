@@ -159,7 +159,7 @@ final class LevelTwoViewController: UIViewController {
         
         let scaleAvatar: Float = 1
          
-        cancellableBot = ModelEntity.loadModelAsync(named: "okoBotVizor_[000-299]-1")
+        cancellableBot = ModelEntity.loadModelAsync(named: "okobot_2305")
             .sink(receiveCompletion: { error in
               print("Unexpected error: \(error)")
                 cancellableBot?.cancel()
@@ -323,6 +323,7 @@ final class LevelTwoViewController: UIViewController {
         guard let okoBot = self.okoBot else { return nil}
         
         let nameVideo = "okoBotVizor_[000-299]-1"
+//        okoBotVizor_lvl2_demo
         let item = returnAVPlayerItem(nameVideo: nameVideo)
         
         videoPlayerOkoBot = AVPlayer(playerItem: item)
@@ -343,7 +344,6 @@ final class LevelTwoViewController: UIViewController {
         guard let screen = self.okoBot else { return nil}
         
         let nameVideo = "flip_vert_[000-299]-1"
-//        let nameVideo = "Debug_futage_[000-299]-1"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
         
         videoPlayerScreen = AVPlayer(playerItem: item)
