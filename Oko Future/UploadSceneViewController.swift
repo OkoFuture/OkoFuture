@@ -50,7 +50,7 @@ final class UploadSceneViewController: UIViewController {
         cameraEntity.camera.fieldOfViewInDegrees = 39
         
         var nodeGirl: ModelEntity?
-        var nodeAvatar: ModelEntity?
+//        var nodeAvatar: ModelEntity?
         
         let scaleAvatar: Float = 0.75
         
@@ -58,15 +58,15 @@ final class UploadSceneViewController: UIViewController {
         
         var cancellable: AnyCancellable? = nil
          
-          cancellable = ModelEntity.loadModelAsync(named: arrayNameScene[1])
-            .sink(receiveCompletion: { error in
-              print("Unexpected error: \(error)")
-              cancellable?.cancel()
-            }, receiveValue: { entity in
-
-                entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
-                
-                nodeAvatar = entity
+//          cancellable = ModelEntity.loadModelAsync(named: arrayNameScene[1])
+//            .sink(receiveCompletion: { error in
+//              print("Unexpected error: \(error)")
+//              cancellable?.cancel()
+//            }, receiveValue: { entity in
+//
+//                entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
+//
+//                nodeAvatar = entity
                 
                 cancellable = ModelEntity.loadModelAsync(named: arrayNameScene[0])
                   .sink(receiveCompletion: { error in
@@ -78,13 +78,13 @@ final class UploadSceneViewController: UIViewController {
                       
                       nodeGirl = entity
 
-                      let generalVC = GeneralViewController(arView: arView, sceneEntity: sceneEntity, nodeGirl: nodeGirl!, nodeAvatar: nodeAvatar!)
+                      let generalVC = GeneralViewController(arView: arView, sceneEntity: sceneEntity, nodeGirl: nodeGirl!)
                       
                       self.navigationController?.pushViewController(generalVC, animated: true)
 
                       cancellable?.cancel()
                   })
-            })
+//            })
         
     }
     
