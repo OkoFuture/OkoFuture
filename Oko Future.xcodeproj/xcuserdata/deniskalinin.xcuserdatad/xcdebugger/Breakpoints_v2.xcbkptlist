@@ -3,4 +3,54 @@
    uuid = "B7159C54-A3E6-45F9-9D78-8988D2B5D312"
    type = "1"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "14C4CC09-B4AC-4605-A491-93C20C069DBA"
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Oko Future/GeneralViewController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "95"
+            endingLineNumber = "95"
+            landmarkName = "GeneralViewController"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  uuid = "14C4CC09-B4AC-4605-A491-93C20C069DBA - 92c628827d46868f"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Oko_Future.GeneralViewController.init(arView: RealityKit.ARView, sceneEntity: RealityKit.ModelEntity, nodeGirl: RealityKit.ModelEntity, nodeAvatar: RealityKit.ModelEntity) -&gt; Oko_Future.GeneralViewController"
+                  moduleName = "Oko Future"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/deniskalinin/Desktop/oko/OkoFuture/Oko%20Future/GeneralViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "95"
+                  endingLineNumber = "95"
+                  offsetFromSymbolStart = "3136">
+               </Location>
+               <Location
+                  uuid = "14C4CC09-B4AC-4605-A491-93C20C069DBA - 15647ec6c721aa7e"
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Oko_Future.GeneralViewController.init(coder: __C.NSCoder) -&gt; Swift.Optional&lt;Oko_Future.GeneralViewController&gt;"
+                  moduleName = "Oko Future"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/deniskalinin/Desktop/oko/OkoFuture/Oko%20Future/GeneralViewController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "95"
+                  endingLineNumber = "95"
+                  offsetFromSymbolStart = "2756">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

@@ -91,7 +91,8 @@ final class GeneralViewController: UIViewController {
     private let timingStartFlex5:Float = 288/24
     private let timingFinishFlex5:Float = 360/24
     
-    private let timingStartEmoji1:Float = 360/24
+//    private let timingStartEmoji1:Float = 360/24
+    private let timingStartEmoji1:Float = 400/24
     private let timingFinishEmoji1:Float = 455/24
     
     private let timingStartEmoji2:Float = 455/24
@@ -829,7 +830,7 @@ final class GeneralViewController: UIViewController {
                     
                     switch self.chooseLevel {
                     case 1: self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
-                        self.animationController?.speed = 1.4
+//                        self.animationController?.speed = 0.9
                     case 2: self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
                     default: break
                     }
