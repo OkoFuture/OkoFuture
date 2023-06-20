@@ -31,6 +31,9 @@ final class GeneralViewController: UIViewController {
     private var nodeGirl: ModelEntity?
     private var nodeAvatar: ModelEntity?
     
+    private var okoBot: ModelEntity? = nil
+    private var okoScreen: ModelEntity? = nil
+    
     public var chooseModel = 0
     private var chooseLevel = 1
     
@@ -77,7 +80,8 @@ final class GeneralViewController: UIViewController {
     private var subAnimComplete: Cancellable? = nil
     
     private let timingStartFlex1:Float = 1/24
-    private let timingFinishFlex1:Float = 72/24
+//    private let timingFinishFlex1:Float = 72/24
+    private let timingFinishFlex1:Float = 90/24
     
     private let timingStartFlex2:Float = 72/24
     private let timingFinishFlex2:Float = 144/24
@@ -207,7 +211,7 @@ final class GeneralViewController: UIViewController {
         setupView()
         dowloadVideos()
         createAnimRes()
-//        subAnim()
+        uploadModelEntity()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -255,9 +259,9 @@ final class GeneralViewController: UIViewController {
                
         arView.scene.addAnchor(cameraAnchor)
         
-        nodeAvatar.transform.translation = SIMD3(x: 0, y: 0.7, z: 0.3)
+        nodeAvatar.transform.translation = SIMD3(x: 0.07, y: 0.7, z: 0.3)
         
-        nodeGirl.transform.translation = SIMD3(x: 0, y: 0.7, z: 0.3)
+        nodeGirl.transform.translation = SIMD3(x: 0.07, y: 0.7, z: 0.3)
         
         anchor.addChild(nodeGirl)
         
@@ -384,6 +388,38 @@ final class GeneralViewController: UIViewController {
 //                                                  width: sideSysButton,
 //                                                  height: sideSysButton)
         
+    }
+    
+    private func uploadModelEntity() {
+        var cancellableBot: AnyCancellable? = nil
+        var cancellableScreen: AnyCancellable? = nil
+        
+        let scaleAvatar: Float = 1
+         
+        cancellableBot = ModelEntity.loadModelAsync(named: "okobot_2305")
+            .sink(receiveCompletion: { error in
+              print("Unexpected error: \(error)")
+                cancellableBot?.cancel()
+            }, receiveValue: { entity in
+
+                entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
+                
+                self.okoBot = entity
+                cancellableBot?.cancel()
+            })
+        
+        cancellableScreen = ModelEntity.loadModelAsync(named: "screen_2405")
+          .sink(receiveCompletion: { error in
+            print("Unexpected error: \(error)")
+              cancellableScreen?.cancel()
+          }, receiveValue: { entity in
+
+              entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
+              
+              self.okoScreen = entity
+
+              cancellableScreen?.cancel()
+          })
     }
     
     private func createAnimRes() {
@@ -696,7 +732,7 @@ final class GeneralViewController: UIViewController {
     
     func generateVideoPlane() {
         
-        let nameVideo = "UVmatch_final"
+        let nameVideo = "Tshirt_lvl2_demo"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
         
         videoPlayerPlane = AVPlayer(playerItem: item)
@@ -706,30 +742,28 @@ final class GeneralViewController: UIViewController {
         nodeGirl?.model?.materials[3] = videoMaterial
         
         videoPlayerPlane.play()
+        videoPlayerPlane.rate = 0.84
     }
     
     private func generateOkoBot() -> ModelEntity? {
         
-        let nameVideo = "okoBotVizor_[000-299]-1"
+        let nameVideo = "okoBotVizor_lvl2_demo"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
         
         videoPlayerOkoBot = AVPlayer(playerItem: item)
         
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerOkoBot)
         videoPlayerOkoBot.play()
+        videoPlayerOkoBot.rate = 0.84
         
-        let okoRobot1 = try! ModelEntity.loadModel(named: "okobot_2305")
+        guard let okoBot = self.okoBot else {return nil}
         
-        okoRobot1.model?.materials[0] = videoMaterial
+        okoBot.model?.materials[0] = videoMaterial
         
-        return okoRobot1
+        return okoBot
     }
     
     private func generateScreen() -> ModelEntity? {
-        let screen = try! ModelEntity.loadModel(named: "screen_2405")
-        
-        let scale: Float = 10
-        screen.scale = [scale,scale,scale]
         
         let nameVideo = "flip_vert_[000-299]-1"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
@@ -738,7 +772,12 @@ final class GeneralViewController: UIViewController {
         videoPlayerScreen.play()
         
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerScreen)
-//        videoPlayerScreen.play()
+        
+        guard let screen = self.okoScreen else {return nil}
+        
+        let scale: Float = 10
+        screen.scale = [scale,scale,scale]
+        
         screen.model?.materials[1] = videoMaterial
         
         return screen
@@ -829,9 +868,29 @@ final class GeneralViewController: UIViewController {
 //                    NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying(_:)), name: AVPlayerItemDidPlayToEndTimeNotification, object: self.videoPlayerEmoji.currentItem)
                     
                     switch self.chooseLevel {
-                    case 1: self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
-//                        self.animationController?.speed = 0.9
-                    case 2: self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
+                    case 1:
+                        
+                        if self.emojiCounter == 1 {
+                            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
+                        }
+                        
+                        if self.emojiCounter == 2 {
+                            self.arSwitch.isOn = true
+                        }
+                    case 2:
+                        if self.emojiCounter == 1 {
+                            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["flex1"]!)
+                        }
+                        
+                        if self.emojiCounter == 2 {
+                            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
+                        }
+                        
+                        if self.emojiCounter == 3 {
+                            self.arSwitch.isOn = true
+                        }
+                        self.animationController?.speed = 1.5
+                        
                     default: break
                     }
                 self.emojiCounter += 1
@@ -867,14 +926,14 @@ final class GeneralViewController: UIViewController {
     }
     
     private func stopAnimationEmoji() {
-        self.serialQueue.sync {
+//        self.serialQueue.sync {
             
             self.emojiCounter = 1
             self.animateMode = .waiting
         
             timerAnimation?.invalidate()
             timerAnimation = nil
-        }
+//        }
     }
     
     private func stopDemo() {
