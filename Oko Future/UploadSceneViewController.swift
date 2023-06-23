@@ -13,7 +13,8 @@ import RealityKit
 final class UploadSceneViewController: UIViewController {
     
     private let welcomeImage: UIImageView = {
-        let img = UIImage(named: "okoLogoBlack")
+//        let img = UIImage(named: "okoLogoBlack")
+        let img = UIImage(named: "LogoBlack")
         let imgV = UIImageView(image: img)
         imgV.contentMode = .scaleAspectFill
         return imgV

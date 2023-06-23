@@ -26,7 +26,7 @@ final class UserProfileViewController: UIViewController {
     }()
     
     let uploadImageView: UIImageView = {
-        let img = UIImage(named: "downloadArrow")
+        let img = UIImage(named: "dowloadArrowWhite")
         let imgV = UIImageView(image: img)
         imgV.contentMode = .scaleAspectFill
         return imgV
@@ -109,7 +109,7 @@ final class UserProfileViewController: UIViewController {
     }
     
     @objc func logOutButtonTap() {
-        Helper().logOut(delegate: self, presentationContextProvider: self)
+        Helper().logOut(viewForError: self, delegate: self, presentationContextProvider: self)
         
         backToWelcomeViewController()
     }
@@ -127,7 +127,7 @@ final class UserProfileViewController: UIViewController {
     }
     
     @objc func deleteUserButtonTap() {
-        currentNonce = Helper().deleteUser(delegate: self, presentationContextProvider: self) { [weak self] in
+        currentNonce = Helper().deleteUser(viewForError: self, delegate: self, presentationContextProvider: self) { [weak self] in
             guard let self = self else { return }
             backToWelcomeViewController()
         }

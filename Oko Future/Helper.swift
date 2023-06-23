@@ -21,16 +21,18 @@ final class Helper {
         Helper().setUser(user: User())
     }
     
-    public func addUserFirebase(email: String, password: String, completedHangler: @escaping (() -> Void)) {
+//    public func addUserFirebase(email: String, password: String, completedHangler: @escaping (() -> Void)) {
+        public func addUserFirebase(email: String, password: String, completedHangler: @escaping ((Error?) -> Void)) {
         
         Auth.auth().createUser(withEmail: email, password: password) { authResult, error in
             if error == nil {
                 
                 Helper().updateUserData(typeUserData: .password, userData: password, needUpdateFirebase: false)
                 Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
-                completedHangler()
+                completedHangler(nil)
             } else {
                 print ("createUser is fail", error?.localizedDescription)
+                completedHangler(error)
             }
         }
     }
@@ -138,12 +140,13 @@ final class Helper {
         UserDefaults.standard.removeObject(forKey: "user")
     }
     
-    private func deleteUserFirebase(completionHandler: @escaping (() -> Void)) {
+    private func deleteUserFirebase(viewForError: UIViewController ,completionHandler: @escaping (() -> Void)) {
         guard let user = Auth.auth().currentUser else { return }
         
         user.delete(completion: { error in
             if let error = error {
-                
+                let action = UIAlertAction(title: "Close", style: .cancel)
+                self.showAlert(title: "Error", message: "Failed to delete account", view: viewForError, actions: [action])
             } else {
                 completionHandler()
             }
@@ -217,10 +220,12 @@ final class Helper {
             return nonce
         } catch {
             print ("delete user Apple error =", error.localizedDescription)
+//            let action = UIAlertAction(title: "Close", style: .cancel)
+//            self.showAlert(title: "Error", message: "Failed to delete account", view: viewForError, actions: [action])
         }
     }
     
-    public func deleteUser(delegate: ASAuthorizationControllerDelegate, presentationContextProvider: ASAuthorizationControllerPresentationContextProviding, completionHandler: @escaping () -> Void) -> String? {
+    public func deleteUser(viewForError: UIViewController, delegate: ASAuthorizationControllerDelegate, presentationContextProvider: ASAuthorizationControllerPresentationContextProviding, completionHandler: @escaping () -> Void) -> String? {
         guard let user = getUser() else { return nil}
         
         var currentNonce: String? = nil
@@ -233,7 +238,7 @@ final class Helper {
 //            deleteUserFirebase(completionHandler: completionHandler)
 //        default: break
 //        }
-        deleteUserFirebase(completionHandler: completionHandler)
+        deleteUserFirebase(viewForError: viewForError, completionHandler: completionHandler)
         self.deleteUserUserDefaults()
         
         return currentNonce
@@ -284,7 +289,7 @@ final class Helper {
 //    }
 //}
     
-    public func logOut(delegate: ASAuthorizationControllerDelegate,presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) {
+    public func logOut(viewForError: UIViewController, delegate: ASAuthorizationControllerDelegate,presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) {
         
         guard let user = getUser() else { return }
         
@@ -300,6 +305,8 @@ final class Helper {
           try firebaseAuth.signOut()
         } catch let signOutError as NSError {
           print("Error signing out: %@", signOutError)
+            let action = UIAlertAction(title: "Close", style: .cancel)
+            self.showAlert(title: "Error", message: "Failed to log out account", view: viewForError, actions: [action])
         }
         
         deleteUserUserDefaults()

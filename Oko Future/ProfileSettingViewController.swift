@@ -16,7 +16,7 @@ final class ProfileSettingViewController: UIViewController {
     }()
     
     let uploadImageView: UIImageView = {
-        let img = UIImage(named: "downloadArrow")
+        let img = UIImage(named: "dowloadArrowWhite")
         let imgV = UIImageView(image: img)
         imgV.contentMode = .scaleAspectFill
         return imgV
