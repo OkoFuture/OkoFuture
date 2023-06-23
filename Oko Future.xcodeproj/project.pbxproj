@@ -67,6 +67,7 @@
 		D199EC232A3216CB00968291 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D199EC222A3216CB00968291 /* GoogleSignInSwift */; };
 		D19B3C6B2A3B201B008C906A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = D19B3C6A2A3B201B008C906A /* GoogleService-Info.plist */; };
 		D1AC4DA62A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */; };
+		D1D53F812A45F4A900E1F31F /* Intro_v3_[0001-0050]-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = D1D53F802A45F4A900E1F31F /* Intro_v3_[0001-0050]-1.mov */; };
 		D1D5B3BB2A24C8AE00E03647 /* WelcomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */; };
 		D1D5B3BD2A24CE9C00E03647 /* PasswordViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D5B3BC2A24CE9C00E03647 /* PasswordViewController.swift */; };
 		D1D5B3BF2A24D31800E03647 /* ProfileSettingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1D5B3BE2A24D31800E03647 /* ProfileSettingViewController.swift */; };
@@ -141,6 +142,7 @@
 		D199EC1B2A32123900968291 /* Oko Future.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Oko Future.entitlements"; sourceTree = "<group>"; };
 		D19B3C6A2A3B201B008C906A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "flip_vert_[000-299]-1.mov"; sourceTree = "<group>"; };
+		D1D53F802A45F4A900E1F31F /* Intro_v3_[0001-0050]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "Intro_v3_[0001-0050]-1.mov"; sourceTree = "<group>"; };
 		D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewController.swift; sourceTree = "<group>"; };
 		D1D5B3BC2A24CE9C00E03647 /* PasswordViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasswordViewController.swift; sourceTree = "<group>"; };
 		D1D5B3BE2A24D31800E03647 /* ProfileSettingViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewController.swift; sourceTree = "<group>"; };
@@ -173,6 +175,7 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				D1D53F802A45F4A900E1F31F /* Intro_v3_[0001-0050]-1.mov */,
 				D170D2062A42345A00F8A831 /* body_shock_lvl2_ar.mov */,
 				D170D2072A42345A00F8A831 /* leftHand_Shock_lvl2_ar.mov */,
 				D170D2052A42345A00F8A831 /* okoBotVizor_Shock_lvl2_ar.mov */,
@@ -347,6 +350,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D1D53F812A45F4A900E1F31F /* Intro_v3_[0001-0050]-1.mov in Resources */,
 				D170D2082A42345A00F8A831 /* righthand_Shock_lvl2_ar.mov in Resources */,
 				D170D2092A42345A00F8A831 /* screen_Shock_lvl2_ar.mov in Resources */,
 				D170D20A2A42345A00F8A831 /* okoBotVizor_Shock_lvl2_ar.mov in Resources */,

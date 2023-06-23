@@ -21,7 +21,7 @@ final class LogInViewController: UIViewController {
     var ref: DatabaseReference!
     
     let logoImageView: UIImageView = {
-        let img = UIImage(named: "okoLogoBlack")
+        let img = UIImage(named: "LogoBlack")
         let imgV = UIImageView(image: img)
         imgV.contentMode = .scaleAspectFill
         return imgV
@@ -85,7 +85,10 @@ final class LogInViewController: UIViewController {
     let appleSignUpButton: OkoBigButton = {
         let btn = OkoBigButton()
         btn.setTitle("Apple", for: .normal)
-        btn.setImage(UIImage(named: "AppleLogo"), for: .normal)
+        let img = UIImage(named: "apple")
+//        img
+        btn.setImage(img, for: .normal)
+        btn.imageView?.contentMode = .scaleAspectFit
         //        btn.font = Helper().fontChakra500(size: 16)!
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.black.cgColor
@@ -97,7 +100,8 @@ final class LogInViewController: UIViewController {
     let googleSignUpButton: OkoBigButton = {
         let btn = OkoBigButton()
         btn.setTitle("Google", for: .normal)
-        btn.setImage(UIImage(named: "GoogleLogo"), for: .normal)
+        btn.setImage(UIImage(named: "Google"), for: .normal)
+        btn.imageView?.contentMode = .scaleAspectFit
         //        btn.font = Helper().fontChakra500(size: 16)!
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.black.cgColor
@@ -199,7 +203,6 @@ final class LogInViewController: UIViewController {
         
         if email.count == 0 || password.count < 6 { return }
         
-//        pushToPasswordViewController(email: email, password: password)
         signInEmail(withEmail: email, password: password)
     }
     
@@ -210,10 +213,29 @@ final class LogInViewController: UIViewController {
             if let error = error {
                 print ("signInEmail fail error =", error.localizedDescription)
                 
-                Helper().addUserFirebase(email: withEmail, password: password, completedHangler: { [weak self] in
-                    guard let self = self else { return }
-                    Helper().updateUserLogStatus(logStatus: .logInWithEmail)
-                    self.pushToProfileSettingViewController()
+                if error.localizedDescription == "The password is invalid or the user does not have a password." {
+                    let action = UIAlertAction(title: "Close", style: .cancel)
+                    Helper().showAlert(title: "Error", message: error.localizedDescription, view: strongSelf, actions: [action])
+                    return
+                }
+                
+                Helper().addUserFirebase(email: withEmail, password: password, completedHangler: { [weak self] error in
+                    
+                    if let error = error {
+                        
+                        print("bhjkdawbhjkawdbhjk fire", error.localizedDescription)
+                        
+                        let action = UIAlertAction(title: "Close", style: .cancel)
+                        Helper().showAlert(title: "Error", message: error.localizedDescription, view: strongSelf, actions: [action])
+                    } else {
+                        guard let self = self else { return }
+                        let action = UIAlertAction(title: "Close", style: .cancel, handler: {_ in
+                            Helper().updateUserLogStatus(logStatus: .logInWithEmail)
+                            self.pushToProfileSettingViewController()
+                        })
+                        Helper().showAlert(title: nil, message: "User created successfully", view: strongSelf, actions: [action])
+                    }
+                    
                 })
             } else {
                 Helper().updateUserLogStatus(logStatus: .logInWithEmail)
@@ -264,6 +286,9 @@ final class LogInViewController: UIViewController {
     private func authenticateUser(for user: GIDGoogleUser?, with error: Error?, completionHandler: @escaping (() -> Void)) {
         if let error = error {
             print(error.localizedDescription)
+            
+            let action = UIAlertAction(title: "Close", style: .cancel)
+            Helper().showAlert(title: "Error", message: "Login failed", view: self, actions: [action])
             return
         }
         

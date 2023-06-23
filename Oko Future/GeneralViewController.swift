@@ -603,20 +603,25 @@ final class GeneralViewController: UIViewController {
         
         if ARFaceTrackingConfiguration.isSupported {
             
-            self.nodeGirl = nil
+            let vc = CleanFaceTrackViewController(arView: self.arView)
+                self.navigationController?.pushViewController(vc,
+                     animated: true)
             
-            switch chooseLevel {
-            case 1: let vc = CleanFaceTrackViewController(arView: self.arView)
-                self.navigationController?.pushViewController(vc,
-                     animated: true)
-            case 2: let vc = LevelTwoViewController(arView: self.arView)
-                self.navigationController?.pushViewController(vc,
-                     animated: true)
-            default: break
-            }
+//            switch chooseLevel {
+//            case 1: let vc = CleanFaceTrackViewController(arView: self.arView)
+//                self.navigationController?.pushViewController(vc,
+//                     animated: true)
+//            case 2: let vc = LevelTwoViewController(arView: self.arView)
+//                self.navigationController?.pushViewController(vc,
+//                     animated: true)
+//            default: break
+//            }
             
         } else {
             print ("log ARFaceTrackingConfiguration.isSupported == false")
+            
+            let action = UIAlertAction(title: "Close", style: .cancel)
+            Helper().showAlert(title: "Error", message: "Your device does not support ar mode", view: self, actions: [action])
         }
     }
     

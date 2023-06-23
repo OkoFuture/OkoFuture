@@ -43,22 +43,23 @@ final class WelcomeViewController: UIViewController {
         
         setupLayout()
         setupPlayer()
+        logoPlayer.play()
     }
     
     private func setupView() {
         view.backgroundColor = .white
         
+        view.addSubview(videoView)
         view.addSubview(welcomeImage)
-        view.addSubview(logoImageView)
+//        view.addSubview(logoImageView)
         view.addSubview(getStartButton)
-//        view.addSubview(videoView)
         
         getStartButton.addTarget(self, action: #selector(tapStartButton), for: .touchUpInside)
         navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     private func setupPlayer() {
-        guard let path = Bundle.main.path(forResource: "Intro_v4", ofType: "mp4") else {
+        guard let path = Bundle.main.path(forResource: "Intro_v3_[0001-0050]-1", ofType: "mov") else {
             print("Failed get path intro_v4")
             return
         }
@@ -80,10 +81,10 @@ final class WelcomeViewController: UIViewController {
         let playerLayer = AVPlayerLayer(player: logoPlayer)
 
         playerLayer.frame = self.videoView.frame
-        playerLayer.videoGravity = .resizeAspectFill
+//        playerLayer.videoGravity = .resizeAspectFill
         self.videoView.layer.addSublayer(playerLayer)
         
-        logoPlayer.play()
+//        logoPlayer.play()
     }
     
     private func setupLayout() {
@@ -91,9 +92,10 @@ final class WelcomeViewController: UIViewController {
         
         welcomeImage.frame = view.frame
         
-        videoView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
+//        videoView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
+        videoView.frame = view.frame
         
-        logoImageView.frame = CGRect(x: (view.bounds.width - 200)/2, y: 80, width: 200, height: 200)
+//        logoImageView.frame = CGRect(x: (view.bounds.width - 200)/2, y: 80, width: 200, height: 200)
         
         getStartButton.frame = CGRect(x: 20, y: view.bounds.height - heightOko - 58, width: view.bounds.width - 40, height: heightOko)
         
