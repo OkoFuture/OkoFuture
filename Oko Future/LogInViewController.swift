@@ -81,32 +81,14 @@ final class LogInViewController: UIViewController {
         lbl.textColor = .black
         return lbl
     }()
-    
-    let appleSignUpButton: OkoBigButton = {
-        let btn = OkoBigButton()
-        btn.setTitle("Apple", for: .normal)
-        let img = UIImage(named: "apple")
-//        img
-        btn.setImage(img, for: .normal)
-        btn.imageView?.contentMode = .scaleAspectFit
-        //        btn.font = Helper().fontChakra500(size: 16)!
-        btn.layer.borderWidth = 1
-        btn.layer.borderColor = UIColor.black.cgColor
-        btn.setTitleColor(.black, for: .normal)
-        btn.backgroundColor = .white
+        
+    let appleSignUpButton: UIOkoLoginButton = {
+        let btn = UIOkoLoginButton(type: .apple)
         return btn
     }()
     
-    let googleSignUpButton: OkoBigButton = {
-        let btn = OkoBigButton()
-        btn.setTitle("Google", for: .normal)
-        btn.setImage(UIImage(named: "Google"), for: .normal)
-        btn.imageView?.contentMode = .scaleAspectFit
-        //        btn.font = Helper().fontChakra500(size: 16)!
-        btn.layer.borderWidth = 1
-        btn.layer.borderColor = UIColor.black.cgColor
-        btn.setTitleColor(.black, for: .normal)
-        btn.backgroundColor = .white
+    let googleSignUpButton: UIOkoLoginButton = {
+        let btn = UIOkoLoginButton(type: .google)
         return btn
     }()
     
@@ -140,8 +122,10 @@ final class LogInViewController: UIViewController {
         passwordTextField.delegate = self
         
         sendCodeButton.addTarget(self, action: #selector(tapSendButton), for: .touchUpInside)
-        appleSignUpButton.addTarget(self, action: #selector(tapLogInApple), for: .touchUpInside)
-        googleSignUpButton.addTarget(self, action: #selector(tapLogInGoogle), for: .touchUpInside)
+        let tapAppleButton = UITapGestureRecognizer(target: self, action: #selector(tapLogInApple))
+        appleSignUpButton.addGestureRecognizer(tapAppleButton)
+        let tapGoogleButton = UITapGestureRecognizer(target: self, action: #selector(tapLogInGoogle))
+        googleSignUpButton.addGestureRecognizer(tapGoogleButton)
         
         NotificationCenter.default.addObserver(
             self,

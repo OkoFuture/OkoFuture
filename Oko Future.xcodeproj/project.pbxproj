@@ -28,6 +28,7 @@
 		D117FB792A38AE6000BE7DAA /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */; };
 		D11C69D52A399ABE004E4C68 /* UIOkoProfileSettingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11C69D42A399ABE004E4C68 /* UIOkoProfileSettingButton.swift */; };
 		D11F10622A277E26004C49CE /* Intro_v4.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D11F10612A277E26004C49CE /* Intro_v4.mp4 */; };
+		D131490B2A46D38E004A71A0 /* UIOkoLoginButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D131490A2A46D38E004A71A0 /* UIOkoLoginButton.swift */; };
 		D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */ = {isa = PBXBuildFile; fileRef = D15A35B129F697EC00E3F6E1 /* Helper.swift */; };
 		D15A35BA29F69BF300E3F6E1 /* ChakraPetch-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */; };
 		D15A35BB29F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = D15A35B929F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf */; };
@@ -105,6 +106,7 @@
 		D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		D11C69D42A399ABE004E4C68 /* UIOkoProfileSettingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIOkoProfileSettingButton.swift; sourceTree = "<group>"; };
 		D11F10612A277E26004C49CE /* Intro_v4.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Intro_v4.mp4; sourceTree = "<group>"; };
+		D131490A2A46D38E004A71A0 /* UIOkoLoginButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIOkoLoginButton.swift; sourceTree = "<group>"; };
 		D15A35B129F697EC00E3F6E1 /* Helper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Helper.swift; sourceTree = "<group>"; };
 		D15A35B829F69BF300E3F6E1 /* ChakraPetch-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ChakraPetch-Medium.ttf"; sourceTree = "<group>"; };
 		D15A35B929F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "ChakraPetch-SemiBold.ttf"; sourceTree = "<group>"; };
@@ -257,6 +259,7 @@
 				D11C69D42A399ABE004E4C68 /* UIOkoProfileSettingButton.swift */,
 				D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */,
 				D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */,
+				D131490A2A46D38E004A71A0 /* UIOkoLoginButton.swift */,
 				D15A35B129F697EC00E3F6E1 /* Helper.swift */,
 				920BF13129CC3D34001D40DA /* Assets.xcassets */,
 				920BF13329CC3D34001D40DA /* LaunchScreen.storyboard */,
@@ -411,6 +414,7 @@
 				D10B06F829F7FDB6002B9868 /* CleanFaceTrackViewController.swift in Sources */,
 				9292EE3029D09A4500526C07 /* UploadSceneViewController.swift in Sources */,
 				D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */,
+				D131490B2A46D38E004A71A0 /* UIOkoLoginButton.swift in Sources */,
 				92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */,
 				D1D5B3BD2A24CE9C00E03647 /* PasswordViewController.swift in Sources */,
 				D1D5B3BF2A24D31800E03647 /* ProfileSettingViewController.swift in Sources */,
