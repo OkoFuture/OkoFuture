@@ -14,6 +14,9 @@ import MessageUI
 
 final class LogInViewController: UIViewController {
     
+    let regService = RegistrationService()
+    let userService = UserService()
+    
     private var currentNonce: String?
     
     var keyboardHeight = CGFloat(0)
@@ -100,8 +103,8 @@ final class LogInViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         setupLayout()
         
-        if Helper().getUser() == nil {
-            Helper().createUser()
+        if userService.getUser() == nil {
+            regService.createUser()
         }
     }
     
@@ -187,122 +190,22 @@ final class LogInViewController: UIViewController {
         
         if email.count == 0 || password.count < 6 { return }
         
-        signInEmail(withEmail: email, password: password)
-    }
-    
-    private func signInEmail(withEmail: String, password: String) {
-        Auth.auth().signIn(withEmail: withEmail, password: password) { [weak self] authResult, error in
-          guard let strongSelf = self else { return }
-          
-            if let error = error {
-                print ("signInEmail fail error =", error.localizedDescription)
-                
-                if error.localizedDescription == "The password is invalid or the user does not have a password." {
-                    let action = UIAlertAction(title: "Close", style: .cancel)
-                    Helper().showAlert(title: "Error", message: error.localizedDescription, view: strongSelf, actions: [action])
-                    return
-                }
-                
-                Helper().addUserFirebase(email: withEmail, password: password, completedHangler: { [weak self] error in
-                    
-                    if let error = error {
-                        
-                        print("bhjkdawbhjkawdbhjk fire", error.localizedDescription)
-                        
-                        let action = UIAlertAction(title: "Close", style: .cancel)
-                        Helper().showAlert(title: "Error", message: error.localizedDescription, view: strongSelf, actions: [action])
-                    } else {
-                        guard let self = self else { return }
-                        let action = UIAlertAction(title: "Close", style: .cancel, handler: {_ in
-                            Helper().updateUserLogStatus(logStatus: .logInWithEmail)
-                            self.pushToProfileSettingViewController()
-                        })
-                        Helper().showAlert(title: nil, message: "User created successfully", view: strongSelf, actions: [action])
-                    }
-                    
-                })
-            } else {
-                Helper().updateUserLogStatus(logStatus: .logInWithEmail)
-                strongSelf.pushToProfileSettingViewController()
-            }
-        }
-    }
-    
-    @objc @available(iOS 13, *)
-    func tapLogInApple() {
-        currentNonce = Helper().tapLogInApple(delegate: self, presentationContextProvider: self)
-    }
-    
-    @objc private func tapLogInGoogle() {
-        
-        self.signIn(completionHandler: { [weak self] in
-            guard let self = self else { return }
+        regService.signInEmail(withEmail: email, password: password, completionHandler: {
             self.pushToProfileSettingViewController()
         })
     }
     
-    func signIn(completionHandler: @escaping (() -> Void)) {
-        
-        if GIDSignIn.sharedInstance.hasPreviousSignIn() {
-            GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
-                self.authenticateUser(for: user, with: error, completionHandler: { [weak self] in
-                    guard let self = self else { return }
-                    self.pushToUploadSceneViewController()
-                })
-            }
-        } else {
-            
-            guard let clientID = FirebaseApp.app()?.options.clientID else { return }
-            
-            let configuration = GIDConfiguration(clientID: clientID)
-            
-            GIDSignIn.sharedInstance.configuration = configuration
-            
-            guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene else { return }
-            guard let rootViewController = windowScene.windows.first?.rootViewController else { return }
-            
-            GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController, hint: nil, completion: { [unowned self] result, error in
-                self.authenticateUser(for: result?.user, with: error, completionHandler: completionHandler)
-            })
-        }
+    @objc @available(iOS 13, *)
+    func tapLogInApple() {
+        currentNonce = regService.tapLogInApple(delegate: self, presentationContextProvider: self)
     }
     
-    private func authenticateUser(for user: GIDGoogleUser?, with error: Error?, completionHandler: @escaping (() -> Void)) {
-        if let error = error {
-            print(error.localizedDescription)
-            
-            let action = UIAlertAction(title: "Close", style: .cancel)
-            Helper().showAlert(title: "Error", message: "Login failed", view: self, actions: [action])
-            return
-        }
+    @objc private func tapLogInGoogle() {
         
-        guard let accessToken = user?.accessToken, let idToken = user?.idToken else { return }
-        
-        let credential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
-        
-        Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
-            if let error = error {
-                print(error.localizedDescription)
-            } else {
-                
-                if let fullname = user?.profile?.name, let email = user?.profile?.email {
-                    for userDate in UserData.allCases {
-                        switch userDate {
-                        case .name:
-                            Helper().updateUserData(typeUserData: .name, userData: fullname, needUpdateFirebase: false)
-                        case .email:
-                            Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
-                        default: break
-                        }
-                    }
-                }
-                
-                print ("log in with google completed", user?.profile?.email, user?.profile?.name, user?.profile?.givenName, user?.profile?.familyName, user?.profile?.imageURL(withDimension: 320))
-                
-                Helper().updateUserLogStatus(logStatus: .logInWithGoogle)
-                completionHandler()
-            }
-        }
+        regService.signIn(completionHandler: { [weak self] in
+            guard let self = self else { return }
+            self.pushToProfileSettingViewController()
+        })
     }
 
 }
@@ -343,9 +246,9 @@ extension LogInViewController: ASAuthorizationControllerDelegate {
                             for userDate in UserData.allCases {
                                 switch userDate {
                                 case .name:
-                                    Helper().updateUserData(typeUserData: .name, userData: firstName + " " + lastName, needUpdateFirebase: false)
+                                    regService.updateUserData(typeUserData: .name, userData: firstName + " " + lastName, needUpdateFirebase: false)
                                 case .email:
-                                    Helper().updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
+                                    regService.updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
                                 default: break
                                 }
                             }
@@ -353,7 +256,7 @@ extension LogInViewController: ASAuthorizationControllerDelegate {
                         
                         print ("log in with apple completed", appleIDCredential.fullName?.givenName, appleIDCredential.fullName?.familyName)
                         
-                        Helper().updateUserLogStatus(logStatus: .logInWithApple)
+                        userService.updateUserLogStatus(logStatus: .logInWithApple)
                         pushToProfileSettingViewController()
                     }
                 }

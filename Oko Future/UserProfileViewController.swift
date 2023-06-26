@@ -12,6 +12,8 @@ import Firebase
 final class UserProfileViewController: UIViewController {
     
     private var currentNonce: String?
+    let userService = UserService()
+    let regService = RegistrationService()
     
     private let backButton: OkoDefaultButton = {
         let btn = OkoDefaultButton()
@@ -67,7 +69,7 @@ final class UserProfileViewController: UIViewController {
         view.addSubview(logOutButton)
         view.addSubview(deleteUserButton)
         
-        guard let user = Helper().getUser() else {
+        guard let user = userService.getUser() else {
             navigationController?.popViewController(animated: true)
             return
         }
@@ -109,7 +111,7 @@ final class UserProfileViewController: UIViewController {
     }
     
     @objc func logOutButtonTap() {
-        Helper().logOut(viewForError: self, delegate: self, presentationContextProvider: self)
+        regService.logOut(viewForError: self, delegate: self, presentationContextProvider: self)
         
         backToWelcomeViewController()
     }
@@ -127,7 +129,7 @@ final class UserProfileViewController: UIViewController {
     }
     
     @objc func deleteUserButtonTap() {
-        currentNonce = Helper().deleteUser(viewForError: self, delegate: self, presentationContextProvider: self) { [weak self] in
+        currentNonce = regService.deleteUser(viewForError: self, delegate: self, presentationContextProvider: self) { [weak self] in
             guard let self = self else { return }
             backToWelcomeViewController()
         }

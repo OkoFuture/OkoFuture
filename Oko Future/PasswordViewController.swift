@@ -98,14 +98,14 @@ final class PasswordViewController: UIViewController {
         guard let password = textField.text else { return }
 //        guard let user = Helper().getUser() else { return }
         
-        if Helper().passwordСheck(password: password) {
-            /// можно так, можно дать возможность поменять имя далее
-//            if user.logInWithApple || user.logInWithGoogle {
-//                UploadSceneViewController()
-//            }
-            
-            let vc = ProfileSettingViewController()
-            navigationController?.pushViewController(vc, animated: true)
-        }
+//        if Helper().passwordСheck(password: password) {
+//            /// можно так, можно дать возможность поменять имя далее
+////            if user.logInWithApple || user.logInWithGoogle {
+////                UploadSceneViewController()
+////            }
+//
+//            let vc = ProfileSettingViewController()
+//            navigationController?.pushViewController(vc, animated: true)
+//        }
     }
 }

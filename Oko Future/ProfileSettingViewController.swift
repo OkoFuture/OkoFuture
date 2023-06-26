@@ -9,6 +9,9 @@ import UIKit
 
 final class ProfileSettingViewController: UIViewController {
     
+    let regService = RegistrationService()
+    let userService = UserService()
+    
     let uploadBackView: UIView = {
         let view = UIView()
         view.backgroundColor = .black
@@ -49,7 +52,7 @@ final class ProfileSettingViewController: UIViewController {
     
     override func viewDidLoad() {
         
-        guard let user = Helper().getUser() else { return }
+        guard let user = userService.getUser() else { return }
         nameTextField.text = user.name
         
         setupView()
@@ -94,7 +97,7 @@ final class ProfileSettingViewController: UIViewController {
         
         if name.count == 0 { return }
         
-        Helper().updateUserData(typeUserData: .name, userData: name, needUpdateFirebase: true)
+        regService.updateUserData(typeUserData: .name, userData: name, needUpdateFirebase: true)
         
         let vc = UploadSceneViewController()
         navigationController?.pushViewController(vc, animated: true)

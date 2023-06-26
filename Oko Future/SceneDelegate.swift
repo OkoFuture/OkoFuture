@@ -17,10 +17,12 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
         
+        let userService = UserService()
+        
         let navigate = UINavigationController()
         var startViewController: UIViewController? = nil
         
-        if let user = Helper().getUser() {
+        if let user = userService.getUser() {
             
             switch user {
                 
@@ -45,7 +47,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             
         } else {
             
-            Helper().createUser()
+            userService.createUser()
             startViewController = WelcomeViewController()
         }
         
