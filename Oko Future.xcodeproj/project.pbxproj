@@ -12,7 +12,6 @@
 		920BF12D29CC3D33001D40DA /* GeneralViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920BF12C29CC3D33001D40DA /* GeneralViewController.swift */; };
 		920BF13229CC3D34001D40DA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 920BF13129CC3D34001D40DA /* Assets.xcassets */; };
 		920BF13529CC3D34001D40DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 920BF13329CC3D34001D40DA /* LaunchScreen.storyboard */; };
-		920BF14129CC623D001D40DA /* ArViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 920BF14029CC623D001D40DA /* ArViewController.swift */; };
 		920BF14329CC804A001D40DA /* hd1833.mov in Resources */ = {isa = PBXBuildFile; fileRef = 920BF14229CC804A001D40DA /* hd1833.mov */; };
 		922CEB3B29D4771E002326F8 /* puppets_with_alpha_hevc.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */; };
 		9292EE3029D09A4500526C07 /* UploadSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */; };
@@ -21,9 +20,8 @@
 		92C8306829D6C5A800C660D1 /* shoced_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306229D6C5A700C660D1 /* shoced_transition.mov */; };
 		92C8306929D6C5A800C660D1 /* poker_face.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306329D6C5A700C660D1 /* poker_face.mov */; };
 		92C8306A29D6C5A800C660D1 /* poker_face_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306429D6C5A800C660D1 /* poker_face_transition.mov */; };
-		92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */; };
 		92D6DF8F29E01547009E5909 /* shocked__228-1.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92D6DF8E29E01547009E5909 /* shocked__228-1.mov */; };
-		D10B06F829F7FDB6002B9868 /* CleanFaceTrackViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10B06F729F7FDB6002B9868 /* CleanFaceTrackViewController.swift */; };
+		D10B06F829F7FDB6002B9868 /* LevelOneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D10B06F729F7FDB6002B9868 /* LevelOneViewController.swift */; };
 		D117FB772A3872A000BE7DAA /* FirebaseDatabase in Frameworks */ = {isa = PBXBuildFile; productRef = D117FB762A3872A000BE7DAA /* FirebaseDatabase */; };
 		D117FB792A38AE6000BE7DAA /* UserProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */; };
 		D11C69D52A399ABE004E4C68 /* UIOkoProfileSettingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D11C69D42A399ABE004E4C68 /* UIOkoProfileSettingButton.swift */; };
@@ -77,6 +75,11 @@
 		D1EE6B492A49B3B60069D2C3 /* UserManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1EE6B482A49B3B60069D2C3 /* UserManager.swift */; };
 		D1F3F6FF2A1B5E89004A2FFD /* LogInViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */; };
 		D1F3F7012A1B6451004A2FFD /* OkoBigButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */; };
+		D1F49B0E2A4AD82B005BB077 /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F49B0D2A4AD82B005BB077 /* Extension.swift */; };
+		D1F49B1D2A4AE393005BB077 /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F49B1C2A4AE393005BB077 /* Coordinator.swift */; };
+		D1F49B1F2A4AE3A3005BB077 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F49B1E2A4AE3A3005BB077 /* AppCoordinator.swift */; };
+		D1F49B212A4AE3C5005BB077 /* FeatureCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F49B202A4AE3C5005BB077 /* FeatureCoordinator.swift */; };
+		D1F49B232A4AE3CF005BB077 /* FeatureSceneFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F49B222A4AE3CF005BB077 /* FeatureSceneFactory.swift */; };
 		D1FC93422A160F84002A3B05 /* LevelTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */; };
 		D1FC93442A1614DA002A3B05 /* okobot_1710scale_all.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */; };
 		D1FC93462A1615B8002A3B05 /* CNNEmotions.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */; };
@@ -93,7 +96,6 @@
 		920BF13129CC3D34001D40DA /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		920BF13429CC3D34001D40DA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		920BF13629CC3D34001D40DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		920BF14029CC623D001D40DA /* ArViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ArViewController.swift; sourceTree = "<group>"; };
 		920BF14229CC804A001D40DA /* hd1833.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = hd1833.mov; sourceTree = "<group>"; };
 		922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = puppets_with_alpha_hevc.mov; sourceTree = "<group>"; };
 		9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadSceneViewController.swift; sourceTree = "<group>"; };
@@ -102,9 +104,8 @@
 		92C8306229D6C5A700C660D1 /* shoced_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = shoced_transition.mov; sourceTree = "<group>"; };
 		92C8306329D6C5A700C660D1 /* poker_face.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face.mov; sourceTree = "<group>"; };
 		92C8306429D6C5A800C660D1 /* poker_face_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = poker_face_transition.mov; sourceTree = "<group>"; };
-		92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceTrackViewContoller.swift; sourceTree = "<group>"; };
 		92D6DF8E29E01547009E5909 /* shocked__228-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "shocked__228-1.mov"; sourceTree = "<group>"; };
-		D10B06F729F7FDB6002B9868 /* CleanFaceTrackViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CleanFaceTrackViewController.swift; sourceTree = "<group>"; };
+		D10B06F729F7FDB6002B9868 /* LevelOneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelOneViewController.swift; sourceTree = "<group>"; };
 		D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewController.swift; sourceTree = "<group>"; };
 		D11C69D42A399ABE004E4C68 /* UIOkoProfileSettingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIOkoProfileSettingButton.swift; sourceTree = "<group>"; };
 		D11F10612A277E26004C49CE /* Intro_v4.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = Intro_v4.mp4; sourceTree = "<group>"; };
@@ -155,6 +156,11 @@
 		D1EE6B482A49B3B60069D2C3 /* UserManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserManager.swift; sourceTree = "<group>"; };
 		D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewController.swift; sourceTree = "<group>"; };
 		D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigButton.swift; sourceTree = "<group>"; };
+		D1F49B0D2A4AD82B005BB077 /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		D1F49B1C2A4AE393005BB077 /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		D1F49B1E2A4AE3A3005BB077 /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		D1F49B202A4AE3C5005BB077 /* FeatureCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureCoordinator.swift; sourceTree = "<group>"; };
+		D1F49B222A4AE3CF005BB077 /* FeatureSceneFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureSceneFactory.swift; sourceTree = "<group>"; };
 		D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelTwoViewController.swift; sourceTree = "<group>"; };
 		D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = okobot_1710scale_all.usdz; sourceTree = "<group>"; };
 		D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = CNNEmotions.mlmodel; sourceTree = "<group>"; };
@@ -242,30 +248,18 @@
 				D199EC1B2A32123900968291 /* Oko Future.entitlements */,
 				920BF12829CC3D33001D40DA /* AppDelegate.swift */,
 				920BF12A29CC3D33001D40DA /* SceneDelegate.swift */,
-				920BF12C29CC3D33001D40DA /* GeneralViewController.swift */,
 				D1EE6B452A49B2190069D2C3 /* Service */,
-				D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */,
+				D1F49B0C2A4AD807005BB077 /* Extension */,
 				9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */,
-				D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */,
-				D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */,
+				D1F49B0F2A4AE0FD005BB077 /* Presenter */,
 				D1D5B3BC2A24CE9C00E03647 /* PasswordViewController.swift */,
-				D1D5B3BE2A24D31800E03647 /* ProfileSettingViewController.swift */,
+				D1F49B152A4AE1AF005BB077 /* MlModel */,
 				D1FF5B792A0BC2F00027B89C /* Lighting.swift */,
-				920BF14029CC623D001D40DA /* ArViewController.swift */,
-				92D211A429E41C930099C226 /* FaceTrackViewContoller.swift */,
 				D16D223F2A3304E700B0E885 /* User.swift */,
-				D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */,
 				D1FF5B772A0BAA340027B89C /* OkoClassifier2.mlmodel */,
 				D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */,
-				D10B06F729F7FDB6002B9868 /* CleanFaceTrackViewController.swift */,
-				D1FF5B752A0BAA120027B89C /* OkoClassifierService.swift */,
 				D15A35B329F698FD00E3F6E1 /* Font */,
-				D188FBB029F553340003F3EC /* OkoDefaultButton.swift */,
-				D11C69D42A399ABE004E4C68 /* UIOkoProfileSettingButton.swift */,
-				D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */,
-				D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */,
-				D131490A2A46D38E004A71A0 /* UIOkoLoginButton.swift */,
-				D15A35B129F697EC00E3F6E1 /* Helper.swift */,
+				D1F49B142A4AE17A005BB077 /* UIOko */,
 				920BF13129CC3D34001D40DA /* Assets.xcassets */,
 				920BF13329CC3D34001D40DA /* LaunchScreen.storyboard */,
 				D19B3C6A2A3B201B008C906A /* GoogleService-Info.plist */,
@@ -293,10 +287,129 @@
 		D1EE6B452A49B2190069D2C3 /* Service */ = {
 			isa = PBXGroup;
 			children = (
+				D15A35B129F697EC00E3F6E1 /* Helper.swift */,
 				D1EE6B462A49B2420069D2C3 /* RegistrationService.swift */,
 				D1EE6B482A49B3B60069D2C3 /* UserManager.swift */,
 			);
 			path = Service;
+			sourceTree = "<group>";
+		};
+		D1F49B0C2A4AD807005BB077 /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				D1F49B0D2A4AD82B005BB077 /* Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		D1F49B0F2A4AE0FD005BB077 /* Presenter */ = {
+			isa = PBXGroup;
+			children = (
+				D1F49B112A4AE124005BB077 /* Scene */,
+				D1F49B102A4AE10E005BB077 /* Router */,
+			);
+			path = Presenter;
+			sourceTree = "<group>";
+		};
+		D1F49B102A4AE10E005BB077 /* Router */ = {
+			isa = PBXGroup;
+			children = (
+				D1F49B1C2A4AE393005BB077 /* Coordinator.swift */,
+				D1F49B1E2A4AE3A3005BB077 /* AppCoordinator.swift */,
+				D1F49B202A4AE3C5005BB077 /* FeatureCoordinator.swift */,
+				D1F49B222A4AE3CF005BB077 /* FeatureSceneFactory.swift */,
+			);
+			path = Router;
+			sourceTree = "<group>";
+		};
+		D1F49B112A4AE124005BB077 /* Scene */ = {
+			isa = PBXGroup;
+			children = (
+				D1F49B1B2A4AE315005BB077 /* GeneralScene */,
+				D1F49B192A4AE2C5005BB077 /* ProfileSetting */,
+				D1F49B182A4AE2B0005BB077 /* UserProfile */,
+				D1F49B172A4AE2A5005BB077 /* LogIn */,
+				D1F49B162A4AE29C005BB077 /* Welcome */,
+				D1F49B132A4AE14A005BB077 /* LevelTwo */,
+				D1F49B122A4AE138005BB077 /* LevelOne */,
+			);
+			path = Scene;
+			sourceTree = "<group>";
+		};
+		D1F49B122A4AE138005BB077 /* LevelOne */ = {
+			isa = PBXGroup;
+			children = (
+				D10B06F729F7FDB6002B9868 /* LevelOneViewController.swift */,
+			);
+			path = LevelOne;
+			sourceTree = "<group>";
+		};
+		D1F49B132A4AE14A005BB077 /* LevelTwo */ = {
+			isa = PBXGroup;
+			children = (
+				D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */,
+			);
+			path = LevelTwo;
+			sourceTree = "<group>";
+		};
+		D1F49B142A4AE17A005BB077 /* UIOko */ = {
+			isa = PBXGroup;
+			children = (
+				D188FBB029F553340003F3EC /* OkoDefaultButton.swift */,
+				D11C69D42A399ABE004E4C68 /* UIOkoProfileSettingButton.swift */,
+				D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */,
+				D1F3F7002A1B6451004A2FFD /* OkoBigButton.swift */,
+				D131490A2A46D38E004A71A0 /* UIOkoLoginButton.swift */,
+			);
+			path = UIOko;
+			sourceTree = "<group>";
+		};
+		D1F49B152A4AE1AF005BB077 /* MlModel */ = {
+			isa = PBXGroup;
+			children = (
+				D1FF5B752A0BAA120027B89C /* OkoClassifierService.swift */,
+			);
+			path = MlModel;
+			sourceTree = "<group>";
+		};
+		D1F49B162A4AE29C005BB077 /* Welcome */ = {
+			isa = PBXGroup;
+			children = (
+				D1D5B3BA2A24C8AE00E03647 /* WelcomeViewController.swift */,
+			);
+			path = Welcome;
+			sourceTree = "<group>";
+		};
+		D1F49B172A4AE2A5005BB077 /* LogIn */ = {
+			isa = PBXGroup;
+			children = (
+				D1F3F6FE2A1B5E89004A2FFD /* LogInViewController.swift */,
+			);
+			path = LogIn;
+			sourceTree = "<group>";
+		};
+		D1F49B182A4AE2B0005BB077 /* UserProfile */ = {
+			isa = PBXGroup;
+			children = (
+				D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */,
+			);
+			path = UserProfile;
+			sourceTree = "<group>";
+		};
+		D1F49B192A4AE2C5005BB077 /* ProfileSetting */ = {
+			isa = PBXGroup;
+			children = (
+				D1D5B3BE2A24D31800E03647 /* ProfileSettingViewController.swift */,
+			);
+			path = ProfileSetting;
+			sourceTree = "<group>";
+		};
+		D1F49B1B2A4AE315005BB077 /* GeneralScene */ = {
+			isa = PBXGroup;
+			children = (
+				920BF12C29CC3D33001D40DA /* GeneralViewController.swift */,
+			);
+			path = GeneralScene;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -425,12 +538,14 @@
 			files = (
 				D1FF5B7A2A0BC2F00027B89C /* Lighting.swift in Sources */,
 				920BF12D29CC3D33001D40DA /* GeneralViewController.swift in Sources */,
-				D10B06F829F7FDB6002B9868 /* CleanFaceTrackViewController.swift in Sources */,
+				D1F49B1D2A4AE393005BB077 /* Coordinator.swift in Sources */,
+				D10B06F829F7FDB6002B9868 /* LevelOneViewController.swift in Sources */,
 				9292EE3029D09A4500526C07 /* UploadSceneViewController.swift in Sources */,
 				D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */,
+				D1F49B1F2A4AE3A3005BB077 /* AppCoordinator.swift in Sources */,
 				D131490B2A46D38E004A71A0 /* UIOkoLoginButton.swift in Sources */,
-				92D211A529E41C930099C226 /* FaceTrackViewContoller.swift in Sources */,
 				D1D5B3BD2A24CE9C00E03647 /* PasswordViewController.swift in Sources */,
+				D1F49B232A4AE3CF005BB077 /* FeatureSceneFactory.swift in Sources */,
 				D1D5B3BF2A24D31800E03647 /* ProfileSettingViewController.swift in Sources */,
 				D1FC93462A1615B8002A3B05 /* CNNEmotions.mlmodel in Sources */,
 				D117FB792A38AE6000BE7DAA /* UserProfileViewController.swift in Sources */,
@@ -441,14 +556,15 @@
 				D1D5B3BB2A24C8AE00E03647 /* WelcomeViewController.swift in Sources */,
 				D1EE6B492A49B3B60069D2C3 /* UserManager.swift in Sources */,
 				D15A35B229F697EC00E3F6E1 /* Helper.swift in Sources */,
+				D1F49B0E2A4AD82B005BB077 /* Extension.swift in Sources */,
 				D1FF5B762A0BAA120027B89C /* OkoClassifierService.swift in Sources */,
 				920BF12929CC3D33001D40DA /* AppDelegate.swift in Sources */,
 				D1F3F6FF2A1B5E89004A2FFD /* LogInViewController.swift in Sources */,
 				920BF12B29CC3D33001D40DA /* SceneDelegate.swift in Sources */,
 				D1FF5B782A0BAA340027B89C /* OkoClassifier2.mlmodel in Sources */,
-				920BF14129CC623D001D40DA /* ArViewController.swift in Sources */,
 				D1F3F7012A1B6451004A2FFD /* OkoBigButton.swift in Sources */,
 				D16D22402A3304E700B0E885 /* User.swift in Sources */,
+				D1F49B212A4AE3C5005BB077 /* FeatureCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
