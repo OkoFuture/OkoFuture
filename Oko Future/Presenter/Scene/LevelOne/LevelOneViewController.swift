@@ -1,5 +1,5 @@
 //
-//  CleanFaceTrackViewController.swift
+//  LevelOneViewController.swift
 //  Oko Future
 //
 //  Created by Денис Калинин on 25.04.23.
@@ -10,7 +10,11 @@ import UIKit
 import RealityKit
 import ReplayKit
 
-final class CleanFaceTrackViewController: UIViewController {
+enum Emoji {
+    case shoced, excited, pokerFace
+}
+
+final class LevelOneViewController: UIViewController {
     
     private let photoVideoButton: UIButton = {
         let btn = UIButton()
@@ -18,7 +22,6 @@ final class CleanFaceTrackViewController: UIViewController {
         btn.layer.borderWidth = 1
         btn.layer.borderColor = UIColor.white.cgColor
         btn.backgroundColor = .black
-//        btn.backgroundColor = .clear
         btn.setImage(UIImage(named: "okoLogoWhite"), for: .normal)
         return btn
     }()
@@ -225,7 +228,7 @@ final class CleanFaceTrackViewController: UIViewController {
     }
 }
 
-extension CleanFaceTrackViewController: RPPreviewViewControllerDelegate {
+extension LevelOneViewController: RPPreviewViewControllerDelegate {
     func previewControllerDidFinish(_ previewController: RPPreviewViewController) {
       previewController.dismiss(animated: true) { [weak self] in
       /// после исчезновения previewController
@@ -233,7 +236,7 @@ extension CleanFaceTrackViewController: RPPreviewViewControllerDelegate {
     }
 }
 
-extension CleanFaceTrackViewController: ARSessionDelegate {
+extension LevelOneViewController: ARSessionDelegate {
     
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
         
