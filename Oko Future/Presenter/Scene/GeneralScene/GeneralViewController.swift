@@ -6,7 +6,6 @@
 //
 
 import UIKit
-import SceneKit
 import RealityKit
 import ARKit
 import Combine
@@ -852,12 +851,8 @@ final class GeneralViewController: UIViewController {
     }
     
     private func subAnim() {
-        /// может тут сабака зарыта
-//        subAnimComplete = arView.scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: nil, { event in
+        
         subAnimComplete = arView.scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: self.nodeGirl, { event in
-            
-            /// может тут сабака зарыта
-//            print ("klmnkmljnkl", event.playbackController ==)
             
             self.serialQueue.sync {
             
