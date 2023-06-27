@@ -55,14 +55,20 @@ class FeatureCoordinator: Coordinator {
 extension FeatureCoordinator {
     
     func showWelcomeScene() {
-        let scene = FeatureSceneFactory.makeFirstScene(delegate: self)
+        let scene = FeatureSceneFactory.makeWelcomeScene(delegate: self)
         navigationController.viewControllers = [scene]
     }
     
     func showLogInScene() {
-        let scene = FeatureSceneFactory.makeSecondScene(delegate: self)
+        let scene = FeatureSceneFactory.makeLogInScene(delegate: self, registrationService: registrationService, userService: userService)
         navigationController.pushViewController(scene, animated: true)
     }
+    
+    func showProfileSettingScene() {
+        let scene = FeatureSceneFactory.makeProfileSettingScene(delegate: self, registrationService: registrationService, userService: userService)
+        navigationController.pushViewController(scene, animated: true)
+    }
+    
 }
 
 extension FeatureCoordinator: WelcomeViewCoordinatorDelegate {
@@ -75,6 +81,13 @@ extension FeatureCoordinator: WelcomeViewCoordinatorDelegate {
 
 extension FeatureCoordinator: LogInViewCoordinatorDelegate {
     func pushToProfileSettingViewController() {
+        showProfileSettingScene()
+    }
+    
+}
+
+extension FeatureCoordinator: ProfileSettingViewCoordinatorDelegate {
+    func uploadGeneralView() {
         
     }
     

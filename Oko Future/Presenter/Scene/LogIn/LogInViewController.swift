@@ -174,8 +174,9 @@ final class LogInViewController: UIViewController {
 //    }
     
     private func pushToProfileSettingViewController() {
-        let vc = ProfileSettingViewController()
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = ProfileSettingViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+        presenter.pushToProfileSettingViewController()
     }
     
     @objc private func tapSendButton() {

@@ -82,6 +82,7 @@
 		D1F49B232A4AE3CF005BB077 /* FeatureSceneFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F49B222A4AE3CF005BB077 /* FeatureSceneFactory.swift */; };
 		D1F49B252A4AE43F005BB077 /* WelcomeViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F49B242A4AE43F005BB077 /* WelcomeViewPresenter.swift */; };
 		D1F49B272A4AEE90005BB077 /* LogInViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F49B262A4AEE90005BB077 /* LogInViewPresenter.swift */; };
+		D1F49B292A4B5556005BB077 /* ProfileSettingViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1F49B282A4B5556005BB077 /* ProfileSettingViewPresenter.swift */; };
 		D1FC93422A160F84002A3B05 /* LevelTwoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */; };
 		D1FC93442A1614DA002A3B05 /* okobot_1710scale_all.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */; };
 		D1FC93462A1615B8002A3B05 /* CNNEmotions.mlmodel in Sources */ = {isa = PBXBuildFile; fileRef = D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */; };
@@ -165,6 +166,7 @@
 		D1F49B222A4AE3CF005BB077 /* FeatureSceneFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeatureSceneFactory.swift; sourceTree = "<group>"; };
 		D1F49B242A4AE43F005BB077 /* WelcomeViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WelcomeViewPresenter.swift; sourceTree = "<group>"; };
 		D1F49B262A4AEE90005BB077 /* LogInViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LogInViewPresenter.swift; sourceTree = "<group>"; };
+		D1F49B282A4B5556005BB077 /* ProfileSettingViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingViewPresenter.swift; sourceTree = "<group>"; };
 		D1FC93412A160F84002A3B05 /* LevelTwoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelTwoViewController.swift; sourceTree = "<group>"; };
 		D1FC93432A1614DA002A3B05 /* okobot_1710scale_all.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = okobot_1710scale_all.usdz; sourceTree = "<group>"; };
 		D1FC93452A1615B8002A3B05 /* CNNEmotions.mlmodel */ = {isa = PBXFileReference; lastKnownFileType = file.mlmodel; path = CNNEmotions.mlmodel; sourceTree = "<group>"; };
@@ -254,7 +256,6 @@
 				920BF12A29CC3D33001D40DA /* SceneDelegate.swift */,
 				D1EE6B452A49B2190069D2C3 /* Service */,
 				D1F49B0C2A4AD807005BB077 /* Extension */,
-				9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */,
 				D1F49B0F2A4AE0FD005BB077 /* Presenter */,
 				D1D5B3BC2A24CE9C00E03647 /* PasswordViewController.swift */,
 				D1F49B152A4AE1AF005BB077 /* MlModel */,
@@ -406,6 +407,7 @@
 			isa = PBXGroup;
 			children = (
 				D1D5B3BE2A24D31800E03647 /* ProfileSettingViewController.swift */,
+				D1F49B282A4B5556005BB077 /* ProfileSettingViewPresenter.swift */,
 			);
 			path = ProfileSetting;
 			sourceTree = "<group>";
@@ -413,6 +415,7 @@
 		D1F49B1B2A4AE315005BB077 /* GeneralScene */ = {
 			isa = PBXGroup;
 			children = (
+				9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */,
 				920BF12C29CC3D33001D40DA /* GeneralViewController.swift */,
 			);
 			path = GeneralScene;
@@ -573,6 +576,7 @@
 				D1F3F7012A1B6451004A2FFD /* OkoBigButton.swift in Sources */,
 				D16D22402A3304E700B0E885 /* User.swift in Sources */,
 				D1F49B212A4AE3C5005BB077 /* FeatureCoordinator.swift in Sources */,
+				D1F49B292A4B5556005BB077 /* ProfileSettingViewPresenter.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

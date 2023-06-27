@@ -7,10 +7,13 @@
 
 import UIKit
 
+protocol ProfileSettingViewProtocol: AnyObject {
+    
+}
+
 final class ProfileSettingViewController: UIViewController {
     
-    let regService = RegistrationService()
-    let userService = UserService()
+    var presenter: ProfileSettingViewPresenterDelegate!
     
     let uploadBackView: UIView = {
         let view = UIView()
@@ -52,8 +55,7 @@ final class ProfileSettingViewController: UIViewController {
     
     override func viewDidLoad() {
         
-        guard let user = userService.getUser() else { return }
-        nameTextField.text = user.name
+        nameTextField.text = presenter.returnUserName()
         
         setupView()
     }
@@ -97,9 +99,10 @@ final class ProfileSettingViewController: UIViewController {
         
         if name.count == 0 { return }
         
-        regService.updateUserData(typeUserData: .name, userData: name, needUpdateFirebase: true)
-        
-        let vc = UploadSceneViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        presenter.tapSaveStartButton(name: name)
     }
+}
+
+extension ProfileSettingViewController: ProfileSettingViewProtocol {
+    
 }

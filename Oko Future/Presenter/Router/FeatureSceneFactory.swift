@@ -10,7 +10,7 @@ import UIKit
 
 struct FeatureSceneFactory {
     
-    static func makeFirstScene(delegate: WelcomeViewCoordinatorDelegate?) -> WelcomeViewController {
+    static func makeWelcomeScene(delegate: WelcomeViewCoordinatorDelegate?) -> WelcomeViewController {
         let viewController = WelcomeViewController()
         let presenter = WelcomeViewPresenter(welcomeView: viewController)
         presenter.coordinatorDelegate = delegate
@@ -18,11 +18,17 @@ struct FeatureSceneFactory {
         return viewController
     }
     
-    static func makeSecondScene(delegate: LogInViewCoordinatorDelegate?) -> LogInViewController {
+    static func makeLogInScene(delegate: LogInViewCoordinatorDelegate?, registrationService: RegistrationService, userService: UserService) -> LogInViewController {
         let viewController = LogInViewController()
-        let regService = RegistrationService()
-        let userService = UserService()
-        let presenter = LogInViewPresenter(logInView: viewController, regService: regService, userService: userService, coordinatorDelegate: delegate)
+        let presenter = LogInViewPresenter(logInView: viewController, regService: registrationService, userService: userService, coordinatorDelegate: delegate)
+        presenter.coordinatorDelegate = delegate
+        viewController.presenter = presenter
+        return viewController
+    }
+    
+    static func makeProfileSettingScene(delegate: ProfileSettingViewCoordinatorDelegate?, registrationService: RegistrationService, userService: UserService) -> ProfileSettingViewController {
+        let viewController = ProfileSettingViewController()
+        let presenter = ProfileSettingViewPresenter(profileSettingView: viewController, regService: registrationService, userService: userService)
         presenter.coordinatorDelegate = delegate
         viewController.presenter = presenter
         return viewController
