@@ -28,6 +28,8 @@ protocol LogInViewPresenterDelegate: AnyObject {
 
 class LogInViewPresenter {
     
+    let logInView: LogInViewProtocol
+    
     let regService: RegistrationService
     let userService: UserService
     
@@ -35,7 +37,8 @@ class LogInViewPresenter {
     
     private var currentNonce: String?
     
-    init(regService: RegistrationService, userService: UserService, coordinatorDelegate: LogInViewCoordinatorDelegate?) {
+    init(logInView: LogInViewProtocol, regService: RegistrationService, userService: UserService, coordinatorDelegate: LogInViewCoordinatorDelegate?) {
+        self.logInView = logInView
         self.regService = regService
         self.userService = userService
         self.coordinatorDelegate = coordinatorDelegate

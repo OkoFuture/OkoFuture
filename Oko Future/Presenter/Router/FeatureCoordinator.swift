@@ -5,4 +5,77 @@
 //  Created by Денис Калинин on 27.06.23.
 //
 
-import Foundation
+import UIKit
+
+class FeatureCoordinator: Coordinator {
+
+    private let navigationController: UINavigationController
+    private let registrationService: RegistrationService
+    private let userService: UserService
+    
+    init(navigationController: UINavigationController = UINavigationController()) {
+        self.navigationController = navigationController
+        self.registrationService = RegistrationService()
+        self.userService = UserService()
+    }
+    
+    func start() {
+        
+        if let user = userService.getUser() {
+
+            switch user {
+
+//            case _ where (user.name != nil):
+//                startViewController = UploadSceneViewController()
+//            case _ where (user.password != nil):
+//                startViewController = ProfileSettingViewController()
+//            case _ where (user.email != nil):
+//                startViewController = PasswordViewController()
+//
+//            case _ where user.logStatus == .logInWithApple:
+//                startViewController = ProfileSettingViewController()
+//            case _ where user.logStatus == .logInWithGoogle:
+//                startViewController = ProfileSettingViewController()
+//
+//            case _ where user.logStatus == .logInWithEmail:
+//                startViewController = ProfileSettingViewController()
+
+            default: showWelcomeScene()
+                break
+            }
+
+        } else {
+
+            userService.createUser()
+            showWelcomeScene()
+        }
+    }
+}
+
+extension FeatureCoordinator {
+    
+    func showWelcomeScene() {
+        let scene = FeatureSceneFactory.makeFirstScene(delegate: self)
+        navigationController.viewControllers = [scene]
+    }
+    
+    func showLogInScene() {
+        let scene = FeatureSceneFactory.makeSecondScene(delegate: self)
+        navigationController.pushViewController(scene, animated: true)
+    }
+}
+
+extension FeatureCoordinator: WelcomeViewCoordinatorDelegate {
+    
+    func tapStartButton() {
+        showLogInScene()
+    }
+    
+}
+
+extension FeatureCoordinator: LogInViewCoordinatorDelegate {
+    func pushToProfileSettingViewController() {
+        
+    }
+    
+}

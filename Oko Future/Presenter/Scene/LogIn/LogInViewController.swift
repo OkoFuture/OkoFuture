@@ -12,14 +12,13 @@ import GoogleSignIn
 import FirebaseDatabase
 import MessageUI
 
+protocol LogInViewProtocol: AnyObject {
+    
+}
+
 final class LogInViewController: UIViewController {
     
-//    let regService = RegistrationService()
-//    let userService = UserService()
-    
     var presenter: LogInViewPresenterDelegate!
-    
-//    private var currentNonce: String?
     
     var keyboardHeight = CGFloat(0)
     
@@ -269,5 +268,9 @@ extension LogInViewController: UITextFieldDelegate {
 //                UserDefaults.standard.synchronize()
             }
         }
+}
+
+extension LogInViewController: LogInViewProtocol {
+    
 }
 

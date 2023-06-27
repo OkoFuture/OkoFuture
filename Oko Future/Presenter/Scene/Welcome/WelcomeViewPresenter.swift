@@ -21,7 +21,6 @@ final class WelcomeViewPresenter {
     let welcomeView: WelcomeViewProtocol
     weak var coordinatorDelegate: WelcomeViewCoordinatorDelegate?
     
-    
     init(welcomeView: WelcomeViewProtocol) {
         self.welcomeView = welcomeView
     }

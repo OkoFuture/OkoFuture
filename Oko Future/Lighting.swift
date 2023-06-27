@@ -7,7 +7,7 @@
 
 import RealityKit
 
-class Lighting: Entity, HasPointLight {
+final class Lighting: Entity, HasPointLight {
     
     required init() {
         super.init()

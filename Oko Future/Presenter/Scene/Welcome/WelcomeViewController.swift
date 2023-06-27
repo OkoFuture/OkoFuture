@@ -89,8 +89,6 @@ final class WelcomeViewController: UIViewController {
     }
     
     @objc private func tapStartButton() {
-//        let vc = LogInViewController()
-//        navigationController?.pushViewController(vc, animated: true)
         presenter?.tapStartButton()
     }
     
