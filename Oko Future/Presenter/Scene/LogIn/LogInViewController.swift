@@ -14,12 +14,12 @@ import MessageUI
 
 final class LogInViewController: UIViewController {
     
-    let regService = RegistrationService()
-    let userService = UserService()
+//    let regService = RegistrationService()
+//    let userService = UserService()
     
     var presenter: LogInViewPresenterDelegate!
     
-    private var currentNonce: String?
+//    private var currentNonce: String?
     
     var keyboardHeight = CGFloat(0)
     
@@ -105,9 +105,7 @@ final class LogInViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         setupLayout()
         
-        if userService.getUser() == nil {
-            regService.createUser()
-        }
+        presenter.checkUser()
     }
     
     private func setupView() {
@@ -181,30 +179,25 @@ final class LogInViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-//    private func pushToUploadSceneViewController() {
-//        let vc = UploadSceneViewController()
-//        navigationController?.pushViewController(vc, animated: true)
-//    }
-    
     @objc private func tapSendButton() {
         
         guard let email = emailTextField.text, let password = passwordTextField.text else { return }
         
         if email.count == 0 || password.count < 6 { return }
         
-        regService.signInEmail(withEmail: email, password: password, completionHandler: {
+        presenter.signInEmail(withEmail: email, password: password, completionHandler: {
             self.pushToProfileSettingViewController()
         })
     }
     
     @objc @available(iOS 13, *)
     func tapLogInApple() {
-        currentNonce = regService.tapLogInApple(delegate: self, presentationContextProvider: self)
+        presenter.tapLogInApple(delegate: self, presentationContextProvider: self)
     }
     
     @objc private func tapLogInGoogle() {
         
-        regService.signIn(completionHandler: { [weak self] in
+        presenter.tapLogInGoogle(completionHandler: { [weak self] in
             guard let self = self else { return }
             self.pushToProfileSettingViewController()
         })
@@ -219,53 +212,8 @@ extension LogInViewController: ASAuthorizationControllerDelegate {
     
     func authorizationController(controller: ASAuthorizationController, didCompleteWithAuthorization authorization: ASAuthorization) {
         
-        switch authorization.credential {
-            
-        case let credentials as ASAuthorizationAppleIDCredential:
-            
-            if let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential {
-                guard let nonce = currentNonce else {
-                    fatalError("Invalid state: A login callback was received, but no login request was sent.")
-                }
-                guard let appleIDToken = appleIDCredential.identityToken else {
-                    print("Unable to fetch identity token")
-                    return
-                }
-                guard let idTokenString = String(data: appleIDToken, encoding: .utf8) else {
-                    print("Unable to serialize token string from data: \(appleIDToken.debugDescription)")
-                    return
-                }
-                
-                let credential = OAuthProvider.appleCredential(withIDToken: idTokenString,
-                                                               rawNonce: nonce,
-                                                               fullName: appleIDCredential.fullName)
-                
-                Auth.auth().signIn(with: credential) { [unowned self] (_, error) in
-                    if let error = error {
-                        print(error.localizedDescription)
-                    } else {
-                        if let firstName = appleIDCredential.fullName?.givenName, let lastName = appleIDCredential.fullName?.familyName, let email = appleIDCredential.email {
-                            for userDate in UserData.allCases {
-                                switch userDate {
-                                case .name:
-                                    regService.updateUserData(typeUserData: .name, userData: firstName + " " + lastName, needUpdateFirebase: false)
-                                case .email:
-                                    regService.updateUserData(typeUserData: .email, userData: email, needUpdateFirebase: false)
-                                default: break
-                                }
-                            }
-                        }
-                        
-                        print ("log in with apple completed", appleIDCredential.fullName?.givenName, appleIDCredential.fullName?.familyName)
-                        
-                        userService.updateUserLogStatus(logStatus: .logInWithApple)
-                        pushToProfileSettingViewController()
-                    }
-                }
-            }
-        default:
-            break
-        }
+        presenter.didCompleteWithAuthorizationApple(authorization: authorization)
+        
     }
 }
 
