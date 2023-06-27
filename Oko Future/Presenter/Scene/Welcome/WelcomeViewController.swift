@@ -8,7 +8,15 @@
 import UIKit
 import AVFoundation
 
+protocol WelcomeViewProtocol: AnyObject {
+    func loadView()
+}
+
+
 final class WelcomeViewController: UIViewController {
+    
+//    weak var presenter: WelcomeViewPresenterDelegate?
+    var presenter: WelcomeViewPresenterDelegate!
     
     let logoImageView: UIImageView = {
         let img = UIImage(named: "okoLogoColor")
@@ -51,7 +59,6 @@ final class WelcomeViewController: UIViewController {
         
         view.addSubview(videoView)
         view.addSubview(welcomeImage)
-//        view.addSubview(logoImageView)
         view.addSubview(getStartButton)
         
         getStartButton.addTarget(self, action: #selector(tapStartButton), for: .touchUpInside)
@@ -59,32 +66,14 @@ final class WelcomeViewController: UIViewController {
     }
     
     private func setupPlayer() {
-        guard let path = Bundle.main.path(forResource: "Intro_v3_[0001-0050]-1", ofType: "mov") else {
-            print("Failed get path intro_v4")
-            return
-        }
+        guard let player = presenter?.returnWelcomeVideoPlayer() else { return }
         
-        let videoURL = URL(fileURLWithPath: path)
-        let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
-        
-        guard let alphaMovieURL = url else {
-            print("Failed get url intro_v4")
-            return
-        }
-        
-        let videoAsset = AVURLAsset(url: alphaMovieURL)
-        
-        let item: AVPlayerItem = .init(asset: videoAsset)
-        
-        logoPlayer = AVPlayer(playerItem: item)
+        logoPlayer = player
         
         let playerLayer = AVPlayerLayer(player: logoPlayer)
 
         playerLayer.frame = self.videoView.frame
-//        playerLayer.videoGravity = .resizeAspectFill
         self.videoView.layer.addSublayer(playerLayer)
-        
-//        logoPlayer.play()
     }
     
     private func setupLayout() {
@@ -92,10 +81,7 @@ final class WelcomeViewController: UIViewController {
         
         welcomeImage.frame = view.frame
         
-//        videoView.frame = CGRect(x: 0, y: 0, width: 400, height: 400)
         videoView.frame = view.frame
-        
-//        logoImageView.frame = CGRect(x: (view.bounds.width - 200)/2, y: 80, width: 200, height: 200)
         
         getStartButton.frame = CGRect(x: 20, y: view.bounds.height - heightOko - 58, width: view.bounds.width - 40, height: heightOko)
         
@@ -103,8 +89,13 @@ final class WelcomeViewController: UIViewController {
     }
     
     @objc private func tapStartButton() {
-        let vc = LogInViewController()
-        navigationController?.pushViewController(vc, animated: true)
+//        let vc = LogInViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+        presenter?.tapStartButton()
     }
+    
+}
+
+extension WelcomeViewController: WelcomeViewProtocol {
     
 }

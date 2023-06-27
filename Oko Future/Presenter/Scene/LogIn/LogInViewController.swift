@@ -17,6 +17,8 @@ final class LogInViewController: UIViewController {
     let regService = RegistrationService()
     let userService = UserService()
     
+    var presenter: LogInViewPresenterDelegate!
+    
     private var currentNonce: String?
     
     var keyboardHeight = CGFloat(0)
@@ -179,10 +181,10 @@ final class LogInViewController: UIViewController {
         navigationController?.pushViewController(vc, animated: true)
     }
     
-    private func pushToUploadSceneViewController() {
-        let vc = UploadSceneViewController()
-        navigationController?.pushViewController(vc, animated: true)
-    }
+//    private func pushToUploadSceneViewController() {
+//        let vc = UploadSceneViewController()
+//        navigationController?.pushViewController(vc, animated: true)
+//    }
     
     @objc private func tapSendButton() {
         
@@ -271,34 +273,6 @@ extension LogInViewController: ASAuthorizationControllerPresentationContextProvi
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return view.window!
     }
-}
-
-extension LogInViewController: MFMailComposeViewControllerDelegate {
-    
-    private func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
-        controller.dismiss(animated: true, completion: nil)
-    }
-    
-    func sendEmailButtonTapped() {
-            let mailComposeViewController = configuredMailComposeViewController()
-            if MFMailComposeViewController.canSendMail() {
-                self.present(mailComposeViewController, animated: true, completion: nil)
-            } else {
-//                self.showSendMailErrorAlert()
-            }
-        }
-
-        func configuredMailComposeViewController() -> MFMailComposeViewController {
-            let mailComposerVC = MFMailComposeViewController()
-            mailComposerVC.mailComposeDelegate = self // Extremely important to set the --mailComposeDelegate-- property, NOT the --delegate-- property
-
-            mailComposerVC.setToRecipients(["kalinin.denis187@gmail.com"])
-            mailComposerVC.setSubject("Sending you an in-app e-mail...")
-            mailComposerVC.setMessageBody("Sending e-mail in-app is not so bad!", isHTML: false)
-
-            return mailComposerVC
-        }
-
 }
 
 extension LogInViewController: UITextFieldDelegate {
