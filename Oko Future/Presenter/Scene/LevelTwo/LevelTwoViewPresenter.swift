@@ -22,6 +22,8 @@ protocol LevelTwoViewPresenterDelegate: AnyObject {
 
 final class LevelTwoViewPresenter: NSObject {
     
+    private let classifierService = OkoClassifierService()
+    
     weak var arView: ARView!
     weak var coordinatorDelegate: LevelTwoViewCoordinatorDelegate?
     
@@ -60,12 +62,40 @@ final class LevelTwoViewPresenter: NSObject {
         }
     }
     
+    private var counterEmoji = 0 {
+        didSet {
+            if counterEmoji == 30 {
+                emojiTrack()
+                counterEmoji = 0
+            }
+        }
+    }
+
+    private var counterSearchImage = 0 {
+        didSet {
+            
+            if view.isOKO {
+                if counterSearchImage == 600 {
+                    reqvest()
+                    counterSearchImage = 0
+                }
+                
+            } else {
+                if counterSearchImage == 30 {
+                    reqvest()
+                    counterSearchImage = 0
+                }
+            }
+        }
+    }
+    
     init(view: LevelTwoViewProtocol, arView: ARView) {
         self.view = view
         self.arView = arView
         super.init()
         
         self.arView.session.delegate = self
+        bindToImageClassifierService()
     }
     
     private func setPlayerItem() {
@@ -288,23 +318,54 @@ final class LevelTwoViewPresenter: NSObject {
       }
     }
     
+    private func bindToImageClassifierService() {
+      classifierService.onDidUpdateState = { [weak self] state in
+        self?.setupWithImageClassifierState(state)
+      }
+    }
     
+    private func setupWithImageClassifierState(_ state: ImageClassifierServiceState) {
+        
+        var resultLog = ""
+      switch state {
+      case .startRequest:
+          resultLog = "Сlassification in progress"
+      case .requestFailed:
+          resultLog = "Classification is failed"
+      case .receiveResult(let result):
+          resultLog = result.description
+          
+          if result.identifier == "OKO" && result.confidence > 70 {
+              view.isOKO = true
+//              print ("hjkhjjnk результ", result.identifier , result.confidence, isOKO)
+          } else {
+              view.isOKO = false
+//              print ("hjkhjjnk результ", result.identifier , result.confidence, isOKO)
+          }
+      }
+//        print (resultLog)
+    }
+    
+    private func reqvest() {
+        
+        arView.snapshot(saveToHDR: false, completion: {image in
+            
+            if let img = image {
+                self.classifierService.classifyImage(img)
+            }
+            
+        })
+        
+    }
 }
 
 extension LevelTwoViewPresenter: LevelTwoViewPresenterDelegate {
     func startSession() {
         
-        guard let referenceImages = ARReferenceImage.referenceImages(
-            inGroupNamed: "rusRap", bundle: nil)
-        else {
-            fatalError("Missing expected asset catalog resources.")
-        }
-        
         arView.scene.anchors.removeAll()
         arView.cameraMode = .ar
         
         let configuration = ARBodyTrackingConfiguration()
-        configuration.detectionImages = referenceImages
         
         arView.session.run(configuration)
     }
@@ -318,18 +379,19 @@ extension LevelTwoViewPresenter: LevelTwoViewPresenterDelegate {
 extension LevelTwoViewPresenter: ARSessionDelegate {
     func session(_ session: ARSession, didAdd anchors: [ARAnchor]) {
         
-//        if arView.scene.anchors.count > 0 {
-//            return
-//        }
+        if arView.scene.anchors.count > 0 {
+            return
+        }
+        
+        print ("didAddAnchors", anchors)
         
         for anchor in anchors {
-            if let imageAnchor = anchor as? ARImageAnchor {
-                view.isOKO = true
-            }
             
             if !view.isOKO {
                 return
             }
+            
+            print ("didAddAnchors after isOko", anchors.count, view.isOKO)
             
             if let bodyAnchor = anchor as? ARBodyAnchor {
                 
@@ -341,6 +403,8 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
     
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
         
+        if arView.scene.anchors.count == 0 { return }
+        
         for anchor in anchors {
             
             if let bodyAnchor = anchor as? ARBodyAnchor {
@@ -351,8 +415,10 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
     
+        counterSearchImage += 1
+        
         if view.isOKO {
-            emojiTrack()
+            counterEmoji += 1
         }
     }
     
@@ -368,8 +434,8 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         
         let spine = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "spine_5_joint"))!
         
-        generatePlaneArm(bonesTransStart: armLeft, bonesTransFinish: forearmLeft, rootTrans: bodyAnchor.transform, armSide: .left)
-        generatePlaneArm(bonesTransStart: armRight, bonesTransFinish: forearmRight, rootTrans: bodyAnchor.transform, armSide: .right)
+//        generatePlaneArm(bonesTransStart: armLeft, bonesTransFinish: forearmLeft, rootTrans: bodyAnchor.transform, armSide: .left)
+//        generatePlaneArm(bonesTransStart: armRight, bonesTransFinish: forearmRight, rootTrans: bodyAnchor.transform, armSide: .right)
         
         generatePlaneBody(armLeft: armLeft, armRight: armRight, legLeft: legLeft, spine: spine, rootTrans: bodyAnchor.transform)
     }
@@ -475,8 +541,8 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         
         let spine = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "spine_5_joint"))!
         
-        updatePlaneArmLeft(bonesTransStart: armLeft, bonesTransFinish: forearmLeft, rootTrans: bodyAnchor.transform)
-        updatePlaneArmRight(bonesTransStart: armRight, bonesTransFinish: forearmRight, rootTrans: bodyAnchor.transform)
+//        updatePlaneArmLeft(bonesTransStart: armLeft, bonesTransFinish: forearmLeft, rootTrans: bodyAnchor.transform)
+//        updatePlaneArmRight(bonesTransStart: armRight, bonesTransFinish: forearmRight, rootTrans: bodyAnchor.transform)
         updatePlaneBody(armLeft: armLeft, armRight: armRight, legLeft: legLeft, spine: spine, rootTrans: bodyAnchor.transform)
     }
     

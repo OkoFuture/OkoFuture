@@ -120,8 +120,8 @@ final class LevelTwoViewController: UIViewController {
     }
     
     @objc func backButtonTap() {
-        arView.removeFromSuperview()
-        navigationController?.popViewController(animated: true)
+//        arView.removeFromSuperview()
+//        navigationController?.popViewController(animated: true)
     }
     
     @objc private func snapshotSave() {

@@ -23,6 +23,9 @@ class FeatureCoordinator: Coordinator {
     
     func start() {
         
+        uploadLevelTwoScene()
+        return
+        
         if let user = userService.getUser() {
 
             switch user {
