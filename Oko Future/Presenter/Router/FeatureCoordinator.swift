@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import ARKit
+import RealityKit
 
 class FeatureCoordinator: Coordinator {
 
@@ -69,6 +71,12 @@ extension FeatureCoordinator {
         navigationController.pushViewController(scene, animated: true)
     }
     
+    func uploadLevelTwoScene() {
+        let arView = ARView()
+        let scene = FeatureSceneFactory.makeLevelTwoScene(delegate: self, arView: arView)
+        navigationController.viewControllers = [scene]
+    }
+    
 }
 
 extension FeatureCoordinator: WelcomeViewCoordinatorDelegate {
@@ -76,19 +84,22 @@ extension FeatureCoordinator: WelcomeViewCoordinatorDelegate {
     func tapStartButton() {
         showLogInScene()
     }
-    
 }
 
 extension FeatureCoordinator: LogInViewCoordinatorDelegate {
     func pushToProfileSettingViewController() {
         showProfileSettingScene()
     }
-    
 }
 
 extension FeatureCoordinator: ProfileSettingViewCoordinatorDelegate {
     func uploadGeneralView() {
-        
+        uploadLevelTwoScene()
     }
-    
+}
+
+extension FeatureCoordinator: LevelTwoViewCoordinatorDelegate {
+    func showLevelTwoScene() {
+//        uploadLevelTwoScene()
+    }
 }

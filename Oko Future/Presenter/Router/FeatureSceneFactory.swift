@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import RealityKit
 
 struct FeatureSceneFactory {
     
@@ -31,6 +32,15 @@ struct FeatureSceneFactory {
         let presenter = ProfileSettingViewPresenter(profileSettingView: viewController, regService: registrationService, userService: userService)
         presenter.coordinatorDelegate = delegate
         viewController.presenter = presenter
+        return viewController
+    }
+    
+    static func makeLevelTwoScene(delegate: LevelTwoViewCoordinatorDelegate, arView: ARView) -> LevelTwoViewController {
+        let viewController = LevelTwoViewController()
+        let presenter = LevelTwoViewPresenter(view: viewController, arView: arView)
+        presenter.coordinatorDelegate = delegate
+        viewController.presenter = presenter
+        viewController.arView = presenter.arView
         return viewController
     }
 }

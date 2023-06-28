@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import RealityKit
 
 extension UIViewController {
     func showError(with message: String) {
@@ -31,5 +32,15 @@ extension String {
         let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil)
 
         return ceil(boundingBox.width)
+    }
+}
+
+extension simd_float4x4 {
+    var eulerAngles: simd_float3 {
+        simd_float3(
+            x: asin(-self[2][1]),
+            y: atan2(self[2][0], self[2][2]),
+            z: atan2(self[0][1], self[1][1])
+        )
     }
 }
