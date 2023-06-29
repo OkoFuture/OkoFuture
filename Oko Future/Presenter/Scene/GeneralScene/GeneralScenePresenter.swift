@@ -18,12 +18,21 @@ protocol GeneralSceneViewCoordinatorDelegate: AnyObject {
 }
 
 protocol GeneralScenePresenterDelegate: AnyObject {
+    
     func showScene()
     func stopSession()
     
     func tapUserProfile()
-    func tapLevelOneScene()
-    func tapLevelTwoScene()
+    func tapArView()
+    
+    func zoomOut()
+    func zoomIn()
+    
+    func tapLevel1()
+    func tapLevel2()
+    
+    func isAnimateModeEmoji() -> Bool
+    func returnLevelAr() -> Int
 }
 
 final class GeneralScenePresenter: NSObject {
@@ -51,7 +60,8 @@ final class GeneralScenePresenter: NSObject {
     private var timerAnimation: Timer? = nil
     private var animationController: AnimationPlaybackController? = nil
     private var animateMode: AnimationMode = .waiting
-    private var chooseLevel = 1
+//    private var chooseLevel = 1
+    var chooseLevel = 1
     
     private var emojiCounter = 1 {
         didSet {
@@ -86,6 +96,10 @@ final class GeneralScenePresenter: NSObject {
     private let timingStartEmoji3:Float = 551/24
     private let timingFinishEmoji3:Float = 647/24
     private let timingFinishEmoji5:Float = 840/24
+    
+    private var videoPlayerPlane = AVPlayer()
+    private var videoPlayerScreen = AVPlayer()
+    private var videoPlayerOkoBot = AVPlayer()
     
     init(view: GeneralSceneViewProtocol, arView: ARView) {
         self.view = view
@@ -370,11 +384,11 @@ final class GeneralScenePresenter: NSObject {
             light.move(to: transLight, relativeTo: light, duration: TimeInterval(self.durationZoomCamera))
         }
         
-//        switch chooseLevel {
-//        case 1: addPlayerEmojiLevel1()
-//        case 2: addPlayerEmojiLevel2()
-//        default: break
-//        }
+        switch chooseLevel {
+        case 1: addPlayerEmojiLevel1()
+        case 2: addPlayerEmojiLevel2()
+        default: break
+        }
             
         self.startAnimationEmoji()
     }
@@ -395,6 +409,9 @@ final class GeneralScenePresenter: NSObject {
         arView.scene.anchors[0].children[2].removeFromParent()
         arView.scene.anchors[0].children[2].removeFromParent()
         nodeGirl?.model?.materials[3] = materialTshirt
+        
+        self.okoBot = nil
+        self.okoScreen = nil
     }
     
     private func stopDemoLevel1() {
@@ -465,18 +482,177 @@ final class GeneralScenePresenter: NSObject {
             self.animateMode = .emoji
         }
     }
+    
+    func tapArView() {
+        if ARFaceTrackingConfiguration.isSupported {
+            /// не удолять
+            switch chooseLevel {
+            case 1: coordinatorDelegate?.showLevelOneScene()
+            case 2: coordinatorDelegate?.showLevelTwoScene()
+            default: break
+            }
+            
+        } else {
+            print ("log ARFaceTrackingConfiguration.isSupported == false")
+            /// алерту прокинуть
+//            let action = UIAlertAction(title: "Close", style: .cancel)
+//            Helper().showAlert(title: "Error", message: "Your device does not support ar mode", view: self, actions: [action])
+        }
+    }
+    
+    func generateVideoPlane() {
+        
+        let nameVideo = "Tshirt_lvl2_demo"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
+        
+        videoPlayerPlane = AVPlayer(playerItem: item)
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlane)
+        
+        nodeGirl?.model?.materials[3] = videoMaterial
+        
+        videoPlayerPlane.play()
+        videoPlayerPlane.rate = 0.84
+    }
+    
+    private func generateOkoBot() -> ModelEntity? {
+        
+        guard let okoBot = self.okoBot else {return nil}
+        
+        let nameVideo = "okoBotVizor_lvl2_demo"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
+        
+        videoPlayerOkoBot = AVPlayer(playerItem: item)
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerOkoBot)
+        videoPlayerOkoBot.play()
+        videoPlayerOkoBot.rate = 0.84
+        
+        okoBot.model?.materials[0] = videoMaterial
+        
+        return okoBot
+    }
+    
+    private func generateScreen() -> ModelEntity? {
+        
+        let nameVideo = "flip_vert_[000-299]-1"
+        let item = returnAVPlayerItem(nameVideo: nameVideo)
+        
+        videoPlayerScreen = AVPlayer(playerItem: item)
+        videoPlayerScreen.play()
+        
+        let videoMaterial = VideoMaterial(avPlayer: videoPlayerScreen)
+        
+        guard let screen = self.okoScreen else {return nil}
+        
+        let scale: Float = 10
+        screen.scale = [scale,scale,scale]
+        
+        screen.model?.materials[1] = videoMaterial
+        
+        return screen
+    }
+    
+    private func addPlayerEmojiLevel1() {
+        if self.videoPlayerEmoji != nil {
+            self.videoPlayerEmoji = nil
+        }
+        
+        videoPlayerEmoji = AVQueuePlayer(items: arrayPlayerItem)
+        
+        let videoMaterial = VideoMaterial(avPlayer: self.videoPlayerEmoji!)
+        
+        let backgroundPlane = ModelEntity(mesh: .generatePlane(width: 0.1, depth: 0.07, cornerRadius: 0), materials: [SimpleMaterial(color: .black, isMetallic: false)])
+        let videoPlane = ModelEntity(mesh: .generatePlane(width: 0.3, depth: 0.3, cornerRadius: 0), materials: [videoMaterial])
+        
+        backgroundPlane.transform.translation = SIMD3(x: 0, y: 2.55, z: -0.25)
+        backgroundPlane.transform.rotation = simd_quatf(angle: 1.5708, axis: SIMD3(x: 1, y: 0, z: 0))
+        
+        videoPlane.transform.translation = SIMD3(x: 0, y: 2.55, z: -0.2)
+        videoPlane.transform.rotation = simd_quatf(angle: 1.5708, axis: SIMD3(x: 1, y: 0, z: 0))
+        
+        arView.scene.anchors[0].addChild(videoPlane)
+        arView.scene.anchors[0].addChild(backgroundPlane)
+        
+        let transformVideoPlane = Transform(scale: SIMD3(x: 1, y: 1, z: 1), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: SIMD3(x: 0, y: 1, z: 0))
+            
+        videoPlane.move(to: transformVideoPlane, relativeTo: videoPlane, duration: TimeInterval(self.durationZoomCamera))
+        backgroundPlane.move(to: transformVideoPlane, relativeTo: backgroundPlane, duration: TimeInterval(self.durationZoomCamera))
+        
+//        self.durationZoomCamera = 0
+        
+        self.videoPlayerEmoji?.play()
+//        self.videoPlayerEmoji?.rate = 1.3
+    }
+    
+    func addPlayerEmojiLevel2() {
+        
+        generateVideoPlane()
+        guard let okoBot = generateOkoBot() else {return}
+        guard let screen = generateScreen() else {return}
+        
+        screen.transform.translation = [0, 1.7, 0.7]
+        
+        okoBot.transform.translation = [-0.3, 2.6, 1.5]
+        
+        let startScale: Float = 0
+        okoBot.scale = [startScale, startScale, startScale]
+        
+        okoBot.playAnimation(okoBot.availableAnimations[0].repeat())
+        
+        let finalScale: Float = 0.1
+
+        arView.scene.anchors[0].addChild(screen)
+        arView.scene.anchors[0].addChild(okoBot)
+        
+        let transOkoBot = Transform(scale: SIMD3(x: finalScale, y: finalScale, z: finalScale), rotation: simd_quatf(angle: 0, axis: SIMD3(x: 0, y: 0, z: 0)), translation: [-0.3, 0.3, 1.5])
+        
+        okoBot.move(to: transOkoBot, relativeTo: nil, duration: TimeInterval(2))
+    }
+    
+    private func startAnimationFlex() {
+
+        self.serialQueue.sync {
+            
+            if let animRes = self.dictAnimationRes1["flex1"] {
+                self.animationController = self.nodeGirl?.playAnimation(animRes)
+            }
+        }
+    }
+    
+
 }
 
 extension GeneralScenePresenter: GeneralScenePresenterDelegate {
+    func returnLevelAr() -> Int {
+        return chooseLevel
+    }
+    
+    func tapLevel1() {
+        if !isAnimateModeEmoji() {
+            chooseLevel = 1
+        }
+    }
+    
+    func tapLevel2() {
+        if !isAnimateModeEmoji() {
+            chooseLevel = 2
+        }
+    }
+    
+    func isAnimateModeEmoji() -> Bool {
+        return self.animateMode == .emoji
+    }
+    
+    func zoomOut() {
+        tapZoomOut()
+    }
+    
+    func zoomIn() {
+        tapZoomIn()
+    }
+    
     func tapUserProfile() {
-        
-    }
-    
-    func tapLevelOneScene() {
-        
-    }
-    
-    func tapLevelTwoScene() {
         
     }
     
