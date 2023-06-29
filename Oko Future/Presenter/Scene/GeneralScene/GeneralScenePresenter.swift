@@ -33,6 +33,8 @@ protocol GeneralScenePresenterDelegate: AnyObject {
     
     func isAnimateModeEmoji() -> Bool
     func returnLevelAr() -> Int
+    
+    func setupScene()
 }
 
 final class GeneralScenePresenter: NSObject {
@@ -141,13 +143,17 @@ final class GeneralScenePresenter: NSObject {
                       self.setupScene()
                       self.startSession()
 
+//                      DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
+//                          self.setupScene()
+//                      })
+                      
                       cancellable?.cancel()
                   })
             })
         
     }
     
-    private func setupScene() {
+    func setupScene() {
         
         guard let nodeGirl = self.nodeGirl else { return }
         guard let sceneEntity = sceneEntity else { return }
@@ -167,31 +173,31 @@ final class GeneralScenePresenter: NSObject {
         
         anchor.addChild(nodeGirl)
         /// убрать, надо поправить индексы в массивах якорей
-        let Light = Lighting()
-        let anchorLight = AnchorEntity(world: self.startPoint)
-        arView.scene.addAnchor(anchorLight)
-        let pointLight = Lighting().light
-        let strongLight = Light.strongLight()
-        
-        let light1 = AnchorEntity(world: [0,1,0])
-        light1.components.set(pointLight)
-        anchorLight.addChild(light1)
-        
-        let light2 = AnchorEntity(world: [0,-0.5,0])
-        light2.components.set(strongLight)
-        anchorLight.addChild(light2)
-        
-        let lightFon1 = AnchorEntity(world: [1,1,-2])
-        lightFon1.components.set(pointLight)
-        anchorLight.addChild(lightFon1)
-        
-        let lightFon2 = AnchorEntity(world: [-1,2,-2])
-        lightFon2.components.set(pointLight)
-        anchorLight.addChild(lightFon2)
-        
-        let lightFon3 = AnchorEntity(world: [-1,1,-2])
-        lightFon3.components.set(strongLight)
-        anchorLight.addChild(lightFon3)
+//        let Light = Lighting()
+//        let anchorLight = AnchorEntity(world: self.startPoint)
+//        arView.scene.addAnchor(anchorLight)
+//        let pointLight = Lighting().light
+//        let strongLight = Light.strongLight()
+//
+//        let light1 = AnchorEntity(world: [0,1,0])
+//        light1.components.set(pointLight)
+//        anchorLight.addChild(light1)
+//
+//        let light2 = AnchorEntity(world: [0,-0.5,0])
+//        light2.components.set(strongLight)
+//        anchorLight.addChild(light2)
+//
+//        let lightFon1 = AnchorEntity(world: [1,1,-2])
+//        lightFon1.components.set(pointLight)
+//        anchorLight.addChild(lightFon1)
+//
+//        let lightFon2 = AnchorEntity(world: [-1,2,-2])
+//        lightFon2.components.set(pointLight)
+//        anchorLight.addChild(lightFon2)
+//
+//        let lightFon3 = AnchorEntity(world: [-1,1,-2])
+//        lightFon3.components.set(strongLight)
+//        anchorLight.addChild(lightFon3)
     }
 
     private func uploadModelEntity() {

@@ -25,27 +25,28 @@ class FeatureCoordinator: Coordinator {
     
     func start() {
         
-        uploadLevelTwoScene()
+//        uploadLevelTwoScene()
+        showGeneralScene()
         return
         
         if let user = userService.getUser() {
 
             switch user {
 
-//            case _ where (user.name != nil):
-//                startViewController = UploadSceneViewController()
-//            case _ where (user.password != nil):
-//                startViewController = ProfileSettingViewController()
+            case _ where (user.name != nil):
+                showGeneralScene()
+            case _ where (user.password != nil):
+                showProfileSettingScene()
 //            case _ where (user.email != nil):
 //                startViewController = PasswordViewController()
-//
-//            case _ where user.logStatus == .logInWithApple:
-//                startViewController = ProfileSettingViewController()
-//            case _ where user.logStatus == .logInWithGoogle:
-//                startViewController = ProfileSettingViewController()
-//
-//            case _ where user.logStatus == .logInWithEmail:
-//                startViewController = ProfileSettingViewController()
+
+            case _ where user.logStatus == .logInWithApple:
+                showProfileSettingScene()
+            case _ where user.logStatus == .logInWithGoogle:
+                showProfileSettingScene()
+
+            case _ where user.logStatus == .logInWithEmail:
+                showProfileSettingScene()
 
             default: showWelcomeScene()
                 break
@@ -90,7 +91,7 @@ extension FeatureCoordinator {
     
     func uploadGeneralScene() {
         cleansingArView(complection: { [self] in
-            let scene = FeatureSceneFactory.makeLevelTwoScene(delegate: self, arView: arView)
+            let scene = FeatureSceneFactory.makeGeneralScene(delegate: self, arView: arView)
             navigationController.viewControllers = [scene]
         })
     }
@@ -124,21 +125,23 @@ extension FeatureCoordinator: LogInViewCoordinatorDelegate {
     }
 }
 
-extension FeatureCoordinator: ProfileSettingViewCoordinatorDelegate {
+extension FeatureCoordinator: ProfileSettingViewCoordinatorDelegate, LevelTwoViewCoordinatorDelegate/*, LevelOneViewCoordinatorDelegate*/ {
     func showGeneralScene() {
-//        uploadLevelTwoScene()
         uploadGeneralScene()
     }
 }
 
-extension FeatureCoordinator: LevelTwoViewCoordinatorDelegate {
+extension FeatureCoordinator: GeneralSceneViewCoordinatorDelegate {
     func showLevelTwoScene() {
-//        uploadLevelTwoScene()
+        uploadLevelTwoScene()
     }
-}
-
-//extension FeatureCoordinator: LevelOneViewCoordinatorDelegate {
-//    func showLevelOneScene() {
+    
+    func showLevelOneScene() {
 //        uploadLevelOneScene()
-//    }
-//}
+    }
+    
+    func showUserProfileView() {
+//        showUserProfileSettingScene()
+    }
+    
+}

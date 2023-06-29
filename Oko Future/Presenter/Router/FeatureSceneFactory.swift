@@ -43,4 +43,13 @@ struct FeatureSceneFactory {
         viewController.arView = presenter.arView
         return viewController
     }
+    
+    static func makeGeneralScene(delegate: GeneralSceneViewCoordinatorDelegate, arView: ARView) -> GeneralViewController {
+        let viewController = GeneralViewController()
+        let presenter = GeneralScenePresenter(view: viewController, arView: arView)
+        presenter.coordinatorDelegate = delegate
+        viewController.presenter = presenter
+        viewController.arView = presenter.arView
+        return viewController
+    }
 }

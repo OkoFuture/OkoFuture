@@ -12,7 +12,7 @@ import UIKit
 import Combine
 
 protocol LevelTwoViewCoordinatorDelegate: AnyObject {
-    func showLevelTwoScene()
+    func showGeneralScene()
 }
 
 protocol LevelTwoViewPresenterDelegate: AnyObject {

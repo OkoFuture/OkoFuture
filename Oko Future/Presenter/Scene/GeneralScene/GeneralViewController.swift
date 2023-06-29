@@ -176,17 +176,17 @@ final class GeneralViewController: UIViewController {
         return btn
     }()
     
-    init(arView: ARView, sceneEntity: ModelEntity, nodeGirl: ModelEntity) {
-//        self.arView = arView
-//        self.sceneEntity = sceneEntity
-//        self.nodeGirl = nodeGirl
-//        self.materialTshirt = (nodeGirl.model?.materials[3])!
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    init(arView: ARView, sceneEntity: ModelEntity, nodeGirl: ModelEntity) {
+////        self.arView = arView
+////        self.sceneEntity = sceneEntity
+////        self.nodeGirl = nodeGirl
+////        self.materialTshirt = (nodeGirl.model?.materials[3])!
+//        super.init(nibName: nil, bundle: nil)
+//    }
+//
+//    required init?(coder: NSCoder) {
+//        fatalError("init(coder:) has not been implemented")
+//    }
     
     deinit {
         print("deinit called GeneralViewController")
@@ -745,6 +745,13 @@ final class GeneralViewController: UIViewController {
 //            self.arrayPlayerItem.removeAll()
 //            self.dowloadVideos()
 //    }
+    
+}
+
+extension GeneralViewController: GeneralSceneViewProtocol {
+    func changeStateSwitch(state: Bool) {
+        arSwitch.isOn = state
+    }
     
 }
 
