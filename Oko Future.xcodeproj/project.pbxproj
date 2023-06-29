@@ -40,6 +40,7 @@
 		D16AC0BF2A4C214D001DF8C3 /* LevelTwoViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16AC0BE2A4C214D001DF8C3 /* LevelTwoViewPresenter.swift */; };
 		D16C64A62A4093FA008C85CA /* avtr_anim_0606.usdz in Resources */ = {isa = PBXBuildFile; fileRef = D16C64A52A4093FA008C85CA /* avtr_anim_0606.usdz */; };
 		D16D0D8C2A4DEDD0003C5192 /* LevelOneViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16D0D8B2A4DEDD0003C5192 /* LevelOneViewPresenter.swift */; };
+		D16D0D8E2A4E02FF003C5192 /* UserProfileViewPresenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16D0D8D2A4E02FF003C5192 /* UserProfileViewPresenter.swift */; };
 		D16D22402A3304E700B0E885 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = D16D223F2A3304E700B0E885 /* User.swift */; };
 		D170D1EC2A41C62300F8A831 /* Tshirt_lvl2_demo.mov in Resources */ = {isa = PBXBuildFile; fileRef = D170D1EB2A41C62300F8A831 /* Tshirt_lvl2_demo.mov */; };
 		D170D1EE2A41C83300F8A831 /* okoBotVizor_lvl2_demo.mov in Resources */ = {isa = PBXBuildFile; fileRef = D170D1ED2A41C83300F8A831 /* okoBotVizor_lvl2_demo.mov */; };
@@ -129,6 +130,7 @@
 		D16AC0BE2A4C214D001DF8C3 /* LevelTwoViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelTwoViewPresenter.swift; sourceTree = "<group>"; };
 		D16C64A52A4093FA008C85CA /* avtr_anim_0606.usdz */ = {isa = PBXFileReference; lastKnownFileType = file.usdz; path = avtr_anim_0606.usdz; sourceTree = "<group>"; };
 		D16D0D8B2A4DEDD0003C5192 /* LevelOneViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LevelOneViewPresenter.swift; sourceTree = "<group>"; };
+		D16D0D8D2A4E02FF003C5192 /* UserProfileViewPresenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileViewPresenter.swift; sourceTree = "<group>"; };
 		D16D223F2A3304E700B0E885 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		D170D1EB2A41C62300F8A831 /* Tshirt_lvl2_demo.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = Tshirt_lvl2_demo.mov; sourceTree = "<group>"; };
 		D170D1ED2A41C83300F8A831 /* okoBotVizor_lvl2_demo.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = okoBotVizor_lvl2_demo.mov; sourceTree = "<group>"; };
@@ -407,6 +409,7 @@
 			isa = PBXGroup;
 			children = (
 				D117FB782A38AE6000BE7DAA /* UserProfileViewController.swift */,
+				D16D0D8D2A4E02FF003C5192 /* UserProfileViewPresenter.swift */,
 			);
 			path = UserProfile;
 			sourceTree = "<group>";
@@ -562,6 +565,7 @@
 				D10B06F829F7FDB6002B9868 /* LevelOneViewController.swift in Sources */,
 				9292EE3029D09A4500526C07 /* UploadSceneViewController.swift in Sources */,
 				D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */,
+				D16D0D8E2A4E02FF003C5192 /* UserProfileViewPresenter.swift in Sources */,
 				D1F49B1F2A4AE3A3005BB077 /* AppCoordinator.swift in Sources */,
 				D131490B2A46D38E004A71A0 /* UIOkoLoginButton.swift in Sources */,
 				D16D0D8C2A4DEDD0003C5192 /* LevelOneViewPresenter.swift in Sources */,

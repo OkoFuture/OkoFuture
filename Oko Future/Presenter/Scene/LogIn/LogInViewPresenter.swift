@@ -26,18 +26,18 @@ protocol LogInViewPresenterDelegate: AnyObject {
     func checkUser()
 }
 
-class LogInViewPresenter {
+final class LogInViewPresenter {
     
     let logInView: LogInViewProtocol
     
     let regService: RegistrationService
     let userService: UserService
     
-    weak var coordinatorDelegate: LogInViewCoordinatorDelegate?
+    weak var coordinatorDelegate: LogInViewCoordinatorDelegate!
     
     private var currentNonce: String?
     
-    init(logInView: LogInViewProtocol, regService: RegistrationService, userService: UserService, coordinatorDelegate: LogInViewCoordinatorDelegate?) {
+    init(logInView: LogInViewProtocol, regService: RegistrationService, userService: UserService, coordinatorDelegate: LogInViewCoordinatorDelegate) {
         self.logInView = logInView
         self.regService = regService
         self.userService = userService

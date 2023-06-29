@@ -9,11 +9,13 @@ import UIKit
 import AuthenticationServices
 import Firebase
 
+protocol UserProfileViewProtocol {
+    
+}
+
 final class UserProfileViewController: UIViewController {
     
-    private var currentNonce: String?
-    let userService = UserService()
-    let regService = RegistrationService()
+    var presenter: UserProfileViewPresenterDelegate!
     
     private let backButton: OkoDefaultButton = {
         let btn = OkoDefaultButton()
@@ -69,16 +71,7 @@ final class UserProfileViewController: UIViewController {
         view.addSubview(logOutButton)
         view.addSubview(deleteUserButton)
         
-        guard let user = userService.getUser() else {
-            navigationController?.popViewController(animated: true)
-            return
-        }
-        
-        if user.name == nil {
-            nameUserLabel.text = "username unknown"
-        } else {
-            nameUserLabel.text = user.name
-        }
+        nameUserLabel.text = presenter.returnNameUser()
         
         backButton.addTarget(self, action: #selector(backButtonTap), for: .touchUpInside)
         
@@ -107,32 +100,16 @@ final class UserProfileViewController: UIViewController {
     }
     
     @objc func backButtonTap() {
-        navigationController?.popViewController(animated: true)
+        presenter.backToGeneralScene()
     }
     
     @objc func logOutButtonTap() {
-        regService.logOut(viewForError: self, delegate: self, presentationContextProvider: self)
-        
-        backToWelcomeViewController()
-    }
-    
-    private func backToWelcomeViewController() {
-        guard let navigationController = self.navigationController else { return }
-        
-        if let welcomeVc = navigationController.viewControllers[0] as? WelcomeViewController {
-            navigationController.popToViewController(welcomeVc, animated: true)
-        } else {
-            let startVc = WelcomeViewController()
-            navigationController.viewControllers.removeAll()
-            navigationController.pushViewController(startVc, animated: true)
-        }
+        presenter.logOut(viewForError: self, delegate: self, presentationContextProvider: self)
     }
     
     @objc func deleteUserButtonTap() {
-        currentNonce = regService.deleteUser(viewForError: self, delegate: self, presentationContextProvider: self) { [weak self] in
-            guard let self = self else { return }
-            backToWelcomeViewController()
-        }
+        
+        presenter.deleteUser(viewForError: self, delegate: self, presentationContextProvider: self)
     }
     
 }
@@ -144,36 +121,12 @@ extension UserProfileViewController: ASAuthorizationControllerDelegate, ASAuthor
     
     func authorizationController(controller: ASAuthorizationController,
                                  didCompleteWithAuthorization authorization: ASAuthorization) {
-        
-      guard let appleIDCredential = authorization.credential as? ASAuthorizationAppleIDCredential
-      else {
-        print("Unable to retrieve AppleIDCredential")
-        return
-      }
-
-        guard let _ = currentNonce else {
-        fatalError("Invalid state: A login callback was received, but no login request was sent.")
-      }
-
-      guard let appleAuthCode = appleIDCredential.authorizationCode else {
-        print("Unable to fetch authorization code")
-        return
-      }
-
-      guard let authCodeString = String(data: appleAuthCode, encoding: .utf8) else {
-        print("Unable to serialize auth code string from data: \(appleAuthCode.debugDescription)")
-        return
-      }
-
-      Task {
-        do {
-          try await Auth.auth().revokeToken(withAuthorizationCode: authCodeString)
-            try await Auth.auth().currentUser?.delete()
-          backToWelcomeViewController()
-        } catch {
-            print ("delete user Apple fail, error =", error.localizedDescription)
-        }
-      }
+        presenter.didCompleteWithAuthorization(authorization: authorization)
+      
     }
 
+}
+
+extension UserProfileViewController: UserProfileViewProtocol {
+    
 }

@@ -116,6 +116,11 @@ extension FeatureCoordinator {
         })
     }
     
+    func showUserProfileScene() {
+        let scene = FeatureSceneFactory.makeUserProfileScene(delegate: self, registrationService: registrationService, userService: userService)
+        navigationController.pushViewController(scene, animated: true)
+    }
+    
 }
 
 extension FeatureCoordinator: WelcomeViewCoordinatorDelegate {
@@ -137,6 +142,16 @@ extension FeatureCoordinator: ProfileSettingViewCoordinatorDelegate, LevelTwoVie
     }
 }
 
+extension FeatureCoordinator: UserProfileViewCoordinatorDelegate {
+    func backToGeneralScene() {
+        uploadGeneralScene()
+    }
+    
+    func backToWelcomeScene() {
+        showWelcomeScene()
+    }
+}
+
 extension FeatureCoordinator: GeneralSceneViewCoordinatorDelegate {
     func showLevelTwoScene() {
         uploadLevelTwoScene()
@@ -147,7 +162,7 @@ extension FeatureCoordinator: GeneralSceneViewCoordinatorDelegate {
     }
     
     func showUserProfileView() {
-//        showUserProfileSettingScene()
+        showUserProfileScene()
     }
     
 }

@@ -19,7 +19,7 @@ struct FeatureSceneFactory {
         return viewController
     }
     
-    static func makeLogInScene(delegate: LogInViewCoordinatorDelegate?, registrationService: RegistrationService, userService: UserService) -> LogInViewController {
+    static func makeLogInScene(delegate: LogInViewCoordinatorDelegate, registrationService: RegistrationService, userService: UserService) -> LogInViewController {
         let viewController = LogInViewController()
         let presenter = LogInViewPresenter(logInView: viewController, regService: registrationService, userService: userService, coordinatorDelegate: delegate)
         presenter.coordinatorDelegate = delegate
@@ -56,6 +56,14 @@ struct FeatureSceneFactory {
         let presenter = GeneralScenePresenter(view: viewController, arView: arView, coordinatorDelegate: delegate)
         viewController.presenter = presenter
         viewController.arView = presenter.arView
+        return viewController
+    }
+    
+    static func makeUserProfileScene(delegate: UserProfileViewCoordinatorDelegate, registrationService: RegistrationService, userService: UserService) -> UserProfileViewController {
+        let viewController = UserProfileViewController()
+        let presenter = UserProfileViewPresenter(userProfileView: viewController, regService: registrationService, userService: userService, coordinatorDelegate: delegate)
+        presenter.coordinatorDelegate = delegate
+        viewController.presenter = presenter
         return viewController
     }
 }
