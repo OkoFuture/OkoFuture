@@ -9,7 +9,7 @@ import Foundation
 import UIKit
 
 protocol ProfileSettingViewCoordinatorDelegate: AnyObject {
-    func uploadGeneralView()
+    func showGeneralScene()
 }
 
 protocol ProfileSettingViewPresenterDelegate: AnyObject {
@@ -37,7 +37,7 @@ class ProfileSettingViewPresenter {
 extension ProfileSettingViewPresenter: ProfileSettingViewPresenterDelegate {
     func tapSaveStartButton(name: String) {
         regService.updateUserData(typeUserData: .name, userData: name, needUpdateFirebase: true)
-        coordinatorDelegate?.uploadGeneralView()
+        coordinatorDelegate?.showGeneralScene()
     }
     
     func returnUserName() -> String {

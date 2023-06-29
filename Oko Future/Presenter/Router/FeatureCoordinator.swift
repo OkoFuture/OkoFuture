@@ -14,11 +14,13 @@ class FeatureCoordinator: Coordinator {
     private let navigationController: UINavigationController
     private let registrationService: RegistrationService
     private let userService: UserService
+    private let arView: ARView
     
     init(navigationController: UINavigationController = UINavigationController()) {
         self.navigationController = navigationController
         self.registrationService = RegistrationService()
         self.userService = UserService()
+        self.arView = ARView()
     }
     
     func start() {
@@ -55,6 +57,18 @@ class FeatureCoordinator: Coordinator {
             showWelcomeScene()
         }
     }
+    
+    private func cleansingArView(complection: @escaping () -> Void) {
+        
+        if self.arView.scene.anchors.isEmpty {
+            complection()
+        } else {
+            self.arView.session.pause()
+            self.arView.scene.anchors.removeAll()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: complection)
+        }
+    }
+    
 }
 
 extension FeatureCoordinator {
@@ -74,10 +88,25 @@ extension FeatureCoordinator {
         navigationController.pushViewController(scene, animated: true)
     }
     
+    func uploadGeneralScene() {
+        cleansingArView(complection: { [self] in
+            let scene = FeatureSceneFactory.makeLevelTwoScene(delegate: self, arView: arView)
+            navigationController.viewControllers = [scene]
+        })
+    }
+    
+//    func uploadLevelOneScene() {
+//        cleansingArView(complection: { [self] in
+//            let scene = FeatureSceneFactory.makeLevelTwoScene(delegate: self, arView: arView)
+//            navigationController.viewControllers = [scene]
+//        })
+//    }
+    
     func uploadLevelTwoScene() {
-        let arView = ARView()
-        let scene = FeatureSceneFactory.makeLevelTwoScene(delegate: self, arView: arView)
-        navigationController.viewControllers = [scene]
+        cleansingArView(complection: { [self] in
+            let scene = FeatureSceneFactory.makeLevelTwoScene(delegate: self, arView: arView)
+            navigationController.viewControllers = [scene]
+        })
     }
     
 }
@@ -96,8 +125,9 @@ extension FeatureCoordinator: LogInViewCoordinatorDelegate {
 }
 
 extension FeatureCoordinator: ProfileSettingViewCoordinatorDelegate {
-    func uploadGeneralView() {
-        uploadLevelTwoScene()
+    func showGeneralScene() {
+//        uploadLevelTwoScene()
+        uploadGeneralScene()
     }
 }
 
@@ -106,3 +136,9 @@ extension FeatureCoordinator: LevelTwoViewCoordinatorDelegate {
 //        uploadLevelTwoScene()
     }
 }
+
+//extension FeatureCoordinator: LevelOneViewCoordinatorDelegate {
+//    func showLevelOneScene() {
+//        uploadLevelOneScene()
+//    }
+//}

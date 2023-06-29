@@ -21,6 +21,12 @@ enum AnimationMode {
     case emoji
 }
 
+protocol GeneralSceneViewProtocol {
+    func tapUserProfile()
+    func tapLevelOneScene()
+    func tapLevelTwoScene()
+}
+
 final class GeneralViewController: UIViewController {
     
     public var arView: ARView
@@ -29,12 +35,10 @@ final class GeneralViewController: UIViewController {
     private var sceneEntity: ModelEntity
     private var nodeGirl: ModelEntity?
     private let materialTshirt: Material
-//    private var nodeAvatar: ModelEntity?
-    
+
     private var okoBot: ModelEntity? = nil
     private var okoScreen: ModelEntity? = nil
-    
-    public var chooseModel = 0
+
     private var chooseLevel = 1
     
     public let startPoint: SIMD3<Float> = [0, -2, -1]
@@ -110,8 +114,6 @@ final class GeneralViewController: UIViewController {
     private var dictAnimationRes1 = [String : AnimationResource]()
 //    private var dictAnimationRes2 = [String : AnimationResource]()
     
-    private var mode: AvatarMode = .general
-    
     private var demoEmoji = false
     
     private var videoPlayerPlane = AVPlayer()
@@ -163,20 +165,6 @@ final class GeneralViewController: UIViewController {
         return btn
     }()
     
-    private let firstModelWardrobeButton: OkoDefaultButton = {
-       let btn = OkoDefaultButton()
-        btn.setImage(UIImage(named: "istockphoto-1"), for: .normal)
-        btn.isEnabled = false
-        return btn
-    }()
-    
-    private let secondModelWardrobeButton: OkoDefaultButton = {
-       let btn = OkoDefaultButton()
-        btn.setImage(UIImage(named: "istockphoto-2"), for: .normal)
-        btn.isEnabled = false
-        return btn
-    }()
-    
     private let arViewButton: OkoDefaultButton = {
        let btn = OkoDefaultButton()
         btn.setImage(UIImage(named: "view_in_ar"), for: .normal)
@@ -194,7 +182,6 @@ final class GeneralViewController: UIViewController {
         self.sceneEntity = sceneEntity
         self.nodeGirl = nodeGirl
         self.materialTshirt = (nodeGirl.model?.materials[3])!
-//        self.nodeAvatar = nodeAvatar
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -241,16 +228,11 @@ final class GeneralViewController: UIViewController {
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         
-//        if self.chooseModel == 0 {
-//            self.nodeAvatar = nil
-//        } else {
             self.nodeGirl = nil
-//        }
     }
     
     private func setupScene() {
         
-//        guard let nodeAvatar = self.nodeAvatar, let nodeGirl = self.nodeGirl else {return}
         guard let nodeGirl = self.nodeGirl else {return}
         
         let anchor = AnchorEntity(world: self.startPoint)
@@ -263,8 +245,6 @@ final class GeneralViewController: UIViewController {
         cameraAnchor.transform.translation = SIMD3(x: 0, y: 0, z: 4)
                
         arView.scene.addAnchor(cameraAnchor)
-        
-//        nodeAvatar.transform.translation = SIMD3(x: 0.07, y: 0.7, z: 0.3)
         
         nodeGirl.transform.translation = SIMD3(x: 0.07, y: 0.7, z: 0.3)
         
@@ -313,22 +293,14 @@ final class GeneralViewController: UIViewController {
         
         view.addSubview(tShirtLabel)
         view.addSubview(tShirtEmphasize)
-//        view.addSubview(firstModelWardrobeButton)
-//        view.addSubview(secondModelWardrobeButton)
         
         view.addSubview(arViewButton)
         view.addSubview(profileSettingButton)
         
         view.addSubview(arSwitch)
         
-//        let dragRotateGesture = UIPanGestureRecognizer(target: self, action: #selector(rotateDragY))
-//        sceneView.addGestureRecognizer(dragRotateGesture)
-        
         level1Button.addTarget(self, action: #selector(tapLevel1), for: .touchUpInside)
         level2Button.addTarget(self, action: #selector(tapLevel2), for: .touchUpInside)
-        
-        firstModelWardrobeButton.addTarget(self, action: #selector(tapFirst), for: .touchUpInside)
-//        secondModelWardrobeButton.addTarget(self, action: #selector(tapSecond), for: .touchUpInside)
         
         arViewButton.addTarget(self, action: #selector(tapArView), for: .touchUpInside)
         profileSettingButton.addTarget(self, action: #selector(tapProfileButton), for: .touchUpInside)
@@ -382,17 +354,6 @@ final class GeneralViewController: UIViewController {
         
         tShirtLabel.frame = CGRect(x: (view.bounds.width - 65) / 2, y: view.bounds.height - 24 - 42, width: 65, height: 24)
         tShirtEmphasize.frame = CGRect(x: tShirtLabel.frame.origin.x, y: tShirtLabel.frame.origin.y + 26, width: 65, height: 2)
-        
-//        firstModelWardrobeButton.frame = CGRect(x: view.center.x - sideSysBigButton / 2,
-//                                                y: view.frame.height - 46 - sideSysBigButton + ((sideSysBigButton - sideSysButton) / 2),
-//                                                width: sideSysBigButton,
-//                                                height: sideSysBigButton)
-//
-//        secondModelWardrobeButton.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
-//                                                  y: view.frame.height - 46 - sideSysButton,
-//                                                  width: sideSysButton,
-//                                                  height: sideSysButton)
-        
     }
     
     private func uploadModelEntity() {
@@ -459,75 +420,6 @@ final class GeneralViewController: UIViewController {
         
     }
     
-    @objc private func tapFirst() {
-        
-        if self.animateMode == .emoji {
-            return
-        }
-        
-        if self.chooseModel != 0 {
-            self.chooseModel = 0
-            
-            if self.nodeGirl != nil {
-                arView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
-                arView.scene.anchors[0].addChild(self.nodeGirl!)
-            } else {
-                self.uploadChooseSceneInBackground()
-            }
-            
-//            self.startTimerFlex()
-            self.startAnimationFlex()
-            
-            UIView.animate(withDuration: 0.4, animations: {
-                
-                self.firstModelWardrobeButton.frame = CGRect(x: self.view.center.x - self.sideSysBigButton / 2,
-                                                        y: self.firstModelWardrobeButton.frame.origin.y - ((self.sideSysBigButton - self.sideSysButton) / 2),
-                                                        width: self.sideSysBigButton,
-                                                        height: self.sideSysBigButton)
-                
-                self.secondModelWardrobeButton.frame =  CGRect(x: self.view.center.x + self.sideSysBigButton / 2 + 16,
-                                                               y: self.view.frame.height - 46 - self.sideSysButton,
-                                                               width: self.sideSysButton,
-                                                               height: self.sideSysButton)
-            })
-            
-        }
-    }
-
-    @objc private func tapSecond() {
-        
-        if self.animateMode == .emoji {
-            return
-        }
-        
-        if self.chooseModel != 1 {
-            self.chooseModel = 1
-            
-//            if self.nodeAvatar != nil {
-//                arView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
-//                arView.scene.anchors[0].addChild(self.nodeAvatar!)
-//            } else {
-//                self.uploadChooseSceneInBackground()
-//            }
-            
-//            self.startTimerFlex()
-            self.startAnimationFlex()
-            
-            UIView.animate(withDuration: 0.4, animations: {
-                
-                self.firstModelWardrobeButton.frame = CGRect(x: self.view.center.x - 16 - self.sideSysButton - (self.sideSysBigButton / 2),
-                                                        y: self.view.frame.height - 46 - self.sideSysButton,
-                                                        width: self.sideSysButton,
-                                                        height: self.sideSysButton)
-                
-                self.secondModelWardrobeButton.frame = CGRect(x: self.view.center.x - self.sideSysBigButton / 2,
-                                                              y: self.secondModelWardrobeButton.frame.origin.y - ((self.sideSysBigButton - self.sideSysButton) / 2),
-                                                              width: self.sideSysBigButton,
-                                                              height: self.sideSysBigButton)
-            })
-        }
-    }
-    
     @objc private func tapLevel1() {
         if self.animateMode == .emoji {
             return
@@ -570,44 +462,12 @@ final class GeneralViewController: UIViewController {
         })
     }
     
-    func uploadChooseSceneInBackground() {
-        
-        var cancellable: AnyCancellable? = nil
-        let scaleAvatar: Float = 1.5
-        
-        cancellable = ModelEntity.loadModelAsync(named: self.arrayNameScene[self.chooseModel])
-          .sink(receiveCompletion: { error in
-            print("Unexpected error: \(error)")
-            cancellable?.cancel()
-          }, receiveValue: { entity in
-              
-              entity.setScale(SIMD3(x: scaleAvatar, y: scaleAvatar, z: scaleAvatar), relativeTo: entity)
-
-              print ("uploadChooseSceneInBackground")
-              
-//              if self.chooseModel == 0 {
-                  self.nodeGirl = entity
-//              } else {
-//                  self.nodeAvatar = entity
-//              }
-              
-              self.arView.scene.anchors[0].children[1].removeFromParent(preservingWorldTransform: false)
-              self.arView.scene.anchors[0].addChild(entity)
-
-              cancellable?.cancel()
-          })
-    }
-    
     @objc private func tapArView() {
         
         if ARFaceTrackingConfiguration.isSupported {
-            
-            let vc = LevelOneViewController(arView: self.arView)
-                self.navigationController?.pushViewController(vc,
-                     animated: true)
-            
+            /// не удолять
 //            switch chooseLevel {
-//            case 1: let vc = CleanFaceTrackViewController(arView: self.arView)
+//            case 1: let vc = LevelOneViewController(arView: self.arView)
 //                self.navigationController?.pushViewController(vc,
 //                     animated: true)
 //            case 2: let vc = LevelTwoViewController(arView: self.arView)
@@ -823,14 +683,10 @@ final class GeneralViewController: UIViewController {
     private func startAnimationFlex() {
 
         self.serialQueue.sync {
-        
-        switch self.chooseModel {
-        case 0:
+            
             if let animRes = self.dictAnimationRes1["flex1"] {
                 self.animationController = self.nodeGirl?.playAnimation(animRes)
             }
-        default: break
-        }
         }
     }
     
@@ -968,17 +824,6 @@ final class GeneralViewController: UIViewController {
             
             self.arrayPlayerItem.removeAll()
             self.dowloadVideos()
-    }
-        
-    @objc private func rotateDragY(_ gesture: UIPanGestureRecognizer) {
-        
-//        let point = gesture.translation(in: view)
-//        sceneView.scene?.rootNode.runAction(SCNAction.rotateBy(x: 0, y: point.x/10, z: 0, duration: 0))
-        
-//        let velocity = gesture.velocity(in: view)
-//        sceneView.scene?.rootNode.childNodes[1].runAction(SCNAction.rotateBy(x: 0, y: 0, z: velocity.x/1000, duration: 0))
-        
-//        gesture.setTranslation(.zero, in: view)
     }
     
 }
