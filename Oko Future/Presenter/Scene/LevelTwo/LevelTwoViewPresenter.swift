@@ -34,7 +34,7 @@ final class LevelTwoViewPresenter: NSObject {
     private let classifierService = OkoClassifierService()
     
     weak var arView: ARView!
-    weak var coordinatorDelegate: LevelTwoViewCoordinatorDelegate?
+    weak var coordinatorDelegate: LevelTwoViewCoordinatorDelegate!
     
     var view: LevelTwoViewProtocol
     
@@ -98,9 +98,10 @@ final class LevelTwoViewPresenter: NSObject {
         }
     }
     
-    init(view: LevelTwoViewProtocol, arView: ARView) {
+    init(view: LevelTwoViewProtocol, arView: ARView, coordinatorDelegate: LevelTwoViewCoordinatorDelegate) {
         self.view = view
         self.arView = arView
+        self.coordinatorDelegate = coordinatorDelegate
         super.init()
         
         self.arView.session.delegate = self
@@ -415,8 +416,6 @@ final class LevelTwoViewPresenter: NSObject {
 
 extension LevelTwoViewPresenter: LevelTwoViewPresenterDelegate {
     func startSession() {
-        
-        arView.scene.anchors.removeAll()
         arView.cameraMode = .ar
         
         let configuration = ARBodyTrackingConfiguration()

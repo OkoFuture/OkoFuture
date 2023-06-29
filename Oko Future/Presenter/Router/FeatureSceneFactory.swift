@@ -35,10 +35,17 @@ struct FeatureSceneFactory {
         return viewController
     }
     
+    static func makeLevelOneScene(delegate: LevelOneViewCoordinatorDelegate, arView: ARView) -> LevelOneViewController {
+        let viewController = LevelOneViewController()
+        let presenter = LevelOneViewPresenter(view: viewController, arView: arView, coordinatorDelegate: delegate)
+        viewController.presenter = presenter
+        viewController.arView = presenter.arView
+        return viewController
+    }
+    
     static func makeLevelTwoScene(delegate: LevelTwoViewCoordinatorDelegate, arView: ARView) -> LevelTwoViewController {
         let viewController = LevelTwoViewController()
-        let presenter = LevelTwoViewPresenter(view: viewController, arView: arView)
-        presenter.coordinatorDelegate = delegate
+        let presenter = LevelTwoViewPresenter(view: viewController, arView: arView, coordinatorDelegate: delegate)
         viewController.presenter = presenter
         viewController.arView = presenter.arView
         return viewController
@@ -46,8 +53,7 @@ struct FeatureSceneFactory {
     
     static func makeGeneralScene(delegate: GeneralSceneViewCoordinatorDelegate, arView: ARView) -> GeneralViewController {
         let viewController = GeneralViewController()
-        let presenter = GeneralScenePresenter(view: viewController, arView: arView)
-        presenter.coordinatorDelegate = delegate
+        let presenter = GeneralScenePresenter(view: viewController, arView: arView, coordinatorDelegate: delegate)
         viewController.presenter = presenter
         viewController.arView = presenter.arView
         return viewController

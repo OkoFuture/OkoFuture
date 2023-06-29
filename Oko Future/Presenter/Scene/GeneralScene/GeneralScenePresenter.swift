@@ -40,7 +40,7 @@ protocol GeneralScenePresenterDelegate: AnyObject {
 final class GeneralScenePresenter: NSObject {
     
     weak var arView: ARView!
-    weak var coordinatorDelegate: GeneralSceneViewCoordinatorDelegate?
+    weak var coordinatorDelegate: GeneralSceneViewCoordinatorDelegate!
     
     var view: GeneralSceneViewProtocol
     
@@ -103,9 +103,10 @@ final class GeneralScenePresenter: NSObject {
     private var videoPlayerScreen = AVPlayer()
     private var videoPlayerOkoBot = AVPlayer()
     
-    init(view: GeneralSceneViewProtocol, arView: ARView) {
+    init(view: GeneralSceneViewProtocol, arView: ARView, coordinatorDelegate: GeneralSceneViewCoordinatorDelegate) {
         self.view = view
         self.arView = arView
+        self.coordinatorDelegate = coordinatorDelegate
         super.init()
         self.arView.cameraMode = .nonAR
     }

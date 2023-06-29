@@ -21,12 +21,15 @@ class FeatureCoordinator: Coordinator {
         self.registrationService = RegistrationService()
         self.userService = UserService()
         self.arView = ARView()
+        
+        self.navigationController.setNavigationBarHidden(true, animated: false)
     }
     
     func start() {
         
 //        uploadLevelTwoScene()
-        showGeneralScene()
+//        showGeneralScene()
+        uploadLevelOneScene()
         return
         
         if let user = userService.getUser() {
@@ -61,13 +64,16 @@ class FeatureCoordinator: Coordinator {
     
     private func cleansingArView(complection: @escaping () -> Void) {
         
-        if self.arView.scene.anchors.isEmpty {
-            complection()
-        } else {
+//        if self.arView.scene.anchors.isEmpty {
+//            complection()
+//        } else {
             self.arView.session.pause()
+            self.arView.removeFromSuperview()
             self.arView.scene.anchors.removeAll()
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: complection)
-        }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+                complection()
+            })
+//        }
     }
     
 }
@@ -96,12 +102,12 @@ extension FeatureCoordinator {
         })
     }
     
-//    func uploadLevelOneScene() {
-//        cleansingArView(complection: { [self] in
-//            let scene = FeatureSceneFactory.makeLevelTwoScene(delegate: self, arView: arView)
-//            navigationController.viewControllers = [scene]
-//        })
-//    }
+    func uploadLevelOneScene() {
+        cleansingArView(complection: { [self] in
+            let scene = FeatureSceneFactory.makeLevelOneScene(delegate: self, arView: arView)
+            navigationController.viewControllers = [scene]
+        })
+    }
     
     func uploadLevelTwoScene() {
         cleansingArView(complection: { [self] in
@@ -125,7 +131,7 @@ extension FeatureCoordinator: LogInViewCoordinatorDelegate {
     }
 }
 
-extension FeatureCoordinator: ProfileSettingViewCoordinatorDelegate, LevelTwoViewCoordinatorDelegate/*, LevelOneViewCoordinatorDelegate*/ {
+extension FeatureCoordinator: ProfileSettingViewCoordinatorDelegate, LevelTwoViewCoordinatorDelegate, LevelOneViewCoordinatorDelegate {
     func showGeneralScene() {
         uploadGeneralScene()
     }
@@ -137,7 +143,7 @@ extension FeatureCoordinator: GeneralSceneViewCoordinatorDelegate {
     }
     
     func showLevelOneScene() {
-//        uploadLevelOneScene()
+        uploadLevelOneScene()
     }
     
     func showUserProfileView() {
