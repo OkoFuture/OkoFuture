@@ -22,14 +22,15 @@ enum AnimationMode {
 }
 
 protocol GeneralSceneViewProtocol {
-    func tapUserProfile()
-    func tapLevelOneScene()
-    func tapLevelTwoScene()
+    
+    func changeStateSwitch(state: Bool)
 }
 
 final class GeneralViewController: UIViewController {
     
-    public var arView: ARView
+    var arView: ARView!
+    
+    var presenter: GeneralScenePresenterDelegate!
     
     private var cameraEntity = PerspectiveCamera()
     private var sceneEntity: ModelEntity
@@ -82,7 +83,7 @@ final class GeneralViewController: UIViewController {
     }
     
     private var subAnimComplete: Cancellable? = nil
-    
+    /// мусор, может пригодица
     private let timingStartFlex1:Float = 1/24
 //    private let timingFinishFlex1:Float = 72/24
     private let timingFinishFlex1:Float = 90/24
@@ -198,8 +199,10 @@ final class GeneralViewController: UIViewController {
 
         setupView()
         dowloadVideos()
-        createAnimRes()
+//        createAnimRes()
         uploadModelEntity()
+        
+        presenter.showScene()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -207,10 +210,11 @@ final class GeneralViewController: UIViewController {
 //        startTimerFlex()
         uploadModelEntity()
         startAnimationFlex()
-        subAnim()
+//        subAnim()
         setupLayout()
         
-        setupScene()
+//        setupScene()
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -231,59 +235,14 @@ final class GeneralViewController: UIViewController {
             self.nodeGirl = nil
     }
     
-    private func setupScene() {
-        
-        guard let nodeGirl = self.nodeGirl else {return}
-        
-        let anchor = AnchorEntity(world: self.startPoint)
-        arView.scene.addAnchor(anchor)
-        
-        anchor.addChild(sceneEntity)
-        cameraEntity.camera.fieldOfViewInDegrees = 39
-        let cameraAnchor = AnchorEntity(world: .zero)
-        cameraAnchor.addChild(cameraEntity)
-        cameraAnchor.transform.translation = SIMD3(x: 0, y: 0, z: 4)
-               
-        arView.scene.addAnchor(cameraAnchor)
-        
-        nodeGirl.transform.translation = SIMD3(x: 0.07, y: 0.7, z: 0.3)
-        
-        anchor.addChild(nodeGirl)
-        
-        let Light = Lighting()
-        let anchorLight = AnchorEntity(world: self.startPoint)
-        arView.scene.addAnchor(anchorLight)
-        let pointLight = Lighting().light
-        let strongLight = Light.strongLight()
-        
-        let light1 = AnchorEntity(world: [0,1,0])
-        light1.components.set(pointLight)
-        anchorLight.addChild(light1)
-        
-        let light2 = AnchorEntity(world: [0,-0.5,0])
-        light2.components.set(strongLight)
-        anchorLight.addChild(light2)
-        
-        let lightFon1 = AnchorEntity(world: [1,1,-2])
-        lightFon1.components.set(pointLight)
-        anchorLight.addChild(lightFon1)
-        
-        let lightFon2 = AnchorEntity(world: [-1,2,-2])
-        lightFon2.components.set(pointLight)
-        anchorLight.addChild(lightFon2)
-        
-        let lightFon3 = AnchorEntity(world: [-1,1,-2])
-        lightFon3.components.set(strongLight)
-        anchorLight.addChild(lightFon3)
-    }
-    
     func stopSession() {
-        arView.session.pause()
-        self.animationController = nil
-        subAnimComplete?.cancel()
-//        self.subAnimComplete = nil
-        self.timerAnimation?.invalidate()
-        self.timerAnimation = nil
+        presenter.stopSession()
+//        arView.session.pause()
+//        self.animationController = nil
+//        subAnimComplete?.cancel()
+////        self.subAnimComplete = nil
+//        self.timerAnimation?.invalidate()
+//        self.timerAnimation = nil
     }
     
     private func setupView() {
@@ -388,37 +347,37 @@ final class GeneralViewController: UIViewController {
           })
     }
     
-    private func createAnimRes() {
-        
-        if let availableAnimationsGirl = self.nodeGirl?.availableAnimations, self.nodeGirl?.availableAnimations.count != 0 {
-            let animGirl = availableAnimationsGirl[0]
-            
-            let flex1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex1), end: .init(timingFinishFlex1), duration: nil)))
-//            let flex2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
-//            let flex3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex3), end: .init(timingFinishFlex3), duration: nil)))
-//            let flex4: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex4), end: .init(timingFinishFlex4), duration: nil)))
-//            let flex5: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex5), end: .init(timingFinishFlex5), duration: nil)))
-            
-//            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
-//            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
-//            let emoji3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
-            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji3), duration: nil)))
-            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji5), duration: nil)))
-            
-            dictAnimationRes1["flex1"] = flex1
-//            dictAnimationRes1["flex2"] = flex2
-//            dictAnimationRes1["flex3"] = flex3
-//            dictAnimationRes1["flex4"] = flex4
-//            dictAnimationRes1["flex5"] = flex5
-            
-            dictAnimationRes1["emoji1"] = emoji1
-            dictAnimationRes1["emoji2"] = emoji2
+//    private func createAnimRes() {
+//
+//        if let availableAnimationsGirl = self.nodeGirl?.availableAnimations, self.nodeGirl?.availableAnimations.count != 0 {
+//            let animGirl = availableAnimationsGirl[0]
+//
+//            let flex1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex1), end: .init(timingFinishFlex1), duration: nil)))
+////            let flex2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
+////            let flex3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex3), end: .init(timingFinishFlex3), duration: nil)))
+////            let flex4: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex4), end: .init(timingFinishFlex4), duration: nil)))
+////            let flex5: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex5), end: .init(timingFinishFlex5), duration: nil)))
+//
+////            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
+////            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
+////            let emoji3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
+//            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji3), duration: nil)))
+//            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji5), duration: nil)))
+//
+//            dictAnimationRes1["flex1"] = flex1
+////            dictAnimationRes1["flex2"] = flex2
+////            dictAnimationRes1["flex3"] = flex3
+////            dictAnimationRes1["flex4"] = flex4
+////            dictAnimationRes1["flex5"] = flex5
+//
 //            dictAnimationRes1["emoji1"] = emoji1
 //            dictAnimationRes1["emoji2"] = emoji2
-//            dictAnimationRes1["emoji3"] = emoji3
-        }
-        
-    }
+////            dictAnimationRes1["emoji1"] = emoji1
+////            dictAnimationRes1["emoji2"] = emoji2
+////            dictAnimationRes1["emoji3"] = emoji3
+//        }
+//
+//    }
     
     @objc private func tapLevel1() {
         if self.animateMode == .emoji {
@@ -619,6 +578,8 @@ final class GeneralViewController: UIViewController {
     
     private func generateOkoBot() -> ModelEntity? {
         
+        guard let okoBot = self.okoBot else {return nil}
+        
         let nameVideo = "okoBotVizor_lvl2_demo"
         let item = returnAVPlayerItem(nameVideo: nameVideo)
         
@@ -627,8 +588,6 @@ final class GeneralViewController: UIViewController {
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerOkoBot)
         videoPlayerOkoBot.play()
         videoPlayerOkoBot.rate = 0.84
-        
-        guard let okoBot = self.okoBot else {return nil}
         
         okoBot.model?.materials[0] = videoMaterial
         
@@ -706,63 +665,63 @@ final class GeneralViewController: UIViewController {
         }
     }
     
-    private func subAnim() {
-        
-        subAnimComplete = arView.scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: self.nodeGirl, { event in
-            
-            self.serialQueue.sync {
-            
-            switch self.animateMode {
-            case .waiting:
-                
-//                let flex = "flex" + String(self.flexCounter)
-//                print ("awdhjbjhbhj", flex)
-                
-                self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["flex1"]!)
-                
-                self.flexCounter += 1
-                
-            case .emoji:
-                
-                let emoji = "emoji" + String(self.emojiCounter)
-                print ("awdhjbjhbhj", emoji)
-                    
-//                    self.videoPlayerEmoji?.advanceToNextItem()
-                    /// конец
-//                    NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying(_:)), name: AVPlayerItemDidPlayToEndTimeNotification, object: self.videoPlayerEmoji.currentItem)
-                    
-                    switch self.chooseLevel {
-                    case 1:
-                        
-                        if self.emojiCounter == 1 {
-                            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
-//                            self.animationController?.speed = 1.15
-                        }
-                        
-                        if self.emojiCounter == 2 {
-                            self.arSwitch.isOn = true
-                        }
-                    case 2:
-                        if self.emojiCounter == 1 {
-                            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["flex1"]!)
-                        }
-                        
-                        if self.emojiCounter == 2 {
-                            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
-                        }
-                        
-                        if self.emojiCounter == 3 {
-                            self.arSwitch.isOn = true
-                        }
-                        self.animationController?.speed = 1.5
-                        
-                    default: break
-                    }
-                self.emojiCounter += 1
-            }
-            }
-        })
-    }
+//    private func subAnim() {
+//        
+//        subAnimComplete = arView.scene.subscribe(to: AnimationEvents.PlaybackCompleted.self, on: self.nodeGirl, { event in
+//            
+//            self.serialQueue.sync {
+//            
+//            switch self.animateMode {
+//            case .waiting:
+//                
+////                let flex = "flex" + String(self.flexCounter)
+////                print ("awdhjbjhbhj", flex)
+//                
+//                self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["flex1"]!)
+//                
+//                self.flexCounter += 1
+//                
+//            case .emoji:
+//                
+//                let emoji = "emoji" + String(self.emojiCounter)
+//                print ("awdhjbjhbhj", emoji)
+//                    
+////                    self.videoPlayerEmoji?.advanceToNextItem()
+//                    /// конец
+////                    NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying(_:)), name: AVPlayerItemDidPlayToEndTimeNotification, object: self.videoPlayerEmoji.currentItem)
+//                    
+//                    switch self.chooseLevel {
+//                    case 1:
+//                        
+//                        if self.emojiCounter == 1 {
+//                            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji1"]!)
+////                            self.animationController?.speed = 1.15
+//                        }
+//                        
+//                        if self.emojiCounter == 2 {
+//                            self.arSwitch.isOn = true
+//                        }
+//                    case 2:
+//                        if self.emojiCounter == 1 {
+//                            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["flex1"]!)
+//                        }
+//                        
+//                        if self.emojiCounter == 2 {
+//                            self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["emoji2"]!)
+//                        }
+//                        
+//                        if self.emojiCounter == 3 {
+//                            self.arSwitch.isOn = true
+//                        }
+//                        self.animationController?.speed = 1.5
+//                        
+//                    default: break
+//                    }
+//                self.emojiCounter += 1
+//            }
+//            }
+//        })
+//    }
     
     private func stopAnimationFlex() {
         self.serialQueue.sync {
