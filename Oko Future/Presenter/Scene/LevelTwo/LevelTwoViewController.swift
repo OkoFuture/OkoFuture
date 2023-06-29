@@ -20,7 +20,8 @@ public enum ArmSide {
 }
 
 protocol LevelTwoViewProtocol {
-    var isOKO: Bool { get set }
+//    var isOKO: Bool { get set }
+    func updateIsOko(isOKO: Bool)
 }
 
 final class LevelTwoViewController: UIViewController {
@@ -117,6 +118,20 @@ final class LevelTwoViewController: UIViewController {
     
     func stopSession() {
         presenter.stopSession()
+    }
+    
+    func updateIsOko(isOKO: Bool) {
+        if isOKO == true {
+            stepImageView.image = UIImage(named: "S")
+            photoVideoButton.isHidden = false
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+                self.stepImageView.image = UIImage(named: "Step 2 (3)")
+
+                DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: {
+                    self.stepImageView.isHidden = true
+                })
+            })
+        }
     }
     
     @objc func backButtonTap() {

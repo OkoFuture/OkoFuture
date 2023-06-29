@@ -304,7 +304,7 @@ extension LevelOneViewController: ARSessionDelegate {
     }
     
     private func dowloadVideos() {
-        
+        /// цикл срань
         if playerItemPokerFace.isEmpty {
             for i in 0...1 {
                 guard let playerItem = dowloadPlayerItem(index: i) else {return}
