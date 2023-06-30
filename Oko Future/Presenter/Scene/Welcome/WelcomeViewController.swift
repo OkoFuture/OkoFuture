@@ -29,7 +29,7 @@ final class WelcomeViewController: UIViewController {
     private var videoView = UIView()
     
     private let welcomeImage: UIImageView = {
-        let img = UIImage(named: "welcomeAlpha")
+        let img = UIImage(named: "welcomeFinal")
         let imgV = UIImageView(image: img)
         imgV.contentMode = .scaleAspectFit
         return imgV

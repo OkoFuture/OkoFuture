@@ -11,8 +11,9 @@ import Firebase
 import GoogleSignIn
 import FirebaseDatabase
 import MessageUI
-
+/// надо норм сделать
 protocol LogInViewProtocol: AnyObject {
+//protocol LogInViewProtocol: UIViewController {
     
 }
 

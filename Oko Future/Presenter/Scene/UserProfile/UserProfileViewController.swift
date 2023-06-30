@@ -17,6 +17,12 @@ final class UserProfileViewController: UIViewController {
     
     var presenter: UserProfileViewPresenterDelegate!
     
+    let backgroundView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .white
+        return view
+    }()
+    
     private let backButton: OkoDefaultButton = {
         let btn = OkoDefaultButton()
         btn.setImage(UIImage(named: "arrow_back"), for: .normal)
@@ -62,8 +68,9 @@ final class UserProfileViewController: UIViewController {
     }
     
     private func setupView() {
-        view.backgroundColor = .white.withAlphaComponent(0.72)
+        view.backgroundColor = .systemGray.withAlphaComponent(0.72)
         
+        view.addSubview(backgroundView)
         view.addSubview(backButton)
         view.addSubview(uploadBackView)
         view.addSubview(uploadImageView)
@@ -84,6 +91,8 @@ final class UserProfileViewController: UIViewController {
     
     private func setupLayout() {
         let heightOko: CGFloat = 48
+        
+        backgroundView.frame = view.frame
         
         backButton.frame = CGRect(x: 21, y: 61, width: heightOko, height: heightOko)
         

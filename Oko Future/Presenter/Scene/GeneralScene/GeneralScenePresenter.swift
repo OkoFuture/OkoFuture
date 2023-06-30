@@ -504,6 +504,7 @@ final class GeneralScenePresenter: NSObject {
             /// алерту прокинуть
 //            let action = UIAlertAction(title: "Close", style: .cancel)
 //            Helper().showAlert(title: "Error", message: "Your device does not support ar mode", view: self, actions: [action])
+            
         }
     }
     
@@ -660,7 +661,7 @@ extension GeneralScenePresenter: GeneralScenePresenterDelegate {
     }
     
     func tapUserProfile() {
-        
+        coordinatorDelegate.showUserProfileView()
     }
     
     func showScene() {

@@ -172,7 +172,8 @@ final class GeneralViewController: UIViewController {
     
     private let profileSettingButton: OkoDefaultButton = {
        let btn = OkoDefaultButton()
-        btn.setTitle("P", for: .normal)
+        btn.setImage(UIImage(named: "Group 28"), for: .normal)
+        btn.imageEdgeInsets = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         return btn
     }()
     

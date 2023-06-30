@@ -10,10 +10,15 @@ import UIKit
 import RealityKit
 
 extension UIViewController {
-    func showError(with message: String) {
-        let alert = UIAlertController(title: "An error occurred!", message: message, preferredStyle: .alert)
+//extension LogInViewProtocol {
+    func showError(title: String? = nil, message: String, complection: (() -> Void)? = nil) {
+        
+        let alert = UIAlertController(title: title ?? "An error occurred!", message: message, preferredStyle: .alert)
+        
         alert.addAction(UIAlertAction(title: "Close", style: .default, handler: { _ in
             alert.dismiss(animated: true, completion: nil)
+            guard let complection = complection else { return }
+            complection()
         }))
         navigationController?.present(alert, animated: true, completion: nil)
     }

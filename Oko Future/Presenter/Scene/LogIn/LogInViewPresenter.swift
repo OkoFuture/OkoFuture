@@ -54,7 +54,7 @@ extension LogInViewPresenter: LogInViewPresenterDelegate {
     }
     
     func signInEmail(withEmail: String, password: String, completionHandler: @escaping (() -> Void)) {
-        regService.signInEmail(withEmail: withEmail, password: password, completionHandler: completionHandler)
+        regService.signInEmail(view: logInView as! UIViewController, withEmail: withEmail, password: password, completionHandler: completionHandler)
     }
     
     
@@ -114,11 +114,11 @@ extension LogInViewPresenter: LogInViewPresenterDelegate {
     }
     
     func tapLogInGoogle(completionHandler: @escaping (() -> Void)) {
-        regService.signIn(completionHandler: completionHandler)
+        regService.signIn(view: logInView as! UIViewController, completionHandler: completionHandler)
     }
     
     func pushToProfileSettingViewController() {
-        coordinatorDelegate?.pushToProfileSettingViewController()
+        coordinatorDelegate.pushToProfileSettingViewController()
     }
     
     func tapLogInApple(delegate: ASAuthorizationControllerDelegate, presentationContextProvider: ASAuthorizationControllerPresentationContextProviding) {

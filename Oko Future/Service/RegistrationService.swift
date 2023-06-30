@@ -15,11 +15,11 @@ final class RegistrationService {
     
     let userService = UserService()
     
-    func signIn(completionHandler: @escaping (() -> Void)) {
+    func signIn(view: UIViewController,completionHandler: @escaping (() -> Void)) {
         
         if GIDSignIn.sharedInstance.hasPreviousSignIn() {
             GIDSignIn.sharedInstance.restorePreviousSignIn { [unowned self] user, error in
-                self.authenticateUser(for: user, with: error, completionHandler: completionHandler)
+                self.authenticateUser(view: view, for: user, with: error, completionHandler: completionHandler)
             }
         } else {
             
@@ -33,17 +33,19 @@ final class RegistrationService {
             guard let rootViewController = windowScene.windows.first?.rootViewController else { return }
             
             GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController, hint: nil, completion: { [unowned self] result, error in
-                self.authenticateUser(for: result?.user, with: error, completionHandler: completionHandler)
+                self.authenticateUser(view: view, for: result?.user, with: error, completionHandler: completionHandler)
             })
         }
     }
     
-    private func authenticateUser(for user: GIDGoogleUser?, with error: Error?, completionHandler: @escaping (() -> Void)) {
+    private func authenticateUser(view: UIViewController , for user: GIDGoogleUser?, with error: Error?, completionHandler: @escaping (() -> Void)) {
         if let error = error {
             print(error.localizedDescription)
             
-            let action = UIAlertAction(title: "Close", style: .cancel)
+//            let action = UIAlertAction(title: "Close", style: .cancel)
 //            Helper().showAlert(title: "Error", message: "Login failed", view: self, actions: [action])
+            view.showError(message: "Login failed")
+                
             return
         }
         
@@ -78,7 +80,7 @@ final class RegistrationService {
         }
     }
     
-    public func signInEmail(withEmail: String, password: String, completionHandler: @escaping (() -> Void)) {
+    public func signInEmail(view: UIViewController, withEmail: String, password: String, completionHandler: @escaping (() -> Void)) {
         Auth.auth().signIn(withEmail: withEmail, password: password) { [weak self] authResult, error in
           guard let strongSelf = self else { return }
           
@@ -87,7 +89,7 @@ final class RegistrationService {
                 
                 if error.localizedDescription == "The password is invalid or the user does not have a password." {
                     let action = UIAlertAction(title: "Close", style: .cancel)
-//                    Helper().showAlert(title: "Error", message: error.localizedDescription, view: strongSelf, actions: [action])
+                    view.showError(message: error.localizedDescription)
                     return
                 }
                 
@@ -98,14 +100,16 @@ final class RegistrationService {
                         print("bhjkdawbhjkawdbhjk fire", error.localizedDescription)
                         
                         let action = UIAlertAction(title: "Close", style: .cancel)
-//                        Helper().showAlert(title: "Error", message: error.localizedDescription, view: strongSelf, actions: [action])
+                        view.showError(message: error.localizedDescription)
                     } else {
                         guard let self = self else { return }
                         let action = UIAlertAction(title: "Close", style: .cancel, handler: {_ in
                             self.userService.updateUserLogStatus(logStatus: .logInWithEmail)
                             completionHandler()
                         })
-//                        Helper().showAlert(title: nil, message: "User created successfully", view: strongSelf, actions: [action])
+                        view.showError(title: "", message: "User created successfully", complection: {
+                            completionHandler()
+                        })
                     }
                     
                 })
