@@ -128,7 +128,7 @@ final class GeneralScenePresenter: NSObject {
               cancellable?.cancel()
             }, receiveValue: { entity in
                 
-                entity.setScale(SIMD3(x: 2, y: 2, z: 2), relativeTo: self.sceneEntity)
+                entity.setScale(SIMD3(x: 2, y: 2, z: 2), relativeTo: entity)
                 self.sceneEntity = entity
                 
                 cancellable = ModelEntity.loadModelAsync(named: arrayNameScene[0])
