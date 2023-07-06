@@ -9,9 +9,8 @@ import Foundation
 import UIKit
 import RealityKit
 
-extension UIViewController {
-//extension LogInViewProtocol {
-    func showError(title: String? = nil, message: String, complection: (() -> Void)? = nil) {
+extension UIViewController: ShowAlertProtocol {
+    func showAlert(title: String? = nil, message: String, complection: (() -> Void)? = nil) {
         
         let alert = UIAlertController(title: title ?? "An error occurred!", message: message, preferredStyle: .alert)
         

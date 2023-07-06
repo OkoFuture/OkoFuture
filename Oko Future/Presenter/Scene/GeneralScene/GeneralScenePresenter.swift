@@ -62,7 +62,6 @@ final class GeneralScenePresenter: NSObject {
     private var timerAnimation: Timer? = nil
     private var animationController: AnimationPlaybackController? = nil
     private var animateMode: AnimationMode = .waiting
-//    private var chooseLevel = 1
     var chooseLevel = 1
     
     private var emojiCounter = 1 {
@@ -143,10 +142,6 @@ final class GeneralScenePresenter: NSObject {
                       self.materialTshirt = entity.model?.materials[3]
                       self.setupScene()
                       self.startSession()
-
-//                      DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
-//                          self.setupScene()
-//                      })
                       
                       cancellable?.cancel()
                   })
@@ -258,9 +253,6 @@ final class GeneralScenePresenter: NSObject {
             switch self.animateMode {
             case .waiting:
                 
-//                let flex = "flex" + String(self.flexCounter)
-//                print ("awdhjbjhbhj", flex)
-                
                 self.animationController = self.nodeGirl?.playAnimation(self.dictAnimationRes1["flex1"]!)
                 
                 self.flexCounter += 1
@@ -269,10 +261,6 @@ final class GeneralScenePresenter: NSObject {
                 
                 let emoji = "emoji" + String(self.emojiCounter)
                 print ("awdhjbjhbhj", emoji)
-                    
-//                    self.videoPlayerEmoji?.advanceToNextItem()
-                    /// конец
-//                    NotificationCenter.default.addObserver(self, selector: #selector(playerDidFinishPlaying(_:)), name: AVPlayerItemDidPlayToEndTimeNotification, object: self.videoPlayerEmoji.currentItem)
                     
                     switch self.chooseLevel {
                     case 1:
@@ -283,7 +271,6 @@ final class GeneralScenePresenter: NSObject {
                         }
                         
                         if self.emojiCounter == 2 {
-//                            self.arSwitch.isOn = true
                             self.view.changeStateSwitch(state: true)
                         }
                     case 2:
@@ -296,7 +283,6 @@ final class GeneralScenePresenter: NSObject {
                         }
                         
                         if self.emojiCounter == 3 {
-//                            self.arSwitch.isOn = true
                             self.view.changeStateSwitch(state: true)
                         }
                         self.animationController?.speed = 1.5
@@ -315,28 +301,13 @@ final class GeneralScenePresenter: NSObject {
             let animGirl = availableAnimationsGirl[0]
             
             let flex1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex1), end: .init(timingFinishFlex1), duration: nil)))
-//            let flex2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex2), end: .init(timingFinishFlex2), duration: nil)))
-//            let flex3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex3), end: .init(timingFinishFlex3), duration: nil)))
-//            let flex4: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex4), end: .init(timingFinishFlex4), duration: nil)))
-//            let flex5: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartFlex5), end: .init(timingFinishFlex5), duration: nil)))
-            
-//            let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji1), duration: nil)))
-//            let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji2), end: .init(timingFinishEmoji2), duration: nil)))
-//            let emoji3: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji3), duration: nil)))
             let emoji1: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji1), end: .init(timingFinishEmoji3), duration: nil)))
             let emoji2: AnimationResource = try! .generate(with: (animGirl.definition.trimmed(start: .init(timingStartEmoji3), end: .init(timingFinishEmoji5), duration: nil)))
             
             dictAnimationRes1["flex1"] = flex1
-//            dictAnimationRes1["flex2"] = flex2
-//            dictAnimationRes1["flex3"] = flex3
-//            dictAnimationRes1["flex4"] = flex4
-//            dictAnimationRes1["flex5"] = flex5
             
             dictAnimationRes1["emoji1"] = emoji1
             dictAnimationRes1["emoji2"] = emoji2
-//            dictAnimationRes1["emoji1"] = emoji1
-//            dictAnimationRes1["emoji2"] = emoji2
-//            dictAnimationRes1["emoji3"] = emoji3
         }
         
     }
@@ -500,11 +471,9 @@ final class GeneralScenePresenter: NSObject {
             }
             
         } else {
-            print ("log ARFaceTrackingConfiguration.isSupported == false")
-            /// алерту прокинуть
-//            let action = UIAlertAction(title: "Close", style: .cancel)
-//            Helper().showAlert(title: "Error", message: "Your device does not support ar mode", view: self, actions: [action])
             
+            guard let view = view as? UIViewController else {return}
+            view.showAlert(title: "Error", message: "Your device does not support ar mode")
         }
     }
     
@@ -628,7 +597,6 @@ final class GeneralScenePresenter: NSObject {
         }
     }
     
-
 }
 
 extension GeneralScenePresenter: GeneralScenePresenterDelegate {
@@ -665,9 +633,7 @@ extension GeneralScenePresenter: GeneralScenePresenterDelegate {
     }
     
     func showScene() {
-//        setupScene()
         uploadScene()
     }
-    
     
 }

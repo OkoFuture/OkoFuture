@@ -14,7 +14,6 @@
 		920BF13529CC3D34001D40DA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 920BF13329CC3D34001D40DA /* LaunchScreen.storyboard */; };
 		920BF14329CC804A001D40DA /* hd1833.mov in Resources */ = {isa = PBXBuildFile; fileRef = 920BF14229CC804A001D40DA /* hd1833.mov */; };
 		922CEB3B29D4771E002326F8 /* puppets_with_alpha_hevc.mov in Resources */ = {isa = PBXBuildFile; fileRef = 922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */; };
-		9292EE3029D09A4500526C07 /* UploadSceneViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */; };
 		92C8306529D6C5A800C660D1 /* excited.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8305F29D6C5A700C660D1 /* excited.mov */; };
 		92C8306729D6C5A800C660D1 /* excited_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306129D6C5A700C660D1 /* excited_transition.mov */; };
 		92C8306829D6C5A800C660D1 /* shoced_transition.mov in Resources */ = {isa = PBXBuildFile; fileRef = 92C8306229D6C5A700C660D1 /* shoced_transition.mov */; };
@@ -59,6 +58,7 @@
 		D170D20A2A42345A00F8A831 /* okoBotVizor_Shock_lvl2_ar.mov in Resources */ = {isa = PBXBuildFile; fileRef = D170D2052A42345A00F8A831 /* okoBotVizor_Shock_lvl2_ar.mov */; };
 		D170D20B2A42345A00F8A831 /* body_shock_lvl2_ar.mov in Resources */ = {isa = PBXBuildFile; fileRef = D170D2062A42345A00F8A831 /* body_shock_lvl2_ar.mov */; };
 		D170D20C2A42345A00F8A831 /* leftHand_Shock_lvl2_ar.mov in Resources */ = {isa = PBXBuildFile; fileRef = D170D2072A42345A00F8A831 /* leftHand_Shock_lvl2_ar.mov */; };
+		D184DBC22A56BD01002CCBA1 /* ShowAlertProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = D184DBC12A56BD01002CCBA1 /* ShowAlertProtocol.swift */; };
 		D188947E2A30CA5D00146348 /* lefthand_lvl2.mov in Resources */ = {isa = PBXBuildFile; fileRef = D188947B2A30CA5A00146348 /* lefthand_lvl2.mov */; };
 		D188947F2A30CA5D00146348 /* body_lvl2.mov in Resources */ = {isa = PBXBuildFile; fileRef = D188947C2A30CA5C00146348 /* body_lvl2.mov */; };
 		D18894802A30CA5D00146348 /* righthand_lvl2.mov in Resources */ = {isa = PBXBuildFile; fileRef = D188947D2A30CA5D00146348 /* righthand_lvl2.mov */; };
@@ -105,7 +105,6 @@
 		920BF13629CC3D34001D40DA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		920BF14229CC804A001D40DA /* hd1833.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = hd1833.mov; sourceTree = "<group>"; };
 		922CEB3A29D4771E002326F8 /* puppets_with_alpha_hevc.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = puppets_with_alpha_hevc.mov; sourceTree = "<group>"; };
-		9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadSceneViewController.swift; sourceTree = "<group>"; };
 		92C8305F29D6C5A700C660D1 /* excited.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = excited.mov; sourceTree = "<group>"; };
 		92C8306129D6C5A700C660D1 /* excited_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = excited_transition.mov; sourceTree = "<group>"; };
 		92C8306229D6C5A700C660D1 /* shoced_transition.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = shoced_transition.mov; sourceTree = "<group>"; };
@@ -149,6 +148,7 @@
 		D170D2052A42345A00F8A831 /* okoBotVizor_Shock_lvl2_ar.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = okoBotVizor_Shock_lvl2_ar.mov; sourceTree = "<group>"; };
 		D170D2062A42345A00F8A831 /* body_shock_lvl2_ar.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = body_shock_lvl2_ar.mov; sourceTree = "<group>"; };
 		D170D2072A42345A00F8A831 /* leftHand_Shock_lvl2_ar.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = leftHand_Shock_lvl2_ar.mov; sourceTree = "<group>"; };
+		D184DBC12A56BD01002CCBA1 /* ShowAlertProtocol.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowAlertProtocol.swift; sourceTree = "<group>"; };
 		D188947B2A30CA5A00146348 /* lefthand_lvl2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = lefthand_lvl2.mov; sourceTree = "<group>"; };
 		D188947C2A30CA5C00146348 /* body_lvl2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = body_lvl2.mov; sourceTree = "<group>"; };
 		D188947D2A30CA5D00146348 /* righthand_lvl2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = righthand_lvl2.mov; sourceTree = "<group>"; };
@@ -262,6 +262,7 @@
 				D199EC1B2A32123900968291 /* Oko Future.entitlements */,
 				920BF12829CC3D33001D40DA /* AppDelegate.swift */,
 				920BF12A29CC3D33001D40DA /* SceneDelegate.swift */,
+				D184DBC02A56BCDC002CCBA1 /* Protocol */,
 				D1EE6B452A49B2190069D2C3 /* Service */,
 				D1F49B0C2A4AD807005BB077 /* Extension */,
 				D1F49B0F2A4AE0FD005BB077 /* Presenter */,
@@ -295,6 +296,14 @@
 				D15A35B929F69BF300E3F6E1 /* ChakraPetch-SemiBold.ttf */,
 			);
 			path = Font;
+			sourceTree = "<group>";
+		};
+		D184DBC02A56BCDC002CCBA1 /* Protocol */ = {
+			isa = PBXGroup;
+			children = (
+				D184DBC12A56BD01002CCBA1 /* ShowAlertProtocol.swift */,
+			);
+			path = Protocol;
 			sourceTree = "<group>";
 		};
 		D1EE6B452A49B2190069D2C3 /* Service */ = {
@@ -426,7 +435,6 @@
 		D1F49B1B2A4AE315005BB077 /* GeneralScene */ = {
 			isa = PBXGroup;
 			children = (
-				9292EE2F29D09A4500526C07 /* UploadSceneViewController.swift */,
 				920BF12C29CC3D33001D40DA /* GeneralViewController.swift */,
 				D1F49B2A2A4B5EBB005BB077 /* GeneralScenePresenter.swift */,
 			);
@@ -563,7 +571,6 @@
 				D16AC0BF2A4C214D001DF8C3 /* LevelTwoViewPresenter.swift in Sources */,
 				D1F49B1D2A4AE393005BB077 /* Coordinator.swift in Sources */,
 				D10B06F829F7FDB6002B9868 /* LevelOneViewController.swift in Sources */,
-				9292EE3029D09A4500526C07 /* UploadSceneViewController.swift in Sources */,
 				D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */,
 				D16D0D8E2A4E02FF003C5192 /* UserProfileViewPresenter.swift in Sources */,
 				D1F49B1F2A4AE3A3005BB077 /* AppCoordinator.swift in Sources */,
@@ -571,6 +578,7 @@
 				D16D0D8C2A4DEDD0003C5192 /* LevelOneViewPresenter.swift in Sources */,
 				D1D5B3BD2A24CE9C00E03647 /* PasswordViewController.swift in Sources */,
 				D1F49B232A4AE3CF005BB077 /* FeatureSceneFactory.swift in Sources */,
+				D184DBC22A56BD01002CCBA1 /* ShowAlertProtocol.swift in Sources */,
 				D1F49B252A4AE43F005BB077 /* WelcomeViewPresenter.swift in Sources */,
 				D1D5B3BF2A24D31800E03647 /* ProfileSettingViewController.swift in Sources */,
 				D1FC93462A1615B8002A3B05 /* CNNEmotions.mlmodel in Sources */,

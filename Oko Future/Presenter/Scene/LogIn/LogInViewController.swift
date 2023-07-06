@@ -12,8 +12,7 @@ import GoogleSignIn
 import FirebaseDatabase
 import MessageUI
 /// надо норм сделать
-protocol LogInViewProtocol: AnyObject {
-//protocol LogInViewProtocol: UIViewController {
+protocol LogInViewProtocol {
     
 }
 
@@ -121,21 +120,11 @@ final class LogInViewController: UIViewController {
         view.addSubview(appleSignUpButton)
         view.addSubview(googleSignUpButton)
         
-        emailTextField.delegate = self
-        passwordTextField.delegate = self
-        
         sendCodeButton.addTarget(self, action: #selector(tapSendButton), for: .touchUpInside)
         let tapAppleButton = UITapGestureRecognizer(target: self, action: #selector(tapLogInApple))
         appleSignUpButton.addGestureRecognizer(tapAppleButton)
         let tapGoogleButton = UITapGestureRecognizer(target: self, action: #selector(tapLogInGoogle))
         googleSignUpButton.addGestureRecognizer(tapGoogleButton)
-        
-        NotificationCenter.default.addObserver(
-            self,
-            selector: #selector(keyboardWillShow),
-            name: UIResponder.keyboardWillShowNotification,
-            object: nil
-        )
     }
     
     private func setupLayout() {
@@ -222,54 +211,6 @@ extension LogInViewController: ASAuthorizationControllerPresentationContextProvi
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         return view.window!
     }
-}
-
-extension LogInViewController: UITextFieldDelegate {
-    
-    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-            
-            textField.resignFirstResponder() // Always dismiss KB upon textField 'Return'
-                 return false
-        }
-    
-    func textFieldDidEndEditing(_ textField: UITextField) {
-        
-        var moveValueDown: CGFloat = 0.0
-        
-        if textField == passwordTextField {
-            moveValueDown = CGFloat(keyboardHeight)
-        }
-        
-        if moveValueDown > 0 {
-//            animateViewMoving(false, moveValue: moveValueDown)
-        }
-    }
-    
-    func animateViewMoving (_ up:Bool, moveValue :CGFloat){
-//            let movementDuration:TimeInterval = 0.3
-            let movement:CGFloat = ( up ? -moveValue : moveValue)
-//            UIView.beginAnimations( "animateView", context: nil)
-//            UIView.setAnimationBeginsFromCurrentState(true)
-//            UIView.setAnimationDuration(movementDuration )
-            self.view.frame = self.view.frame.offsetBy(dx: 0,  dy: movement)
-//            UIView.commitAnimations()
-        }
-        
-        @objc func keyboardWillShow(notification: NSNotification) {
-            
-            // IMPORTANT Use    UIKeyboardFrameEndUserInfoKey
-            //                  UIKeyboardFrameBeginUserInfoKey (gives inconsistent KB heights)
-            if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
-              keyboardHeight = keyboardSize.height
-              print(#function, keyboardHeight)
-                // The 1st keyboardWillShow gets the keyboard size height then observer removed as no need to get keyboard height every time it shows or hides
-                NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-                
-                // Store KeyboardHeight in UserDefaults to use when in Edit Mode
-//                UserDefaults.standard.set(keyboardHeight, forKey: "KeyboardHeight")
-//                UserDefaults.standard.synchronize()
-            }
-        }
 }
 
 extension LogInViewController: LogInViewProtocol {

@@ -38,13 +38,13 @@ final class RegistrationService {
         }
     }
     
-    private func authenticateUser(view: UIViewController , for user: GIDGoogleUser?, with error: Error?, completionHandler: @escaping (() -> Void)) {
+    private func authenticateUser(view: ShowAlertProtocol , for user: GIDGoogleUser?, with error: Error?, completionHandler: @escaping (() -> Void)) {
         if let error = error {
             print(error.localizedDescription)
             
 //            let action = UIAlertAction(title: "Close", style: .cancel)
 //            Helper().showAlert(title: "Error", message: "Login failed", view: self, actions: [action])
-            view.showError(message: "Login failed")
+            view.showAlert(title: nil, message: "Login failed", complection: nil)
                 
             return
         }
@@ -80,7 +80,7 @@ final class RegistrationService {
         }
     }
     
-    public func signInEmail(view: UIViewController, withEmail: String, password: String, completionHandler: @escaping (() -> Void)) {
+    public func signInEmail(view: ShowAlertProtocol, withEmail: String, password: String, completionHandler: @escaping (() -> Void)) {
         Auth.auth().signIn(withEmail: withEmail, password: password) { [weak self] authResult, error in
           guard let strongSelf = self else { return }
           
@@ -88,26 +88,18 @@ final class RegistrationService {
                 print ("signInEmail fail error =", error.localizedDescription)
                 
                 if error.localizedDescription == "The password is invalid or the user does not have a password." {
-                    let action = UIAlertAction(title: "Close", style: .cancel)
-                    view.showError(message: error.localizedDescription)
+                    view.showAlert(title: nil, message: error.localizedDescription, complection: nil)
                     return
                 }
                 
                 strongSelf.addUserFirebase(email: withEmail, password: password, completedHangler: { [weak self] error in
                     
                     if let error = error {
-                        
-                        print("bhjkdawbhjkawdbhjk fire", error.localizedDescription)
-                        
-                        let action = UIAlertAction(title: "Close", style: .cancel)
-                        view.showError(message: error.localizedDescription)
+                        view.showAlert(title: nil, message: error.localizedDescription, complection: nil)
                     } else {
                         guard let self = self else { return }
-                        let action = UIAlertAction(title: "Close", style: .cancel, handler: {_ in
+                        view.showAlert(title: nil, message: "User created successfully", complection: {
                             self.userService.updateUserLogStatus(logStatus: .logInWithEmail)
-                            completionHandler()
-                        })
-                        view.showError(title: "", message: "User created successfully", complection: {
                             completionHandler()
                         })
                     }
