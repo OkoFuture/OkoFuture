@@ -22,14 +22,8 @@ protocol LevelTwoViewPresenterDelegate: AnyObject {
 }
 
 final class LevelTwoViewPresenter: NSObject {
-    /// переделать на функцию
-    var isOKO = false {
-        didSet {
-            if isOKO != oldValue {
-                view.updateIsOko(isOKO: isOKO)
-            }
-        }
-    }
+    
+    var isOKO = false
     
     private let classifierService = OkoClassifierService()
     
@@ -45,58 +39,55 @@ final class LevelTwoViewPresenter: NSObject {
     private var okoBot: ModelEntity? = nil
     private var okoScreen: ModelEntity? = nil
     
-    private var videoPlayerScreen = AVPlayer()
-    private var videoPlayerOkoBot = AVPlayer()
+    private var videoPlayerScreen = AVQueuePlayer()
+    private var videoPlayerOkoBot = AVQueuePlayer()
     
     private var videoPlayerPlaneBody = AVPlayer()
-    private var videoPlayerPlaneLeftHand = AVPlayer()
-    private var videoPlayerPlaneRightHand = AVPlayer()
-    /// убрать сраные словари и массивы с AVPlayerItem
-    private var playerItemSurpris = [String : AVPlayerItem]()
-    private var playerItemCry = [String : AVPlayerItem]()
-    private var playerItemCuteness = [String : AVPlayerItem]()
     
     private let nameSurpriseItem = ["screen_Shock_lvl2_ar", "okoBotVizor_Shock_lvl2_ar", "body_shock_lvl2_ar", "leftHand_Shock_lvl2_ar", "righthand_Shock_lvl2_ar"]
     private let nameCryItem = ["screen_Cry_lvl2_ar", "okoBotVizor_Cry_lvl2_ar", "body_cry_lvl2_ar", "leftHand_Cry_lvl2_ar", "righthand_Cry_lvl2_ar"]
     private let nameCutenessItem = ["screen_Cut_lvl2_ar", "okoBotVizor_Cut_lvl2_ar", "body_Cut_lvl2_ar", "leftHand_Cut_lvl2_ar", "righthand_Cut_lvl2_ar"]
     
     var model: VNCoreMLModel?
-    /// переделать на функцию
-    private var emoji: EmojiLVL2? = nil {
+    
+    private var emojiOldValue: EmojiLVL2? = nil {
         didSet {
-            if emoji != oldValue, let emoji = emoji {
-                self.emoji = emoji
-                self.changeVideoFivePlayer(emoji: emoji)
+            if emojiOldValue != oldValue, let emoji = emojiOldValue {
+                self.emojiOldValue = emoji
             }
         }
     }
     /// переделать на функцию
-    private var counterEmoji = 0 {
-        didSet {
-            if counterEmoji == 30 {
-                emojiTrack()
-                counterEmoji = 0
-            }
-        }
-    }
+    
+    private var counterEmoji = 0
+//    private var counterEmoji = 0 {
+//        didSet {
+//            if counterEmoji == 30 {
+//                emojiTrack()
+//                counterEmoji = 0
+//            }
+//        }
+//    }
     /// переделать на функцию
-    private var counterSearchImage = 0 {
-        didSet {
-            
-            if isOKO {
-                if counterSearchImage == 600 {
-                    reqvest()
-                    counterSearchImage = 0
-                }
-                
-            } else {
-                if counterSearchImage == 30 {
-                    reqvest()
-                    counterSearchImage = 0
-                }
-            }
-        }
-    }
+//    private var counterSearchImage = 0 {
+//        didSet {
+//
+//            if isOKO {
+//                if counterSearchImage == 600 {
+//                    reqvest()
+//                    counterSearchImage = 0
+//                }
+//
+//            } else {
+//                if counterSearchImage == 30 {
+//                    reqvest()
+//                    counterSearchImage = 0
+//                }
+//            }
+//        }
+//    }
+    
+    var counterSearchImage = 0
     
     init(view: LevelTwoViewProtocol, arView: ARView, coordinatorDelegate: LevelTwoViewCoordinatorDelegate) {
         self.view = view
@@ -106,30 +97,30 @@ final class LevelTwoViewPresenter: NSObject {
         
         self.arView.session.delegate = self
         bindToImageClassifierService()
-        setPlayerItem()
+//        setPlayerItem()
     }
     
-    private func setPlayerItem() {
-        
-        if playerItemSurpris.isEmpty {
-            for name in nameSurpriseItem {
-                playerItemSurpris[name] = returnAVPlayerItem(nameVideo: name)
-            }
-        }
-        
-        if playerItemCry.isEmpty {
-            for name in nameCryItem {
-                playerItemCry[name] = returnAVPlayerItem(nameVideo: name)
-            }
-        }
-        
-        if playerItemCuteness.isEmpty {
-            for name in nameCutenessItem {
-                playerItemCuteness[name] = returnAVPlayerItem(nameVideo: name)
-            }
-        }
-        
-    }
+//    private func setPlayerItem() {
+//
+//        if playerItemSurpris.isEmpty {
+//            for name in nameSurpriseItem {
+//                playerItemSurpris[name] = returnAVPlayerItem(nameVideo: name)
+//            }
+//        }
+//
+//        if playerItemCry.isEmpty {
+//            for name in nameCryItem {
+//                playerItemCry[name] = returnAVPlayerItem(nameVideo: name)
+//            }
+//        }
+//
+//        if playerItemCuteness.isEmpty {
+//            for name in nameCutenessItem {
+//                playerItemCuteness[name] = returnAVPlayerItem(nameVideo: name)
+//            }
+//        }
+//
+//    }
     
     private func uploadModelEntity() {
         var cancellableBot: AnyCancellable? = nil
@@ -194,79 +185,50 @@ final class LevelTwoViewPresenter: NSObject {
         
         return item
     }
-    /// делаем avqueueplayer
-    /// при смене эмоции делать примерно это
-    /// только перекидывать insert в следующий ранЛуп
     
-//    func restartPlayer(){
-//            player.removeAllItems()
-//            playerItems.forEach{
-//                player.insert($0, after:nil)
-//            }
-//            player.seek(to: .zero)
-//
-//        }
-    
-    
-    func changeVideoFivePlayer(emoji: EmojiLVL2) {
+    func changeVideoEmoji(emoji: EmojiLVL2) {
+        
+        if emojiOldValue == emoji {return}
+        
+        emojiOldValue = emoji
+        
+        var itemScreen: AVPlayerItem?
+        var itemOkoBot: AVPlayerItem?
+        
         switch emoji {
             
         case .surprise:
-//            updatePlayers(name: nameSurpriseItem)
-            updatePlayers(avItem: playerItemSurpris, name: nameSurpriseItem)
-            playerItemSurpris.removeAll()
+            itemScreen = returnAVPlayerItem(nameVideo: nameSurpriseItem[0])
+            itemOkoBot = returnAVPlayerItem(nameVideo: nameSurpriseItem[1])
         case .cry:
-//            updatePlayers(name: nameCryItem)
-            updatePlayers(avItem: playerItemCry, name: nameCryItem)
-            playerItemCry.removeAll()
+            itemScreen = returnAVPlayerItem(nameVideo: nameCryItem[0])
+            itemOkoBot = returnAVPlayerItem(nameVideo: nameCryItem[1])
         case .cuteness:
-//            updatePlayers(name: nameCutenessItem)
-            updatePlayers(avItem: playerItemCuteness, name: nameCutenessItem)
-            playerItemCuteness.removeAll()
+            itemScreen = returnAVPlayerItem(nameVideo: nameCutenessItem[0])
+            itemOkoBot = returnAVPlayerItem(nameVideo: nameCutenessItem[1])
         }
         
-        setPlayerItem()
-    }
-    
-    func updatePlayers(avItem: [String : AVPlayerItem], name: [String]) {
-        print ("logiLogi updatePlayers")
-//        self.videoPlayerScreen = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[0]))
-//        self.videoPlayerOkoBot = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[1]))
-//
-//        self.videoPlayerPlaneBody = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[2]))
-        self.videoPlayerScreen = AVPlayer(playerItem: avItem[name[0]])
-        self.videoPlayerOkoBot = AVPlayer(playerItem: avItem[name[1]])
-        self.videoPlayerPlaneBody = AVPlayer(playerItem: avItem[name[2]])
+        guard let itemScreen = itemScreen else {return}
+        guard let itemOkoBot = itemOkoBot else {return}
         
-        self.videoPlayerScreen.play()
-        self.videoPlayerOkoBot.play()
-        self.videoPlayerPlaneBody.play()
+        videoPlayerScreen.removeAllItems()
+        
+        videoPlayerOkoBot.removeAllItems()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+            self.videoPlayerScreen.insert(itemScreen, after: nil)
+            self.videoPlayerScreen.seek(to: .zero)
+            self.videoPlayerScreen.play()
+            
+            self.videoPlayerOkoBot.insert(itemOkoBot, after: nil)
+            self.videoPlayerOkoBot.seek(to: .zero)
+            self.videoPlayerOkoBot.play()
+        })
     }
-    
-//    func updatePlayers(name: [String]) {
-//        self.videoPlayerScreen = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[0]))
-//        self.videoPlayerOkoBot = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[1]))
-//
-//        self.videoPlayerPlaneBody = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[2]))
-//        self.videoPlayerPlaneLeftHand = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[3]))
-//        self.videoPlayerPlaneRightHand = AVPlayer(playerItem: returnAVPlayerItem(nameVideo: name[4]))
-//
-//        self.videoPlayerScreen.play()
-//        self.videoPlayerOkoBot.play()
-//        self.videoPlayerPlaneBody.play()
-//        self.videoPlayerPlaneLeftHand.play()
-//        self.videoPlayerPlaneRightHand.play()
-//    }
     
     private func generateOkoBot() -> ModelEntity? {
         
         guard let okoBot = self.okoBot else { return nil}
-        
-        let nameVideo = "okoBotVizor_[000-299]-1"
-//        okoBotVizor_lvl2_demo
-        let item = returnAVPlayerItem(nameVideo: nameVideo)
-        
-        videoPlayerOkoBot = AVPlayer(playerItem: item)
         
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerOkoBot)
         videoPlayerOkoBot.play()
@@ -279,11 +241,6 @@ final class LevelTwoViewPresenter: NSObject {
     private func generateScreen() -> ModelEntity? {
         
         guard let screen = self.okoScreen else { return nil}
-        
-        let nameVideo = "flip_vert_[000-299]-1"
-        let item = returnAVPlayerItem(nameVideo: nameVideo)
-        
-        videoPlayerScreen = AVPlayer(playerItem: item)
         
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerScreen)
         videoPlayerScreen.play()
@@ -329,13 +286,20 @@ final class LevelTwoViewPresenter: NSObject {
 //        imageAnchorID = anchor.anchorIdentifier
     }
     
-    func emojiTrack() {
+    func emojiTrack(pixelBuffer: CVPixelBuffer) {
+        
+        counterEmoji += 1
+        
+        if counterEmoji != 30 {return}
+        
+        counterEmoji = 0
         
         guard let model = self.model else { return }
         
-        let pixelBuffer = self.arView.session.currentFrame?.capturedImage
+//        let pixelBuffer = self.arView.session.currentFrame?.capturedImage
         
-        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer!)
+        
+        let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer)
         let request = VNCoreMLRequest(model: model) { [weak self] request, error in
             self?.handleClassifierResults(request.results)
         }
@@ -363,9 +327,9 @@ final class LevelTwoViewPresenter: NSObject {
           if confidence > 50 {
               switch firstResult.identifier {
                   
-              case "Surprise": self?.emoji = .surprise
-              case "Happy": self?.emoji = .cuteness
-              case "Sad": self?.emoji = .cry
+              case "Surprise": self?.changeVideoEmoji(emoji: .surprise)
+              case "Happy": self?.changeVideoEmoji(emoji: .cuteness)
+              case "Sad": self?.changeVideoEmoji(emoji: .cry)
                   
               default: break
               }
@@ -391,7 +355,11 @@ final class LevelTwoViewPresenter: NSObject {
           resultLog = result.description
           
           if result.identifier == "OKO" && result.confidence > 70 {
-              isOKO = true
+              
+              if !isOKO {
+                  isOKO = true
+                  view.updateIsOko(isOKO: isOKO)
+              }
 //              print ("hjkhjjnk результ", result.identifier , result.confidence, isOKO)
           } else {
 //              isOKO = false
@@ -400,17 +368,25 @@ final class LevelTwoViewPresenter: NSObject {
       }
 //        print (resultLog)
     }
-    
-    private func reqvest() {
+    /// надо сделать 3-5 попыток на повторную проверку логотипа
+    private func searchLogoOkoFuture(pixelBuffer: CVPixelBuffer) {
+        counterSearchImage += 1
         
-        arView.snapshot(saveToHDR: false, completion: {image in
+        if isOKO {
             
-            if let img = image {
-                self.classifierService.classifyImage(img)
+            if counterSearchImage == 600 {
+                counterSearchImage = 0
+                
+                self.classifierService.classifyImage(pixelBuffer)
             }
             
-        })
-        
+        } else {
+            if counterSearchImage == 30 {
+                counterSearchImage = 0
+                
+                self.classifierService.classifyImage(pixelBuffer)
+            }
+        }
     }
 }
 
@@ -470,10 +446,10 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
     
-        counterSearchImage += 1
+        searchLogoOkoFuture(pixelBuffer: frame.capturedImage)
         
         if isOKO {
-            counterEmoji += 1
+            emojiTrack(pixelBuffer: frame.capturedImage)
         }
     }
     
@@ -484,67 +460,12 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         let armLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_arm_joint"))!
         let armRight = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "right_arm_joint"))!
         
-        let forearmLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_forearm_joint"))!
-        let forearmRight = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "right_forearm_joint"))!
-        
         let legLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_upLeg_joint"))!
         
         let spine = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "spine_5_joint"))!
         
-//        generatePlaneArm(bonesTransStart: armLeft, bonesTransFinish: forearmLeft, rootTrans: bodyAnchor.transform, armSide: .left)
-//        generatePlaneArm(bonesTransStart: armRight, bonesTransFinish: forearmRight, rootTrans: bodyAnchor.transform, armSide: .right)
-        
         generatePlaneBody(armLeft: armLeft, armRight: armRight, legLeft: legLeft, spine: spine, rootTrans: bodyAnchor.transform)
         videoPlayerPlaneBody.play()
-    }
-    
-    func generatePlaneArm(bonesTransStart: simd_float4x4,bonesTransFinish: simd_float4x4, rootTrans: simd_float4x4, armSide: ArmSide) {
-        
-        let bonesStartForRoot: SIMD3<Float> = simd_make_float3(bonesTransStart.columns.3)
-        let bonesFinishForRoot: SIMD3<Float> = simd_make_float3(bonesTransFinish.columns.3)
-        let root: SIMD3<Float> = simd_make_float3(rootTrans.columns.3)
-        
-        let bonesStartWorld = bonesStartForRoot + root
-        let bonesFinishWorld = bonesFinishForRoot + root
-        
-        let height = simd_distance(bonesStartWorld, bonesFinishWorld) * 2
-        
-        var videoMaterial = VideoMaterial(avPlayer: AVPlayer())
-        
-        switch armSide {
-        case .left:
-            let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlaneLeftHand)
-        case .right:
-            videoMaterial = VideoMaterial(avPlayer: videoPlayerPlaneRightHand)
-        }
-        
-        let planeMesh = MeshResource.generatePlane(width: height, height: height / 2)
-//        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
-        let planeModel = ModelEntity(mesh: planeMesh, materials: [videoMaterial])
-        
-        
-        let anchor = AnchorEntity(world: [(bonesStartWorld.x + bonesFinishWorld.x) / 2, (bonesStartWorld.y + bonesFinishWorld.y) / 2, bonesStartWorld.z])
-        anchor.addChild(planeModel)
-        arView.scene.addAnchor(anchor)
-        
-        switch armSide {
-        case .left:
-            planeModel.transform.translation = [-0.1,-0.15,0]
-            leftArmAnchorID = anchor.anchorIdentifier
-        case .right:
-            planeModel.transform.translation = [0.1,0.15,0]
-            rightArmAnchorID = anchor.anchorIdentifier
-        }
-        
-        let quatArm = Transform(matrix: bonesTransStart).rotation
-        
-        anchor.orientation = quatArm
-        
-        let angle = 0 - abs(bonesTransStart.eulerAngles.z)
-        
-        let quatFix: simd_quatf = .init(angle: angle, axis: [1,0,0])
-        
-        planeModel.setOrientation(quatFix, relativeTo: anchor)
     }
     
     func generatePlaneBody(armLeft: simd_float4x4, armRight: simd_float4x4, legLeft: simd_float4x4,spine: simd_float4x4, rootTrans: simd_float4x4){
@@ -566,7 +487,6 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         
         let height = simd_distance(planeUpLeft, planeDownLeft) * 2.5
         let planeMesh = MeshResource.generatePlane(width: height , height: height / 1.75)
-//        let planeModel = ModelEntity(mesh: planeMesh, materials: [SimpleMaterial(color: .green, isMetallic: false)])
         let planeModel = ModelEntity(mesh: planeMesh, materials: [videoMaterial])
         
         let spineWorld = simd_make_float3(spine.columns.3) + root
@@ -603,65 +523,7 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         
         let spine = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "spine_5_joint"))!
         
-//        updatePlaneArmLeft(bonesTransStart: armLeft, bonesTransFinish: forearmLeft, rootTrans: bodyAnchor.transform)
-//        updatePlaneArmRight(bonesTransStart: armRight, bonesTransFinish: forearmRight, rootTrans: bodyAnchor.transform)
         updatePlaneBody(armLeft: armLeft, armRight: armRight, legLeft: legLeft, spine: spine, rootTrans: bodyAnchor.transform)
-    }
-    
-    func updatePlaneArmLeft(bonesTransStart: simd_float4x4,bonesTransFinish: simd_float4x4, rootTrans: simd_float4x4) {
-        let root: SIMD3<Float> = simd_make_float3(rootTrans.columns.3)
-        
-        let bonesStartForRootLeft: SIMD3<Float> = simd_make_float3(bonesTransStart.columns.3)
-        let bonesFinishForRootLeft: SIMD3<Float> = simd_make_float3(bonesTransFinish.columns.3)
-        
-        let bonesStartWorldLeft = bonesStartForRootLeft + root
-        let bonesFinishWorldLeft = bonesFinishForRootLeft + root
-        
-        let quatArmLeft = Transform(matrix: bonesTransStart).rotation
-        
-        var anchorLeft = AnchorEntity()
-        
-        for anchor in arView.scene.anchors {
-            if leftArmAnchorID == anchor.anchorIdentifier {
-                anchorLeft = anchor as! AnchorEntity
-            }
-        }
-        
-        anchorLeft.transform.translation = [(bonesStartWorldLeft.x + bonesFinishWorldLeft.x) / 2, (bonesStartWorldLeft.y + bonesFinishWorldLeft.y) / 2, bonesStartWorldLeft.z]
-        anchorLeft.orientation = quatArmLeft
-        
-        let angleLeft = 0 + abs(bonesTransStart.eulerAngles.z)
-        
-        let quatFixLeft: simd_quatf = .init(angle: angleLeft, axis: [1,0,0])
-        anchorLeft.children[0].setOrientation(quatFixLeft, relativeTo: anchorLeft)
-    }
-    
-    func updatePlaneArmRight(bonesTransStart: simd_float4x4,bonesTransFinish: simd_float4x4, rootTrans: simd_float4x4) {
-        let root: SIMD3<Float> = simd_make_float3(rootTrans.columns.3)
-        
-        let bonesStartForRootLeft: SIMD3<Float> = simd_make_float3(bonesTransStart.columns.3)
-        let bonesFinishForRootLeft: SIMD3<Float> = simd_make_float3(bonesTransFinish.columns.3)
-        
-        let bonesStartWorldLeft = bonesStartForRootLeft + root
-        let bonesFinishWorldLeft = bonesFinishForRootLeft + root
-        
-        let quatArmLeft = Transform(matrix: bonesTransStart).rotation
-        
-        var anchorRight = AnchorEntity()
-        
-        for anchor in arView.scene.anchors {
-            if rightArmAnchorID == anchor.anchorIdentifier {
-                anchorRight = anchor as! AnchorEntity
-            }
-        }
-        
-        anchorRight.transform.translation = [(bonesStartWorldLeft.x + bonesFinishWorldLeft.x) / 2, (bonesStartWorldLeft.y + bonesFinishWorldLeft.y) / 2, bonesStartWorldLeft.z]
-        anchorRight.orientation = quatArmLeft
-        
-        let angleLeft = 0 - abs(bonesTransStart.eulerAngles.z)
-        
-        let quatFixLeft: simd_quatf = .init(angle: angleLeft, axis: [1,0,0])
-        anchorRight.children[0].setOrientation(quatFixLeft, relativeTo: anchorRight)
     }
     
     func updatePlaneBody(armLeft: simd_float4x4, armRight: simd_float4x4, legLeft: simd_float4x4, spine: simd_float4x4, rootTrans: simd_float4x4) {

@@ -41,22 +41,9 @@ final class LevelOneViewPresenter: NSObject {
         }
     }
     
-    private var isOKO = false {
-        didSet {
-            if isOKO != oldValue {
-                view.updateIsOko(isOKO: isOKO)
-            }
-        }
-    }
+    private var isOKO = false
     
-    private var counter = 0 {
-        didSet {
-            if counter == 30 {
-                reqvest()
-                counter = 0
-            }
-        }
-    }
+    private var counterSearchImage = 0
     
     init(view: LevelOneViewProtocol, arView: ARView, coordinatorDelegate: LevelOneViewCoordinatorDelegate) {
         self.view = view
@@ -89,26 +76,37 @@ final class LevelOneViewPresenter: NSObject {
           resultLog = result.description
           
           if result.identifier == "OKO" && result.confidence > 70 {
-              isOKO = true
+              if !isOKO {
+                  isOKO = true
+                  view.updateIsOko(isOKO: isOKO)
+              }
 //              print ("hjkhjjnk результ", result.identifier , result.confidence, isOKO)
           } else {
-              isOKO = false
+//              isOKO = false
 //              print ("hjkhjjnk результ", result.identifier , result.confidence, isOKO)
           }
       }
 //        print (resultLog)
     }
-
-    private func reqvest() {
+    /// надо сделать 3-5 попыток на повторную проверку логотипа
+    private func searchLogoOkoFuture(pixelBuffer: CVPixelBuffer) {
+        counterSearchImage += 1
         
-        arView.snapshot(saveToHDR: false, completion: {image in
+        if isOKO {
             
-            if let img = image {
-                self.classifierService.classifyImage(img)
+            if counterSearchImage == 600 {
+                counterSearchImage = 0
+                
+                self.classifierService.classifyImage(pixelBuffer)
             }
             
-        })
-        
+        } else {
+            if counterSearchImage == 30 {
+                counterSearchImage = 0
+                
+                self.classifierService.classifyImage(pixelBuffer)
+            }
+        }
     }
     
 }
@@ -136,9 +134,10 @@ extension LevelOneViewPresenter: ARSessionDelegate {
     }
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        if !isOKO {
-            counter += 1
-        }
+//        if !isOKO {
+//            counter += 1
+//        }
+        searchLogoOkoFuture(pixelBuffer: frame.capturedImage)
     }
 
     private func createOneAnchor (faceAnchor: ARFaceAnchor) {

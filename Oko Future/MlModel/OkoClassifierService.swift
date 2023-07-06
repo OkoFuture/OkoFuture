@@ -24,14 +24,14 @@ enum ImageClassifierServiceState {
 class OkoClassifierService {
   var onDidUpdateState: ((ImageClassifierServiceState) -> Void)?
   
-  func classifyImage(_ image: UIImage) {
+  func classifyImage(_ pixelBuffer: CVPixelBuffer) {
     onDidUpdateState?(.startRequest)
     
-    guard let model = makeImageClassifierModel(), let ciImage = CIImage(image: image) else {
+    guard let model = makeImageClassifierModel() else {
       onDidUpdateState?(.requestFailed)
       return
     }
-    makeClassifierRequest(for: model, ciImage: ciImage)
+      makeClassifierRequest(for: model, pixelBuffer: pixelBuffer)
   }
   
   private func makeImageClassifierModel() -> VNCoreMLModel? {
@@ -42,12 +42,13 @@ class OkoClassifierService {
       return mlModel
   }
   
-  private func makeClassifierRequest(for model: VNCoreMLModel, ciImage: CIImage) {
+    private func makeClassifierRequest(for model: VNCoreMLModel, /*ciImage: CIImage*/ pixelBuffer: CVPixelBuffer) {
     let request = VNCoreMLRequest(model: model) { [weak self] request, error in
       self?.handleClassifierResults(request.results)
     }
     
-    let handler = VNImageRequestHandler(ciImage: ciImage)
+//    let handler = VNImageRequestHandler(ciImage: ciImage)
+    let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer)
     DispatchQueue.global(qos: .userInteractive).async {
       do {
         try handler.perform([request])
