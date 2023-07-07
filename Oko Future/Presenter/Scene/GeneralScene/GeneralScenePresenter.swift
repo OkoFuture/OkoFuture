@@ -108,9 +108,12 @@ final class GeneralScenePresenter: NSObject {
         self.coordinatorDelegate = coordinatorDelegate
         super.init()
         self.arView.cameraMode = .nonAR
+        self.uploadScene()
     }
     
     private func uploadScene() {
+        
+        view.arLoaderShow()
         
         let cameraEntity = PerspectiveCamera()
         cameraEntity.camera.fieldOfViewInDegrees = 39
@@ -144,6 +147,7 @@ final class GeneralScenePresenter: NSObject {
                       self.startSession()
                       
                       cancellable?.cancel()
+                      self.view.arLoaderHide()
                   })
             })
         
@@ -463,7 +467,7 @@ final class GeneralScenePresenter: NSObject {
     
     func tapArView() {
         if ARFaceTrackingConfiguration.isSupported {
-            /// не удолять
+            
             switch chooseLevel {
             case 1: coordinatorDelegate?.showLevelOneScene()
             case 2: coordinatorDelegate?.showLevelTwoScene()

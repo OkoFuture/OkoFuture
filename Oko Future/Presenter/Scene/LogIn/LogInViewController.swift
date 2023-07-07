@@ -151,21 +151,7 @@ final class LogInViewController: UIViewController {
         
     }
     
-//    private func pushToPasswordViewController(email: String, password: String) {
-//
-//        if Auth.auth().currentUser != nil {
-//            pushToProfileSettingViewController()
-//        } else {
-//            Helper().addUserFirebase(email: email, password: password, completedHangler: { [weak self] in
-//                guard let self = self else { return }
-//                self.pushToProfileSettingViewController()
-//            })
-//        }
-//    }
-    
     private func pushToProfileSettingViewController() {
-//        let vc = ProfileSettingViewController()
-//        navigationController?.pushViewController(vc, animated: true)
         presenter.pushToProfileSettingViewController()
     }
     

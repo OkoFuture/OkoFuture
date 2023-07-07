@@ -22,6 +22,44 @@ extension UIViewController: ShowAlertProtocol {
         navigationController?.present(alert, animated: true, completion: nil)
     }
 }
+/// для дефолтного ожидания
+extension UIViewController {
+    func defaultLoader() -> UIAlertController {
+        let alert = UIAlertController(title: nil, message: "Please wait...", preferredStyle: .alert)
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.style = UIActivityIndicatorView.Style.large
+        loadingIndicator.startAnimating()
+        alert.view.addSubview(loadingIndicator)
+        present(alert, animated: true, completion: nil)
+        return alert
+        }
+        
+    func stopDefaultLoader(loader : UIAlertController) {
+        DispatchQueue.main.async {
+            loader.dismiss(animated: true, completion: nil)
+        }
+    }
+}
+/// добавить идентификатор или отдельный класс, что бы не удалить случайно другую Subview
+/// сделать плавнее появление и исчезновение
+extension UIViewController {
+    func arLoaderShow() {
+        let backgroundView = UIView(frame: self.view.frame)
+        backgroundView.backgroundColor = .white
+        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        loadingIndicator.center = view.center
+        loadingIndicator.hidesWhenStopped = true
+        loadingIndicator.style = UIActivityIndicatorView.Style.large
+        loadingIndicator.startAnimating()
+        backgroundView.addSubview(loadingIndicator)
+        view.addSubview(backgroundView)
+    }
+    
+    func arLoaderHide() {
+        self.view.subviews.last?.removeFromSuperview()
+    }
+}
 
 extension String {
     func height(withConstrainedWidth width: CGFloat, font: UIFont) -> CGFloat {

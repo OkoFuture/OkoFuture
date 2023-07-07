@@ -10,4 +10,10 @@ import UIKit
 
 protocol ShowAlertProtocol {
     func showAlert(title: String?, message: String, complection: (() -> Void)?)
+    
+    func defaultLoader() -> UIAlertController
+    func stopDefaultLoader(loader : UIAlertController)
+    
+    func arLoaderShow()
+    func arLoaderHide()
 }

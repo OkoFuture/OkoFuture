@@ -39,12 +39,11 @@ final class RegistrationService {
     }
     
     private func authenticateUser(view: ShowAlertProtocol , for user: GIDGoogleUser?, with error: Error?, completionHandler: @escaping (() -> Void)) {
+        let loader = view.defaultLoader()
+        
         if let error = error {
-            print(error.localizedDescription)
-            
-//            let action = UIAlertAction(title: "Close", style: .cancel)
-//            Helper().showAlert(title: "Error", message: "Login failed", view: self, actions: [action])
-            view.showAlert(title: nil, message: "Login failed", complection: nil)
+            view.stopDefaultLoader(loader: loader)
+            view.showAlert(title: nil, message: error.localizedDescription, complection: nil)
                 
             return
         }
@@ -55,7 +54,7 @@ final class RegistrationService {
         
         Auth.auth().signIn(with: credential) { [weak self] (_, error) in
             if let error = error {
-                print(error.localizedDescription)
+                view.showAlert(title: nil, message: error.localizedDescription, complection: nil)
             } else {
                 
                 guard let self = self else { return }
@@ -71,7 +70,7 @@ final class RegistrationService {
                         }
                     }
                 }
-                
+                view.stopDefaultLoader(loader: loader)
                 print ("log in with google completed", user?.profile?.email, user?.profile?.name, user?.profile?.givenName, user?.profile?.familyName, user?.profile?.imageURL(withDimension: 320))
                 
                 userService.updateUserLogStatus(logStatus: .logInWithGoogle)
@@ -81,6 +80,7 @@ final class RegistrationService {
     }
     
     public func signInEmail(view: ShowAlertProtocol, withEmail: String, password: String, completionHandler: @escaping (() -> Void)) {
+        let loader = view.defaultLoader()
         Auth.auth().signIn(withEmail: withEmail, password: password) { [weak self] authResult, error in
           guard let strongSelf = self else { return }
           
@@ -88,6 +88,7 @@ final class RegistrationService {
                 print ("signInEmail fail error =", error.localizedDescription)
                 
                 if error.localizedDescription == "The password is invalid or the user does not have a password." {
+                    view.stopDefaultLoader(loader: loader)
                     view.showAlert(title: nil, message: error.localizedDescription, complection: nil)
                     return
                 }
@@ -95,9 +96,11 @@ final class RegistrationService {
                 strongSelf.addUserFirebase(email: withEmail, password: password, completedHangler: { [weak self] error in
                     
                     if let error = error {
+                        view.stopDefaultLoader(loader: loader)
                         view.showAlert(title: nil, message: error.localizedDescription, complection: nil)
                     } else {
                         guard let self = self else { return }
+                        view.stopDefaultLoader(loader: loader)
                         view.showAlert(title: nil, message: "User created successfully", complection: {
                             self.userService.updateUserLogStatus(logStatus: .logInWithEmail)
                             completionHandler()
@@ -106,6 +109,7 @@ final class RegistrationService {
                     
                 })
             } else {
+                view.stopDefaultLoader(loader: loader)
                 strongSelf.userService.updateUserLogStatus(logStatus: .logInWithEmail)
                 completionHandler()
             }

@@ -42,7 +42,7 @@ final class LevelTwoViewPresenter: NSObject {
     private var videoPlayerScreen = AVQueuePlayer()
     private var videoPlayerOkoBot = AVQueuePlayer()
     
-    private var videoPlayerPlaneBody = AVPlayer()
+    private var videoPlayerPlaneBody = AVQueuePlayer()
     
     private let nameSurpriseItem = ["screen_Shock_lvl2_ar", "okoBotVizor_Shock_lvl2_ar", "body_shock_lvl2_ar", "leftHand_Shock_lvl2_ar", "righthand_Shock_lvl2_ar"]
     private let nameCryItem = ["screen_Cry_lvl2_ar", "okoBotVizor_Cry_lvl2_ar", "body_cry_lvl2_ar", "leftHand_Cry_lvl2_ar", "righthand_Cry_lvl2_ar"]
@@ -57,37 +57,9 @@ final class LevelTwoViewPresenter: NSObject {
             }
         }
     }
-    /// переделать на функцию
     
     private var counterEmoji = 0
-//    private var counterEmoji = 0 {
-//        didSet {
-//            if counterEmoji == 30 {
-//                emojiTrack()
-//                counterEmoji = 0
-//            }
-//        }
-//    }
-    /// переделать на функцию
-//    private var counterSearchImage = 0 {
-//        didSet {
-//
-//            if isOKO {
-//                if counterSearchImage == 600 {
-//                    reqvest()
-//                    counterSearchImage = 0
-//                }
-//
-//            } else {
-//                if counterSearchImage == 30 {
-//                    reqvest()
-//                    counterSearchImage = 0
-//                }
-//            }
-//        }
-//    }
-    
-    var counterSearchImage = 0
+    private var counterSearchImage = 0
     
     init(view: LevelTwoViewProtocol, arView: ARView, coordinatorDelegate: LevelTwoViewCoordinatorDelegate) {
         self.view = view
@@ -97,30 +69,8 @@ final class LevelTwoViewPresenter: NSObject {
         
         self.arView.session.delegate = self
         bindToImageClassifierService()
-//        setPlayerItem()
+        uploadCoreModel()
     }
-    
-//    private func setPlayerItem() {
-//
-//        if playerItemSurpris.isEmpty {
-//            for name in nameSurpriseItem {
-//                playerItemSurpris[name] = returnAVPlayerItem(nameVideo: name)
-//            }
-//        }
-//
-//        if playerItemCry.isEmpty {
-//            for name in nameCryItem {
-//                playerItemCry[name] = returnAVPlayerItem(nameVideo: name)
-//            }
-//        }
-//
-//        if playerItemCuteness.isEmpty {
-//            for name in nameCutenessItem {
-//                playerItemCuteness[name] = returnAVPlayerItem(nameVideo: name)
-//            }
-//        }
-//
-//    }
     
     private func uploadModelEntity() {
         var cancellableBot: AnyCancellable? = nil
@@ -187,35 +137,43 @@ final class LevelTwoViewPresenter: NSObject {
     }
     
     func changeVideoEmoji(emoji: EmojiLVL2) {
-        
+        print ("video start")
         if emojiOldValue == emoji {return}
         
         emojiOldValue = emoji
         
         var itemScreen: AVPlayerItem?
         var itemOkoBot: AVPlayerItem?
+        var itemBodyPlane: AVPlayerItem?
         
         switch emoji {
             
         case .surprise:
             itemScreen = returnAVPlayerItem(nameVideo: nameSurpriseItem[0])
             itemOkoBot = returnAVPlayerItem(nameVideo: nameSurpriseItem[1])
+            itemBodyPlane = returnAVPlayerItem(nameVideo: nameSurpriseItem[2])
         case .cry:
             itemScreen = returnAVPlayerItem(nameVideo: nameCryItem[0])
             itemOkoBot = returnAVPlayerItem(nameVideo: nameCryItem[1])
+            itemBodyPlane = returnAVPlayerItem(nameVideo: nameCryItem[2])
         case .cuteness:
             itemScreen = returnAVPlayerItem(nameVideo: nameCutenessItem[0])
             itemOkoBot = returnAVPlayerItem(nameVideo: nameCutenessItem[1])
+            itemBodyPlane = returnAVPlayerItem(nameVideo: nameCutenessItem[2])
         }
         
         guard let itemScreen = itemScreen else {return}
         guard let itemOkoBot = itemOkoBot else {return}
+        guard let itemBodyPlane = itemBodyPlane else {return}
+        print ("video upload")
         
         videoPlayerScreen.removeAllItems()
         
         videoPlayerOkoBot.removeAllItems()
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1, execute: {
+        videoPlayerPlaneBody.removeAllItems()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
             self.videoPlayerScreen.insert(itemScreen, after: nil)
             self.videoPlayerScreen.seek(to: .zero)
             self.videoPlayerScreen.play()
@@ -223,6 +181,12 @@ final class LevelTwoViewPresenter: NSObject {
             self.videoPlayerOkoBot.insert(itemOkoBot, after: nil)
             self.videoPlayerOkoBot.seek(to: .zero)
             self.videoPlayerOkoBot.play()
+            
+            self.videoPlayerPlaneBody.insert(itemBodyPlane, after: nil)
+            self.videoPlayerPlaneBody.seek(to: .zero)
+            self.videoPlayerPlaneBody.play()
+            
+            print ("video play")
         })
     }
     
@@ -251,7 +215,7 @@ final class LevelTwoViewPresenter: NSObject {
     
     func addModelTshirt(bodyAnchor: ARBodyAnchor) {
         
-        print ("kjkljljkljkjnkljnkl addPlaneTshirt", arView.scene.anchors.count)
+        print ("logilogi addPlaneTshirt", arView.scene.anchors.count)
         
         guard let okoBot = generateOkoBot() else {return}
         guard let screen = generateScreen() else {return}
@@ -290,14 +254,11 @@ final class LevelTwoViewPresenter: NSObject {
         
         counterEmoji += 1
         
-        if counterEmoji != 30 {return}
+        if counterEmoji != 60 {return}
         
         counterEmoji = 0
         
         guard let model = self.model else { return }
-        
-//        let pixelBuffer = self.arView.session.currentFrame?.capturedImage
-        
         
         let handler = VNImageRequestHandler(cvPixelBuffer: pixelBuffer)
         let request = VNCoreMLRequest(model: model) { [weak self] request, error in
@@ -328,8 +289,11 @@ final class LevelTwoViewPresenter: NSObject {
               switch firstResult.identifier {
                   
               case "Surprise": self?.changeVideoEmoji(emoji: .surprise)
+                  print ("emoji == surprise")
               case "Happy": self?.changeVideoEmoji(emoji: .cuteness)
+                  print ("emoji == cuteness")
               case "Sad": self?.changeVideoEmoji(emoji: .cry)
+                  print ("emoji == cry")
                   
               default: break
               }
@@ -418,14 +382,11 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         
         for anchor in anchors {
             
-//            if !view.isOKO {
+//            if !isOKO {
 //                return
 //            }
             
-//            print ("logiLogi didAddAnchors after isOko", anchors.count, isOKO)
-            
             if let bodyAnchor = anchor as? ARBodyAnchor {
-                
                 addPlaneBody(bodyAnchor: bodyAnchor)
                 addModelTshirt(bodyAnchor: bodyAnchor)
             }
@@ -478,11 +439,6 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         let planeUpLeft = planeUpLeftForRoot + root
         let planeDownLeft = planeDownLeftForRoot + root
         
-        let nameVideo = "body_lvl2"
-        let item = returnAVPlayerItem(nameVideo: nameVideo)
-        
-        videoPlayerPlaneBody = AVPlayer(playerItem: item)
-//
         let videoMaterial = VideoMaterial(avPlayer: videoPlayerPlaneBody)
         
         let height = simd_distance(planeUpLeft, planeDownLeft) * 2.5
@@ -515,9 +471,6 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         
         let armLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_arm_joint"))!
         let armRight = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "right_arm_joint"))!
-        
-        let forearmLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_forearm_joint"))!
-        let forearmRight = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "right_forearm_joint"))!
         
         let legLeft = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "left_upLeg_joint"))!
         
@@ -560,8 +513,8 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         anchorBody.children[0].setOrientation(quatFix, relativeTo: anchorBody)
         
         if isOKO {
-            print ("logiLogi updatePlaneBody isOKO == true")
-            videoPlayerPlaneBody.play()
+//            print ("logiLogi updatePlaneBody isOKO == true")
+//            videoPlayerPlaneBody.play()
         }
     }
 }

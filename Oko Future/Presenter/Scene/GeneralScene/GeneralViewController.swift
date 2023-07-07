@@ -21,7 +21,7 @@ enum AnimationMode {
     case emoji
 }
 
-protocol GeneralSceneViewProtocol {
+protocol GeneralSceneViewProtocol: UIViewController {
     
     func changeStateSwitch(state: Bool)
 }
@@ -89,15 +89,17 @@ final class GeneralViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setupView()
         
-        presenter.showScene()
+        arLoaderShow()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
         setupLayout()
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
+            self.arLoaderHide()
+        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -191,6 +193,8 @@ final class GeneralViewController: UIViewController {
             return
         }
         
+        presenter.tapLevel1()
+        
         UIView.animate(withDuration: 0.4, animations: {
             
             self.level1Button.frame = CGRect(x: self.view.center.x - self.sideSysBigButton / 2,
@@ -210,6 +214,8 @@ final class GeneralViewController: UIViewController {
         if presenter.isAnimateModeEmoji() {
             return
         }
+        
+        presenter.tapLevel2()
         
         UIView.animate(withDuration: 0.4, animations: {
             
