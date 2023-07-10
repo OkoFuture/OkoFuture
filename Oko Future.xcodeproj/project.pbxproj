@@ -64,6 +64,7 @@
 		D18894802A30CA5D00146348 /* righthand_lvl2.mov in Resources */ = {isa = PBXBuildFile; fileRef = D188947D2A30CA5D00146348 /* righthand_lvl2.mov */; };
 		D188FBB129F553340003F3EC /* OkoDefaultButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB029F553340003F3EC /* OkoDefaultButton.swift */; };
 		D188FBB329F558FD0003F3EC /* OkoBigSwitch.swift in Sources */ = {isa = PBXBuildFile; fileRef = D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */; };
+		D18EC7572A5C3ADC00AC2680 /* Logo_1_glass_.png[0001-0135].mp4 in Resources */ = {isa = PBXBuildFile; fileRef = D18EC7562A5C3ADC00AC2680 /* Logo_1_glass_.png[0001-0135].mp4 */; };
 		D199EC1E2A3215D400968291 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = D199EC1D2A3215D400968291 /* FirebaseAuth */; };
 		D199EC212A3216CB00968291 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = D199EC202A3216CB00968291 /* GoogleSignIn */; };
 		D199EC232A3216CB00968291 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = D199EC222A3216CB00968291 /* GoogleSignInSwift */; };
@@ -154,6 +155,7 @@
 		D188947D2A30CA5D00146348 /* righthand_lvl2.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = righthand_lvl2.mov; sourceTree = "<group>"; };
 		D188FBB029F553340003F3EC /* OkoDefaultButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoDefaultButton.swift; sourceTree = "<group>"; };
 		D188FBB229F558FD0003F3EC /* OkoBigSwitch.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OkoBigSwitch.swift; sourceTree = "<group>"; };
+		D18EC7562A5C3ADC00AC2680 /* Logo_1_glass_.png[0001-0135].mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Logo_1_glass_.png[0001-0135].mp4"; sourceTree = "<group>"; };
 		D199EC1B2A32123900968291 /* Oko Future.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = "Oko Future.entitlements"; sourceTree = "<group>"; };
 		D19B3C6A2A3B201B008C906A /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D1AC4DA52A20CDCF00F5ED6D /* flip_vert_[000-299]-1.mov */ = {isa = PBXFileReference; lastKnownFileType = video.quicktime; path = "flip_vert_[000-299]-1.mov"; sourceTree = "<group>"; };
@@ -201,6 +203,7 @@
 		920BF11C29CC3D33001D40DA = {
 			isa = PBXGroup;
 			children = (
+				D18EC7562A5C3ADC00AC2680 /* Logo_1_glass_.png[0001-0135].mp4 */,
 				D1D53F802A45F4A900E1F31F /* Intro_v3_[0001-0050]-1.mov */,
 				D170D2062A42345A00F8A831 /* body_shock_lvl2_ar.mov */,
 				D170D2072A42345A00F8A831 /* leftHand_Shock_lvl2_ar.mov */,
@@ -509,6 +512,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D18EC7572A5C3ADC00AC2680 /* Logo_1_glass_.png[0001-0135].mp4 in Resources */,
 				D1D53F812A45F4A900E1F31F /* Intro_v3_[0001-0050]-1.mov in Resources */,
 				D170D2082A42345A00F8A831 /* righthand_Shock_lvl2_ar.mov in Resources */,
 				D170D2092A42345A00F8A831 /* screen_Shock_lvl2_ar.mov in Resources */,
@@ -760,9 +764,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = okofuture.mvp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -792,9 +799,12 @@
 				PRODUCT_BUNDLE_IDENTIFIER = okofuture.mvp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

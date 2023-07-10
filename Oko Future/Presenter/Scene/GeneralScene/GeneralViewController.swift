@@ -72,7 +72,8 @@ final class GeneralViewController: UIViewController {
     
     private let arViewButton: OkoDefaultButton = {
        let btn = OkoDefaultButton()
-        btn.setImage(UIImage(named: "view_in_ar"), for: .normal)
+        btn.setImage(UIImage(named: "ARButton"), for: .normal)
+        btn.imageEdgeInsets = UIEdgeInsets(top: 7, left: 7, bottom: 7, right: 7)
         return btn
     }()
     
@@ -90,16 +91,10 @@ final class GeneralViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        
-        arLoaderShow()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         setupLayout()
-        
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1, execute: {
-            self.arLoaderHide()
-        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {

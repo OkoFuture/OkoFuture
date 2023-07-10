@@ -8,6 +8,7 @@
 import Foundation
 import UIKit
 import RealityKit
+import AVFoundation
 
 extension UIViewController: ShowAlertProtocol {
     func showAlert(title: String? = nil, message: String, complection: (() -> Void)? = nil) {
@@ -45,19 +46,63 @@ extension UIViewController {
 /// сделать плавнее появление и исчезновение
 extension UIViewController {
     func arLoaderShow() {
-        let backgroundView = UIView(frame: self.view.frame)
+        let backgroundView = UIView(frame: view.frame)
         backgroundView.backgroundColor = .white
-        let loadingIndicator = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-        loadingIndicator.center = view.center
-        loadingIndicator.hidesWhenStopped = true
-        loadingIndicator.style = UIActivityIndicatorView.Style.large
-        loadingIndicator.startAnimating()
-        backgroundView.addSubview(loadingIndicator)
+        
+        let image = UIImage(named: "LogoBlack")
+        let imageView = UIImageView(image: image)
+        imageView.contentMode = .scaleAspectFill
+        backgroundView.addSubview(imageView)
+        
+        imageView.frame = CGRect(x: 0, y: 0, width: 96, height: 96)
+        imageView.center = view.center
+        
+        view.addSubview(backgroundView)
+        UIView.animate(withDuration: 2.0, delay: 0, options: .repeat, animations: {
+            imageView.transform = CGAffineTransform(rotationAngle: CGFloat.pi)
+        })
+    }
+    
+    func arVideoLoaderShow() {
+        let backgroundView = UIView(frame: view.frame)
+        backgroundView.backgroundColor = .white
+        
+        let videoView = UIView(frame: CGRect(x: 0, y: 0, width: 96, height: 96))
+        videoView.center = view.center
+        
+        guard let path = Bundle.main.path(forResource: "Logo_1_glass_.png[0001-0135]", ofType: "mov") else {
+            print("Failed get path Logo_1_glass_.png[0001-0135]")
+            return
+        }
+
+        let videoURL = URL(fileURLWithPath: path)
+        let url = try? URL.init(resolvingAliasFileAt: videoURL, options: .withoutMounting)
+
+        guard let alphaMovieURL = url else {
+            print("Failed get url Logo_1_glass_.png[0001-0135]")
+            return
+        }
+
+        let videoAsset = AVURLAsset(url: alphaMovieURL)
+
+        let item: AVPlayerItem = .init(asset: videoAsset)
+
+        let player = AVPlayer(playerItem: item)
+
+        let playerLayer = AVPlayerLayer(player: player)
+
+        playerLayer.frame = videoView.frame
+        player.play()
+        
+        videoView.layer.addSublayer(playerLayer)
+        backgroundView.addSubview(videoView)
         view.addSubview(backgroundView)
     }
     
     func arLoaderHide() {
+        print ("dawbhjkawdbhj", self.view.subviews.last, self.view.subviews.count)
         self.view.subviews.last?.removeFromSuperview()
+        
     }
 }
 

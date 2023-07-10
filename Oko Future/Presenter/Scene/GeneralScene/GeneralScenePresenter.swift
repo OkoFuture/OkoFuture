@@ -146,8 +146,13 @@ final class GeneralScenePresenter: NSObject {
                       self.setupScene()
                       self.startSession()
                       
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                          self.view.arLoaderHide()
+                      })
+                      
                       cancellable?.cancel()
-                      self.view.arLoaderHide()
+//                      self.view.arLoaderHide()
+//                      print ("dawbhjkawdbhj presenter", self.view.subviews.count)
                   })
             })
         
