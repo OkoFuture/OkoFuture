@@ -43,4 +43,9 @@ final class Helper {
     public func borderColor() -> CGColor {
         return UIColor.black.withAlphaComponent(0.04).cgColor
     }
+    
+    public func numberContrastColor() -> UIColor {
+        UIColor(red: 1.00, green: 0.41, blue: 0.21, alpha: 1)
+//        UIColor.red
+    }
 }

@@ -57,16 +57,18 @@ final class GeneralViewController: UIViewController {
     private let level1Button: OkoDefaultButton = {
        let btn = OkoDefaultButton()
         btn.setTitle("1", for: .normal)
-        btn.setTitleColor(.black, for: .normal)
-        btn.backgroundColor = .white
+        btn.layer.borderColor = Helper().numberContrastColor().cgColor
+        btn.setTitleColor(.orange, for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 30)
+//        btn.titleLabel?.font = Helper().fontChakra500(size: 20)!
         return btn
     }()
     
     private let level2Button: OkoDefaultButton = {
        let btn = OkoDefaultButton()
         btn.setTitle("2", for: .normal)
-        btn.setTitleColor(.black, for: .normal)
-        btn.backgroundColor = .white
+        btn.setTitleColor(.white, for: .normal)
+        btn.titleLabel?.font = .systemFont(ofSize: 20)
         return btn
     }()
     
@@ -192,6 +194,14 @@ final class GeneralViewController: UIViewController {
         
         UIView.animate(withDuration: 0.4, animations: {
             
+            self.level1Button.layer.borderColor = Helper().numberContrastColor().cgColor
+            self.level1Button.setTitleColor(.orange, for: .normal)
+            self.level1Button.titleLabel?.font = .systemFont(ofSize: 30)
+            
+            self.level2Button.setTitleColor(.white, for: .normal)
+            self.level2Button.titleLabel?.font = .systemFont(ofSize: 20)
+            self.level2Button.layer.borderColor = UIColor.white.cgColor
+            
             self.level1Button.frame = CGRect(x: self.view.center.x - self.sideSysBigButton / 2,
                                                     y: self.level1Button.frame.origin.y - ((self.sideSysBigButton - self.sideSysButton) / 2),
                                                     width: self.sideSysBigButton,
@@ -213,6 +223,14 @@ final class GeneralViewController: UIViewController {
         presenter.tapLevel2()
         
         UIView.animate(withDuration: 0.4, animations: {
+            
+            self.level2Button.layer.borderColor = Helper().numberContrastColor().cgColor
+            self.level2Button.setTitleColor(.orange, for: .normal)
+            self.level2Button.titleLabel?.font = .systemFont(ofSize: 30)
+            
+            self.level1Button.setTitleColor(.white, for: .normal)
+            self.level1Button.titleLabel?.font = .systemFont(ofSize: 20)
+            self.level1Button.layer.borderColor = UIColor.white.cgColor
             
             self.level1Button.frame = CGRect(x: self.view.center.x - 16 - self.sideSysButton - (self.sideSysBigButton / 2),
                                                     y: self.view.frame.height - 82 - self.sideSysButton,

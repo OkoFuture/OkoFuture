@@ -49,12 +49,12 @@ extension UIViewController {
         let backgroundView = UIView(frame: view.frame)
         backgroundView.backgroundColor = .white
         
-        let image = UIImage(named: "LogoBlack")
+        let image = UIImage(named: "glassStillAlpha")
         let imageView = UIImageView(image: image)
         imageView.contentMode = .scaleAspectFill
         backgroundView.addSubview(imageView)
         
-        imageView.frame = CGRect(x: 0, y: 0, width: 96, height: 96)
+        imageView.frame = CGRect(x: 0, y: 0, width: 196, height: 196)
         imageView.center = view.center
         
         view.addSubview(backgroundView)
