@@ -19,8 +19,7 @@ public enum ArmSide {
     case left, right
 }
 
-protocol LevelTwoViewProtocol {
-//    var isOKO: Bool { get set }
+protocol LevelTwoViewProtocol: UIViewController {
     func updateIsOko(isOKO: Bool)
 }
 
@@ -100,7 +99,7 @@ final class LevelTwoViewController: UIViewController {
         arView.frame = view.frame
         view.insertSubview(arView, at: 0)
         
-        startSession()
+//        startSession()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

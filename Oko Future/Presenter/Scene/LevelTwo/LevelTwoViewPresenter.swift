@@ -25,10 +25,14 @@ final class LevelTwoViewPresenter: NSObject {
     
     var isOKO = false
     
+    var isPlay = false
+    
     private let classifierService = OkoClassifierService()
     
     weak var arView: ARView!
     weak var coordinatorDelegate: LevelTwoViewCoordinatorDelegate!
+    
+    var debugThrottle: Cancellable?
     
     var view: LevelTwoViewProtocol
     
@@ -68,34 +72,64 @@ final class LevelTwoViewPresenter: NSObject {
         super.init()
         
         self.arView.session.delegate = self
+        
+        self.arView.renderOptions.insert(.disableMotionBlur)
+        self.arView.renderOptions.insert(.disableHDR)
+        
+        setFPS(debugThrottle: true)
+        
+        uploadModelEntity()
+        
         bindToImageClassifierService()
-        uploadCoreModel()
+        
+//        uploadCoreModel()
     }
     
-    private func uploadModelEntity() {
-        var cancellableBot: AnyCancellable? = nil
-        var cancellableScreen: AnyCancellable? = nil
+    func setFPS(debugThrottle: Bool) {
+        let minFPS = 30.0
+        let maxFPS = 30.0
         
-        cancellableBot = ModelEntity.loadModelAsync(named: "okobot_2305")
+        guard debugThrottle else { self.debugThrottle = nil; return }
+        
+        var debugThrottleTime = 0.0
+        self.debugThrottle = arView.scene.subscribe(to: SceneEvents.Update.self) { event in
+            Thread.sleep(forTimeInterval: 1.0 / (minFPS + 0.5 * (1.0 + sin(debugThrottleTime)) * (maxFPS - minFPS)))
+            debugThrottleTime += event.deltaTime
+        }
+    }
+        
+    
+    private func uploadModelEntity() {
+        
+        view.arLoaderShow()
+        
+        var cancellable: AnyCancellable? = nil
+         
+          cancellable = ModelEntity.loadModelAsync(named: "okobot_2305")
             .sink(receiveCompletion: { error in
               print("Unexpected error: \(error)")
-                cancellableBot?.cancel()
+              cancellable?.cancel()
             }, receiveValue: { entity in
                 
                 self.okoBot = entity
-                cancellableBot?.cancel()
-            })
-        
-        cancellableScreen = ModelEntity.loadModelAsync(named: "screen_2405")
-          .sink(receiveCompletion: { error in
-            print("Unexpected error: \(error)")
-              cancellableScreen?.cancel()
-          }, receiveValue: { entity in
-              
-              self.okoScreen = entity
+                
+                cancellable = ModelEntity.loadModelAsync(named: "screen_2405")
+                  .sink(receiveCompletion: { error in
+                    print("Unexpected error: \(error)")
+                    cancellable?.cancel()
+                  }, receiveValue: { entity in
 
-              cancellableScreen?.cancel()
-          })
+                      self.okoScreen = entity
+                      
+                      DispatchQueue.main.asyncAfter(deadline: .now() + 0.5, execute: {
+                          
+                          self.view.arLoaderHide()
+                          self.startSession()
+                      })
+                      
+                      cancellable?.cancel()
+                  })
+            })
     }
     
     private func uploadCoreModel() {
@@ -166,7 +200,7 @@ final class LevelTwoViewPresenter: NSObject {
         guard let itemOkoBot = itemOkoBot else {return}
         guard let itemBodyPlane = itemBodyPlane else {return}
         print ("video upload")
-        
+        /// удалять после проигрывания видоса (обсервер)
         videoPlayerScreen.removeAllItems()
         
         videoPlayerOkoBot.removeAllItems()
@@ -187,6 +221,35 @@ final class LevelTwoViewPresenter: NSObject {
             self.videoPlayerPlaneBody.play()
             
             print ("video play")
+        })
+    }
+    
+    private func playVideoKOSTIL() {
+        
+        print ("зглзглзгл вызов playVideoKOSTIL")
+        
+        let nameItemScreen = "flip_vert_[000-299]-1"
+        let nameItemOkoBot = "okoBotVizor_lvl2_demo"
+        let nameItemBodyPlane = "fx element_[000-299]-1"
+        
+        guard let itemScreen = returnAVPlayerItem(nameVideo: nameItemScreen), let itemOkoBot = returnAVPlayerItem(nameVideo: nameItemOkoBot), let itemBodyPlane = returnAVPlayerItem(nameVideo: nameItemBodyPlane) else {
+            return
+        }
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3, execute: {
+            self.videoPlayerScreen.insert(itemScreen, after: nil)
+            self.videoPlayerScreen.seek(to: .zero)
+            self.videoPlayerScreen.play()
+            
+            self.videoPlayerOkoBot.insert(itemOkoBot, after: nil)
+            self.videoPlayerOkoBot.seek(to: .zero)
+            self.videoPlayerOkoBot.play()
+            
+            self.videoPlayerPlaneBody.insert(itemBodyPlane, after: nil)
+            self.videoPlayerPlaneBody.seek(to: .zero)
+            self.videoPlayerPlaneBody.play()
+            
+            print ("зглзглзгл video play playVideoKOSTIL")
         })
     }
     
@@ -215,10 +278,12 @@ final class LevelTwoViewPresenter: NSObject {
     
     func addModelTshirt(bodyAnchor: ARBodyAnchor) {
         
-        print ("logilogi addPlaneTshirt", arView.scene.anchors.count)
+        print ("зглзглзгл addModelTshirt до анрапа")
         
         guard let okoBot = generateOkoBot() else {return}
         guard let screen = generateScreen() else {return}
+        
+        print ("зглзглзгл addModelTshirt")
         
 //        okoBot.transform.translation = [-0.3, 0.3, 0]
         okoBot.transform.translation = [-0.3, 0.7, 0]
@@ -338,6 +403,14 @@ final class LevelTwoViewPresenter: NSObject {
         
         if isOKO {
             
+//            if !isPlay {
+//                playVideoKOSTIL()
+//                isPlay = true
+//            }
+            
+            /// для перфоманса
+            return
+            
             if counterSearchImage == 600 {
                 counterSearchImage = 0
                 
@@ -347,7 +420,7 @@ final class LevelTwoViewPresenter: NSObject {
         } else {
             if counterSearchImage == 30 {
                 counterSearchImage = 0
-                
+                print ("зглзглзгл ищем ОКО ФУТУРЕ")
                 self.classifierService.classifyImage(pixelBuffer)
             }
         }
@@ -387,6 +460,8 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
 //            }
             
             if let bodyAnchor = anchor as? ARBodyAnchor {
+                print ("зглзглзгл добавили якоря на тушку")
+                
                 addPlaneBody(bodyAnchor: bodyAnchor)
                 addModelTshirt(bodyAnchor: bodyAnchor)
             }
@@ -409,9 +484,9 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
     
         searchLogoOkoFuture(pixelBuffer: frame.capturedImage)
         
-        if isOKO {
-            emojiTrack(pixelBuffer: frame.capturedImage)
-        }
+//        if isOKO {
+//            emojiTrack(pixelBuffer: frame.capturedImage)
+//        }
     }
     
     func addPlaneBody(bodyAnchor: ARBodyAnchor) {
@@ -426,7 +501,8 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         let spine = bodyAnchor.skeleton.modelTransform(for: ARSkeleton.JointName(rawValue: "spine_5_joint"))!
         
         generatePlaneBody(armLeft: armLeft, armRight: armRight, legLeft: legLeft, spine: spine, rootTrans: bodyAnchor.transform)
-        videoPlayerPlaneBody.play()
+        
+        playVideoKOSTIL()
     }
     
     func generatePlaneBody(armLeft: simd_float4x4, armRight: simd_float4x4, legLeft: simd_float4x4,spine: simd_float4x4, rootTrans: simd_float4x4){
@@ -511,11 +587,7 @@ extension LevelTwoViewPresenter: ARSessionDelegate {
         let quatFix: simd_quatf = .init(angle: angle, axis: [1,0,0])
         
         anchorBody.children[0].setOrientation(quatFix, relativeTo: anchorBody)
-        
-        if isOKO {
-//            print ("logiLogi updatePlaneBody isOKO == true")
-//            videoPlayerPlaneBody.play()
-        }
     }
+    
 }
 
